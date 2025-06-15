@@ -6,21 +6,23 @@ import { CheckCircle, Wrench, Loader, Eye, Home } from "lucide-react";
 
 function statusIcon(status: "done" | "progress" | "soon") {
   return status === "done"
-    ? <CheckCircle size={20} className="text-primaryAccentGreen" title="Complete" />
+    ? <CheckCircle size={20} className="text-primaryAccent" />
     : status === "progress"
-    ? <Wrench size={20} className="text-yellow-700 animate-spin-slow" title="In Progress" />
-    : <Loader size={20} className="text-primaryAccent animate-pulse" title="Coming Soon" />;
+    ? <Wrench size={20} className="text-yellow-700 animate-spin-slow" />
+    : <Loader size={20} className="text-primaryAccent animate-pulse" />;
 }
 
 export default function AIVision() {
   return (
-    <div className="relative min-h-screen bg-neutralBg flex flex-col overflow-x-hidden font-sans">
+    <div className="relative min-h-screen bg-white flex flex-col overflow-x-hidden font-sans">
       <Header />
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center py-20 px-4">
-        <AbstractAccent position="top" color="green" />
-        <h1 className="text-3xl md:text-5xl font-bold max-w-4xl mx-auto tracking-tight text-gray-950 mb-4 animate-fade-in">We&rsquo;re Building the <span className="text-primaryAccentGreen">AI Operating System</span> for Modern Property Management</h1>
+      <section className="relative flex flex-col items-center justify-center text-center py-20 px-4 bg-white">
+        <AbstractAccent position="top" color="blue" />
+        <h1 className="text-3xl md:text-5xl font-bold max-w-4xl mx-auto tracking-tight text-gray-950 mb-4 animate-fade-in">
+          We&rsquo;re Building the <span className="text-primaryAccent">AI Operating System</span> for Modern Property Management
+        </h1>
         <p className="text-lg md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in">
           A seamless platform that combines intelligent automation with real-world operational expertise — purpose-built for the future of real estate.
         </p>
@@ -28,7 +30,7 @@ export default function AIVision() {
           href="https://calendly.com/propcloud/ai-waitlist"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-primaryAccentGreen text-white font-semibold rounded-lg px-7 py-3 text-lg shadow-soft hover:bg-primaryAccentGreen/90 transition-all duration-150 animate-fade-in"
+          className="inline-block bg-primaryAccent text-white font-semibold rounded-lg px-7 py-3 text-lg shadow-soft hover:bg-primaryAccent/90 transition-all duration-150 animate-fade-in"
         >
           Join the Waitlist
         </a>
@@ -47,7 +49,7 @@ export default function AIVision() {
           </div>
           <div className="hidden md:block border-l border-gray-200"></div>
           <div>
-            <h4 className="text-lg font-semibold mb-2 text-primaryAccentGreen">Our Vision</h4>
+            <h4 className="text-lg font-semibold mb-2 text-primaryAccent">Our Vision</h4>
             <ul className="list-disc list-inside text-gray-700 text-base space-y-2 text-left mx-auto max-w-xs">
               <li>AI agents that handle guest communication, pricing, bookings, and maintenance</li>
               <li>All-in-one platform with modular tools for automation and insight</li>
@@ -74,7 +76,7 @@ export default function AIVision() {
                 <tr className="border-b hover:bg-neutralBg/60 transition">
                   <td className="px-4 py-3">MVP</td>
                   <td className="px-4 py-3">Guest AI, Webhook, CRM Sheets</td>
-                  <td className="px-4 py-3">{statusIcon("done")} <span className="ml-2 text-green-700 align-middle">Complete</span></td>
+                  <td className="px-4 py-3">{statusIcon("done")} <span className="ml-2 text-primaryAccent align-middle">Complete</span></td>
                 </tr>
                 <tr className="border-b hover:bg-neutralBg/60 transition">
                   <td className="px-4 py-3">Phase 1</td>
@@ -95,13 +97,13 @@ export default function AIVision() {
       {/* Differentiators */}
       <section className="py-14 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h4 className="text-lg md:text-xl font-semibold mb-6 text-primaryAccentGreen text-center">Our Differentiators</h4>
+          <h4 className="text-lg md:text-xl font-semibold mb-6 text-primaryAccent text-center">Our Differentiators</h4>
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-900 text-center">
             <li className="bg-neutralBg rounded-lg py-6 px-4 shadow">
               <span className="font-semibold text-primaryAccent">Human-assisted → AI-automated transition</span>
             </li>
             <li className="bg-neutralBg rounded-lg py-6 px-4 shadow">
-              <span className="font-semibold text-primaryAccentGreen">Built on real-world operational data</span>
+              <span className="font-semibold text-primaryAccent">Built on real-world operational data</span>
             </li>
             <li className="bg-neutralBg rounded-lg py-6 px-4 shadow">
               <span className="font-semibold text-primaryAccent">Open, integratable system (not a closed app)</span>
@@ -113,7 +115,9 @@ export default function AIVision() {
       {/* Strong CTA Section */}
       <section className="py-16 md:py-20 flex flex-col justify-center items-center text-center bg-neutralBg">
         <AbstractAccent position="bottom" color="blue" />
-        <h2 className="text-2xl md:text-3xl font-bold mb-5 max-w-xl mx-auto text-gray-900">Be the First to Experience the Future</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-5 max-w-xl mx-auto text-gray-900">
+          Be the First to Experience the Future
+        </h2>
         <a
           href="https://calendly.com/propcloud/ai-waitlist"
           target="_blank"
