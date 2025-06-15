@@ -107,8 +107,9 @@ export default function ChatBot() {
   };
 
   const findFAQResponse = (message: string): string | null => {
-    for (const [keywords, response] of Object.entries(faqResponses)) {
-      if (keywords.some(keyword => message.includes(keyword))) {
+    for (const [keywordString, response] of Object.entries(faqResponses)) {
+      const keywords = keywordString.split(',');
+      if (keywords.some(keyword => message.includes(keyword.trim()))) {
         return response;
       }
     }
