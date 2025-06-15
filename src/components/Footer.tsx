@@ -5,27 +5,27 @@ import Logo from "./Logo";
 export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-medium mt-16">
-      <div className="container py-10 flex flex-col md:flex-row gap-8 md:gap-0 items-center justify-between text-sm text-propcloud-900">
+      <div className="container mx-auto py-10 px-4 flex flex-col md:flex-row gap-8 md:gap-0 items-center justify-between text-sm text-propcloud-800">
         <nav className="flex gap-6 justify-center mb-2 md:mb-0">
-          <a href="#home" className="hover:text-mint-600 transition font-semibold">
+          <a href="#home" className="hover:text-accent-600 transition font-semibold">
             Home
           </a>
-          <a href="#services" className="hover:text-mint-600 transition font-semibold">
+          <a href="#services" className="hover:text-accent-600 transition font-semibold">
             Services
           </a>
-          <a href="#how-it-works" className="hover:text-mint-600 transition font-semibold">
+          <a href="#how-it-works" className="hover:text-accent-600 transition font-semibold">
             How It Works
           </a>
-          <a href="#ai" className="hover:text-mint-600 transition font-semibold">
+          <a href="#ai" className="hover:text-accent-600 transition font-semibold">
             AI
           </a>
-          <a href="#testimonials" className="hover:text-mint-600 transition font-semibold">
+          <a href="#testimonials" className="hover:text-accent-600 transition font-semibold">
             Testimonials
           </a>
-          <a href="#contact" className="hover:text-mint-600 transition font-semibold">
+          <a href="#contact" className="hover:text-accent-600 transition font-semibold">
             Contact
           </a>
-          <Link to="/about" className="hover:text-mint-600 transition font-semibold">
+          <Link to="/about" className="hover:text-accent-600 transition font-semibold">
             About Us
           </Link>
         </nav>
@@ -33,8 +33,8 @@ export default function Footer() {
           <span>
             <a href="mailto:contact@propcloud.io" className="hover:text-propcloud-600 transition font-semibold">contact@propcloud.io</a>
           </span>
-          <span className="text-xs text-mint-600 mt-1">
-            © PropCloud Inc. — All rights reserved
+          <span className="text-xs text-accent-700 mt-1">
+            © propcloud Inc. — All rights reserved
           </span>
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
@@ -30,21 +31,21 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 
-        ${scrolled ? "bg-white/85 shadow-sm backdrop-blur" : "bg-white/95 border-b border-gray-medium"}
+        ${scrolled ? "bg-white/90 shadow-sm backdrop-blur" : "bg-white/95 border-b border-gray-medium"}
       `}
       style={{ WebkitBackdropFilter: "blur(8px)", backdropFilter: "blur(8px)" }}
     >
-      <nav className="container flex items-center justify-between h-16">
-        <Link to="/" aria-label="PropCloud homepage" className="flex items-center min-w-fit">
+      <nav className="container mx-auto flex items-center justify-between h-16 px-4">
+        <Link to="/" aria-label="propcloud homepage" className="flex items-center min-w-fit">
           <Logo size="text-2xl md:text-3xl" />
         </Link>
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-900">
+        <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-800">
           {navItems.map((item) => (
             <SmoothScrollLink
               key={item.label}
               to={item.to}
-              className="transition text-propcloud-900 hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
+              className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
             >
               {item.label}
             </SmoothScrollLink>
@@ -53,7 +54,7 @@ export default function Header() {
         {/* About Us Button */}
         <Link
           to="/about"
-          className="hidden md:inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 ml-6"
+          className="hidden md:inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 ml-6"
         >
           About Us
         </Link>
@@ -73,7 +74,7 @@ export default function Header() {
             <SmoothScrollLink
               key={item.label}
               to={item.to}
-              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent transition"
+              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition"
               style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
               onClick={() => setShowMobileMenu(false)}
             >
@@ -82,7 +83,7 @@ export default function Header() {
           ))}
           <Link
             to="/about"
-            className="mt-2 inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition"
+            className="mt-2 inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition"
             onClick={() => setShowMobileMenu(false)}
           >
             About Us
