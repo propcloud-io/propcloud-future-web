@@ -35,16 +35,16 @@ export default function Header() {
       style={{ WebkitBackdropFilter: "blur(8px)", backdropFilter: "blur(8px)" }}
     >
       <nav className="container flex items-center justify-between h-16">
-        <Link to="/" aria-label="propcloud homepage" className="flex items-center min-w-fit">
+        <Link to="/" aria-label="PropCloud homepage" className="flex items-center min-w-fit">
           <Logo size="text-2xl md:text-3xl" />
         </Link>
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 font-medium text-black">
+        <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-900">
           {navItems.map((item) => (
             <SmoothScrollLink
               key={item.label}
               to={item.to}
-              className="transition text-black hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
+              className="transition text-propcloud-900 hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
             >
               {item.label}
             </SmoothScrollLink>
@@ -53,13 +53,13 @@ export default function Header() {
         {/* About Us Button */}
         <Link
           to="/about"
-          className="hidden md:inline-block bg-gradient-to-r from-blue-600 to-blue-400 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 ml-6 lowercase"
+          className="hidden md:inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 ml-6"
         >
-          about us
+          About Us
         </Link>
         {/* Mobile Menu Button */}
         <button
-          className="flex md:hidden p-2 rounded hover:bg-blue-50 transition"
+          className="flex md:hidden p-2 rounded hover:bg-propcloud-50 transition"
           aria-label="Open navigation menu"
           onClick={() => setShowMobileMenu((v) => !v)}
         >
@@ -73,7 +73,7 @@ export default function Header() {
             <SmoothScrollLink
               key={item.label}
               to={item.to}
-              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-400 hover:bg-clip-text hover:text-transparent transition"
+              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent transition"
               style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
               onClick={() => setShowMobileMenu(false)}
             >
@@ -82,10 +82,10 @@ export default function Header() {
           ))}
           <Link
             to="/about"
-            className="mt-2 inline-block bg-gradient-to-r from-blue-600 to-blue-400 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition lowercase"
+            className="mt-2 inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition"
             onClick={() => setShowMobileMenu(false)}
           >
-            about us
+            About Us
           </Link>
         </div>
       )}

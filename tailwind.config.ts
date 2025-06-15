@@ -1,18 +1,30 @@
 
 import type { Config } from "tailwindcss";
 
-// Define blues, black, and a very light grey background
-const blues = {
-  50: "#f0f6fc",
-  100: "#ddeaf7",
-  200: "#b6d6ee",
-  300: "#78aee5",
-  400: "#4481e0", // Main accent
-  500: "#3763c9", // Darker blue
-  600: "#2447a2", // Even darker
-  700: "#193377",
-  800: "#0d1837",
-  900: "#0a1122",
+const propcloudBlue = {
+  50: "#f0f9ff",
+  100: "#e0f2fe",
+  200: "#bae6fd",
+  300: "#7dd3fc",
+  400: "#38bdf8",
+  500: "#0ea5e9",
+  600: "#0284c7",
+  700: "#0369a1",
+  800: "#075985",
+  900: "#0c4a6e",
+};
+
+const mint = {
+  50:  "#ecfcf7",
+  100: "#d5f7ee",
+  200: "#b0efe0",
+  300: "#7ae9d1",
+  400: "#5eead4", // used as highlight accent
+  500: "#2dd4bf", // main mint accent, matches Tailwind syntax for "mint"
+  600: "#14b8a6",
+  700: "#0d9488",
+  800: "#0f766e",
+  900: "#115e59",
 };
 
 export default {
@@ -36,32 +48,38 @@ export default {
         sans: ['Inter', 'DM Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        ...blues,
-        blue: blues,
-        "blue-50": blues[50],
-        "blue-400": blues[400],
-        "blue-500": blues[500],
-        "blue-600": blues[600],
-        "blue-900": blues[900],
-        black: "#111216",
-        white: "#fff",
-        background: "#f8fafc", // very light grey used everywhere
-        surface: "#f4f6fa", // slightly darker than background for cards/shadows
+        ...propcloudBlue,
+        ...mint,
+        propcloud: propcloudBlue,
+        mint,
+        "mint-50": mint[50],
+        "mint-200": mint[200],
+        "mint-400": mint[400],
+        "mint-500": mint[500],
+        "mint-600": mint[600],
+        "propcloud-50": propcloudBlue[50],
+        "propcloud-400": propcloudBlue[400],
+        "propcloud-500": propcloudBlue[500],
+        "propcloud-600": propcloudBlue[600],
+        "propcloud-900": propcloudBlue[900],
+        primary: propcloudBlue[600],
+        "primary-foreground": "#fff",
+        accent: mint[400],
+        "accent-foreground": "#fff",
+        background: "#fff",
+        surface: "#f8fafc",
         muted: "#64748b",
         border: "#e5e7eb",
+        "muted-foreground": "#64748b",
         "gray-light": "#f3f4f6",
         "gray-medium": "#e5e7eb",
-        primary: blues[600],
-        "primary-foreground": "#fff",
-        accent: blues[400],
-        "accent-foreground": "#fff"
       },
       boxShadow: {
-        soft: '0 2px 32px 0 rgba(16,40,80,0.08)',
+        soft: '0 2px 32px 0 rgba(16,40,80,0.10)',
       },
       backgroundImage: {
-        'blue-gradient': 'linear-gradient(90deg, #2447a2 0%, #4481e0 100%)',
-        'brand-gradient': 'linear-gradient(90deg, #193377 0%, #3763c9 70%, #4481e0 100%)',
+        'blue-gradient': 'linear-gradient(90deg, #0c4a6e 0%, #0284c7 100%)',
+        'brand-gradient': 'linear-gradient(90deg, #0c4a6e 0%, #0ea5e9 70%, #38bdf8 100%)',
       },
       keyframes: {
         "fade-up": {
