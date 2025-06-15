@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
@@ -19,7 +18,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'DM Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         // Map main semantic colors to CSS variables for bg-background, text-foreground, etc.

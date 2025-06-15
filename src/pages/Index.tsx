@@ -1,135 +1,107 @@
 
-// Main Landing Page — Virtual Property Management
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
-import { Link } from "react-router-dom";
-import { CheckCircle, Home, Eye, Contact } from "lucide-react";
+import { CheckCircle, Calendar, Users, Home as HomeIcon, Contact } from "lucide-react";
 
-const features = [
-  { icon: <CheckCircle size={20} className="text-primaryAccent"/>, text: "24/7 Guest Messaging & Support" },
-  { icon: <CheckCircle size={20} className="text-primaryAccent"/>, text: "Calendar & Booking Management" },
-  { icon: <CheckCircle size={20} className="text-primaryAccent"/>, text: "Dynamic Pricing Optimization" },
-  { icon: <CheckCircle size={20} className="text-primaryAccent"/>, text: "Housekeeping & Turnover Coordination" },
-  { icon: <CheckCircle size={20} className="text-primaryAccent"/>, text: "Maintenance Request Handling" },
-  { icon: <CheckCircle size={20} className="text-primaryAccent"/>, text: "Owner Reports & Revenue Insights" },
-];
-
-const whoFor = [
-  "Airbnb Hosts",
-  "Vacation Rental Owners",
-  "Property Managers",
-  "International Investors"
+const services = [
+  { icon: <CheckCircle size={22} className="text-primaryAccentGreen" />, label: "24/7 Guest Messaging & Support" },
+  { icon: <Calendar size={22} className="text-primaryAccentGreen" />, label: "Booking & Calendar Management" },
+  { icon: <CheckCircle size={22} className="text-primaryAccentGreen" />, label: "Dynamic Pricing Optimization" },
+  { icon: <Users size={22} className="text-primaryAccentGreen" />, label: "Turnover & Housekeeping Coordination" },
+  { icon: <CheckCircle size={22} className="text-primaryAccentGreen" />, label: "Maintenance Issue Handling" },
+  { icon: <HomeIcon size={22} className="text-primaryAccentGreen" />, label: "Owner Dashboards & Reporting" },
 ];
 
 export default function Index() {
   return (
-    <div className="relative min-h-screen bg-white flex flex-col overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-white flex flex-col font-sans overflow-x-hidden">
       <Header />
 
-      {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center py-20 px-4 bg-white">
+      {/* HERO SECTION */}
+      <section id="home" className="relative flex flex-col items-center justify-center text-center py-20 px-4 bg-white">
         <AbstractAccent position="top" color="blue" />
-        <h1 className="text-3xl md:text-5xl font-bold max-w-3xl mx-auto tracking-tight text-gray-950 mb-4 animate-fade-in">
-          Virtual Property Management,<br /> 
-          <span className="text-primaryAccent">Powered by People&nbsp;+&nbsp;AI</span>
+        <h1 className="text-4xl md:text-5xl font-bold max-w-3xl mx-auto tracking-tight text-gray-950 mb-4 animate-fade-in">
+          Virtual Property Management, <br />
+          <span className="text-primaryAccent">Powered by People + AI</span>
         </h1>
-        <p className="text-lg md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in">
-          Let PropCloud manage your short-term rentals, guest communication, and operations — so you can focus on growing your portfolio.
+        <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in">
+          We manage your listings, guests, pricing, and operations — so you can focus on growth.
         </p>
         <a
-          href="https://calendly.com/propcloud/consultation"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-primaryAccent text-white font-semibold rounded-lg px-7 py-3 text-lg shadow-soft hover:bg-primaryAccent/90 transition-all duration-150 animate-fade-in"
+          href="#contact"
+          className="inline-block bg-primaryAccentGreen text-white font-semibold rounded-lg px-7 py-3 text-lg shadow-soft hover:bg-primaryAccentGreen/90 transition-all duration-150 animate-fade-in"
         >
           Start Managing Today
         </a>
       </section>
 
-      {/* Features */}
-      <section className="py-16 md:py-20 bg-white shadow-soft">
+      {/* SERVICES SECTION */}
+      <section id="services" className="py-16 md:py-20 bg-neutralBg shadow-soft">
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-1 text-gray-900">Everything You Need. Done For You.</h2>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {features.map((f, idx) => (
-            <div key={idx} className="flex gap-4 items-center bg-neutralBg py-5 px-5 rounded-lg shadow hover:shadow-md transition animate-fade-in">
-              {f.icon}
-              <span className="text-base md:text-lg text-gray-800">{f.text}</span>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {services.map((service, idx) => (
+            <div key={idx} className="flex gap-4 items-center bg-white py-5 px-5 rounded-lg shadow hover:shadow-md transition animate-fade-in border border-gray-100">
+              {service.icon}
+              <span className="text-base md:text-lg text-gray-800">{service.label}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-16 md:py-20 bg-white">
-        <h3 className="font-semibold text-xl md:text-2xl mb-6 text-primaryAccent text-center">How It Works</h3>
-        <div className="max-w-2xl mx-auto space-y-8">
-          {/* Step 1 */}
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-lg">
-              1
-            </div>
-            <span className="block font-medium text-lg text-gray-900">Book a free onboarding call</span>
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="py-16 md:py-20 bg-white">
+        <h2 className="font-semibold text-2xl md:text-3xl mb-10 text-primaryAccent text-center">How It Works</h2>
+        <div className="max-w-3xl mx-auto grid md:grid-cols-3 gap-8">
+          <div className="flex flex-col items-center text-center gap-4 animate-fade-in">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-2xl mb-3">1</div>
+            <span className="block font-medium text-lg text-gray-900">Schedule your onboarding call</span>
           </div>
-          {/* Step 2 */}
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-lg">
-              2
-            </div>
-            <span className="block font-medium text-lg text-gray-900">We connect your properties in 24–48&nbsp;hours</span>
+          <div className="flex flex-col items-center text-center gap-4 animate-fade-in">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-2xl mb-3">2</div>
+            <span className="block font-medium text-lg text-gray-900">We connect and configure your listings within 48 hours</span>
           </div>
-          {/* Step 3 */}
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-lg">
-              3
-            </div>
-            <span className="block font-medium text-lg text-gray-900">Sit back — we handle the rest</span>
+          <div className="flex flex-col items-center text-center gap-4 animate-fade-in">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-2xl mb-3">3</div>
+            <span className="block font-medium text-lg text-gray-900">We handle day-to-day operations using people + AI</span>
           </div>
         </div>
       </section>
 
-      {/* Who It's For / AI Usage */}
-      <section className="py-14 px-4 bg-neutralBg">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 md:gap-6 justify-between">
-          {/* Audience */}
-          <div className="flex-1">
-            <h4 className="text-lg md:text-xl font-semibold mb-2 text-primaryAccent">Who It's For</h4>
-            <ul className="list-disc ml-6 text-gray-900 text-base space-y-1">
-              {whoFor.map((who, i) => (<li key={i}>{who}</li>))}
-            </ul>
-          </div>
-          {/* Internal AI Usage */}
-          <div className="flex-1">
-            <h4 className="text-lg md:text-xl font-semibold mb-2 text-primaryAccent">Internal AI Use</h4>
-            <p className="text-gray-800 text-base">
-              We use proprietary AI tools to power{' '}
-              <span className="font-semibold text-primaryAccent">faster response times</span>,{' '}
-              <span className="font-semibold text-primaryAccent">smarter pricing strategies</span>, and{' '}
-              <span className="font-semibold text-primaryAccent">better guest experiences</span>.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Soft Transition */}
-      <section className="py-12 md:py-20 bg-white text-center relative">
-        <AbstractAccent position="bottom" color="green" />
-        <div className="max-w-2xl mx-auto relative z-10">
-          <h5 className="text-xl md:text-2xl text-gray-900 font-semibold mb-4">This is just the beginning.</h5>
-          <p className="text-gray-800 mb-6">
-            We're working on something truly transformative — a new kind of AI platform that will redefine how property management is done.
+      {/* AI SUMMARY */}
+      <section id="ai" className="py-16 md:py-20 bg-neutralBg">
+        <div className="max-w-3xl mx-auto flex flex-col items-center text-center gap-5">
+          <h2 className="text-2xl md:text-3xl font-semibold text-primaryAccent mb-2">Built with AI Inside</h2>
+          <p className="text-lg md:text-xl text-gray-900 mb-3">
+            We use proprietary AI to streamline guest support, pricing, and workflow automation. It's already working behind the scenes — and soon, it will do much more.
           </p>
-          <Link
-            to="/ai-vision"
-            className="inline-block bg-primaryAccent text-white font-semibold rounded-lg px-6 py-3 text-lg shadow-soft hover:bg-primaryAccent/90 transition"
+          <a
+            href="/about"
+            className="inline-block bg-primaryAccentGreen text-white font-semibold rounded-lg px-7 py-3 text-lg shadow-soft hover:bg-primaryAccentGreen/90 transition-all"
           >
-            Book Your Free Consultation
-          </Link>
+            Learn More
+          </a>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" className="py-16 md:py-24 bg-white flex flex-col items-center justify-center text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-primaryAccent">Get Started Today</h2>
+        <p className="text-lg text-gray-800 mb-7">We'd love to help you grow. Schedule a free call or reach us directly:</p>
+        <a
+          href="https://calendly.com/propcloud/consultation"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-primaryAccentGreen text-white font-semibold rounded-lg px-8 py-4 text-lg shadow-soft hover:bg-primaryAccentGreen/90 transition mb-4"
+        >
+          Book Free Consultation
+        </a>
+        <div className="text-base text-gray-700 mt-2">
+          <a href="mailto:contact@propcloud.io" className="hover:text-primaryAccent transition">contact@propcloud.io</a>
         </div>
       </section>
 
       <Footer />
     </div>
-  )
+  );
 }
-
