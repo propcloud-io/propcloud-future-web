@@ -24,13 +24,16 @@ const whoFor = [
 
 export default function Index() {
   return (
-    <div className="relative min-h-screen bg-neutralBg flex flex-col overflow-x-hidden font-sans">
+    <div className="relative min-h-screen bg-white flex flex-col overflow-x-hidden font-sans">
       <Header />
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center py-20 px-4">
+      <section className="relative flex flex-col items-center justify-center text-center py-20 px-4 bg-white">
         <AbstractAccent position="top" color="blue" />
-        <h1 className="text-3xl md:text-5xl font-bold max-w-3xl mx-auto tracking-tight text-gray-950 mb-4 animate-fade-in">Virtual Property Management,<br /> <span className="text-primaryAccent">Powered by People&nbsp;+&nbsp;AI</span></h1>
+        <h1 className="text-3xl md:text-5xl font-bold max-w-3xl mx-auto tracking-tight text-gray-950 mb-4 animate-fade-in">
+          Virtual Property Management,<br /> 
+          <span className="text-primaryAccent">Powered by People&nbsp;+&nbsp;AI</span>
+        </h1>
         <p className="text-lg md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in">
           Let PropCloud manage your short-term rentals, guest communication, and operations — so you can focus on growing your portfolio.
         </p>
@@ -58,30 +61,31 @@ export default function Index() {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-20 container max-w-4xl">
+      <section className="py-16 md:py-20 bg-white">
         <h3 className="font-semibold text-xl md:text-2xl mb-6 text-primaryAccent text-center">How It Works</h3>
-        <ol className="relative border-l-2 border-primaryAccent/20 pl-6 space-y-6">
-          <li>
-            <div className="absolute -left-5 top-0 flex justify-center items-center w-10 h-10 bg-primaryAccent text-white rounded-full font-bold shadow-soft">
+        <div className="max-w-2xl mx-auto space-y-8">
+          {/* Step 1 */}
+          <div className="flex items-center gap-6">
+            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-lg">
               1
             </div>
-            <div className="ml-6">
-              <span className="block font-medium text-lg text-gray-900">Book a free onboarding call</span>
+            <span className="block font-medium text-lg text-gray-900">Book a free onboarding call</span>
+          </div>
+          {/* Step 2 */}
+          <div className="flex items-center gap-6">
+            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-lg">
+              2
             </div>
-          </li>
-          <li>
-            <div className="absolute -left-5 top-20 flex justify-center items-center w-10 h-10 bg-primaryAccent text-white rounded-full font-bold shadow-soft">2</div>
-            <div className="ml-6">
-              <span className="block font-medium text-lg text-gray-900">We connect your properties in 24–48&nbsp;hours</span>
+            <span className="block font-medium text-lg text-gray-900">We connect your properties in 24–48&nbsp;hours</span>
+          </div>
+          {/* Step 3 */}
+          <div className="flex items-center gap-6">
+            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primaryAccent text-white font-bold shadow-soft text-lg">
+              3
             </div>
-          </li>
-          <li>
-            <div className="absolute -left-5 top-40 flex justify-center items-center w-10 h-10 bg-primaryAccent text-white rounded-full font-bold shadow-soft">3</div>
-            <div className="ml-6">
-              <span className="block font-medium text-lg text-gray-900">Sit back — we handle the rest</span>
-            </div>
-          </li>
-        </ol>
+            <span className="block font-medium text-lg text-gray-900">Sit back — we handle the rest</span>
+          </div>
+        </div>
       </section>
 
       {/* Who It's For / AI Usage */}
@@ -89,19 +93,19 @@ export default function Index() {
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 md:gap-6 justify-between">
           {/* Audience */}
           <div className="flex-1">
-            <h4 className="text-lg md:text-xl font-semibold mb-2 text-primaryAccentGreen">Who It's For</h4>
-            <ul className="list-disc ml-6 text-gray-800 text-base space-y-1">
+            <h4 className="text-lg md:text-xl font-semibold mb-2 text-primaryAccent">Who It's For</h4>
+            <ul className="list-disc ml-6 text-gray-900 text-base space-y-1">
               {whoFor.map((who, i) => (<li key={i}>{who}</li>))}
             </ul>
           </div>
           {/* Internal AI Usage */}
           <div className="flex-1">
             <h4 className="text-lg md:text-xl font-semibold mb-2 text-primaryAccent">Internal AI Use</h4>
-            <p className="text-gray-700 text-base">
+            <p className="text-gray-800 text-base">
               We use proprietary AI tools to power{' '}
-              <span className="font-semibold text-primaryAccentGreen">faster response times</span>,{' '}
-              <span className="font-semibold text-primaryAccentGreen">smarter pricing strategies</span>, and{' '}
-              <span className="font-semibold text-primaryAccentGreen">better guest experiences</span>.
+              <span className="font-semibold text-primaryAccent">faster response times</span>,{' '}
+              <span className="font-semibold text-primaryAccent">smarter pricing strategies</span>, and{' '}
+              <span className="font-semibold text-primaryAccent">better guest experiences</span>.
             </p>
           </div>
         </div>
@@ -111,13 +115,13 @@ export default function Index() {
       <section className="py-12 md:py-20 bg-white text-center relative">
         <AbstractAccent position="bottom" color="green" />
         <div className="max-w-2xl mx-auto relative z-10">
-          <h5 className="text-xl md:text-2xl text-gray-800 font-semibold mb-4">This is just the beginning.</h5>
-          <p className="text-gray-600 mb-6">
+          <h5 className="text-xl md:text-2xl text-gray-900 font-semibold mb-4">This is just the beginning.</h5>
+          <p className="text-gray-800 mb-6">
             We're working on something truly transformative — a new kind of AI platform that will redefine how property management is done.
           </p>
           <Link
             to="/ai-vision"
-            className="inline-block bg-primaryAccentGreen text-white font-semibold rounded-lg px-6 py-3 text-lg shadow-soft hover:bg-primaryAccentGreen/90 transition"
+            className="inline-block bg-primaryAccent text-white font-semibold rounded-lg px-6 py-3 text-lg shadow-soft hover:bg-primaryAccent/90 transition"
           >
             Book Your Free Consultation
           </Link>
@@ -128,3 +132,4 @@ export default function Index() {
     </div>
   )
 }
+
