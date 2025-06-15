@@ -29,6 +29,7 @@ export default {
 					DEFAULT: '#059669' // Deep green
 				},
 				neutralBg: "#f8fafc",
+				border: "hsl(214.3,31.8%,91.4%)", // Added for border-border class support
 			},
 			boxShadow: {
 				soft: '0 2px 32px 0 rgba(16,40,80,0.10)',
@@ -49,3 +50,4 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
