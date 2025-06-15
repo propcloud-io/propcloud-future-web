@@ -1,4 +1,19 @@
+
 import type { Config } from "tailwindcss";
+
+const propcloudBlue = {
+  50: "#f0f9ff",
+  100: "#e0f2fe",
+  200: "#bae6fd",
+  300: "#7dd3fc",
+  400: "#38bdf8",
+  500: "#0ea5e9",
+  600: "#0284c7",
+  700: "#0369a1",
+  800: "#075985",
+  900: "#0c4a6e",
+};
+
 export default {
   darkMode: ["class"],
   content: [
@@ -7,7 +22,6 @@ export default {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  prefix: "",
   theme: {
     container: {
       center: true,
@@ -21,51 +35,38 @@ export default {
         sans: ['Inter', 'DM Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Map main semantic colors to CSS variables for bg-background, text-foreground, etc.
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        card: "hsl(var(--card))",
-        "card-foreground": "hsl(var(--card-foreground))",
-        popover: "hsl(var(--popover))",
-        "popover-foreground": "hsl(var(--popover-foreground))",
-        primary: "hsl(var(--primary))",
-        "primary-foreground": "hsl(var(--primary-foreground))",
-        secondary: "hsl(var(--secondary))",
-        "secondary-foreground": "hsl(var(--secondary-foreground))",
-        muted: "hsl(var(--muted))",
-        "muted-foreground": "hsl(var(--muted-foreground))",
-        accent: "hsl(var(--accent))",
-        "accent-foreground": "hsl(var(--accent-foreground))",
-        destructive: "hsl(var(--destructive))",
-        "destructive-foreground": "hsl(var(--destructive-foreground))",
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        // Custom accent colors for branding
-        primaryAccent: {
-          DEFAULT: '#1e3a8a', // Deep blue
-        },
-        primaryAccentGreen: {
-          DEFAULT: '#059669' // Deep green
-        },
-        neutralBg: "#f8fafc",
+        ...propcloudBlue,
+        propcloud: propcloudBlue,
+        primary: propcloudBlue[600],
+        "primary-foreground": "#fff",
+        accent: propcloudBlue[400],
+        "accent-foreground": "#fff",
+        background: "#fff",
+        surface: "#f8fafc",
+        muted: "#64748b",
+        border: "#e5e7eb",
+        "muted-foreground": "#64748b",
+        "gray-light": "#f3f4f6",
+        "gray-medium": "#e5e7eb",
       },
       boxShadow: {
         soft: '0 2px 32px 0 rgba(16,40,80,0.10)',
       },
+      backgroundImage: {
+        'blue-gradient': 'linear-gradient(90deg, #0c4a6e 0%, #0284c7 100%)',
+        'brand-gradient': 'linear-gradient(90deg, #0c4a6e 0%, #0ea5e9 70%, #38bdf8 100%)',
+      },
       keyframes: {
-        'fade-in': {
-          '0%': { opacity: '0', transform: 'translateY(24px)' },
-          '100%': { opacity: '1', transform: 'none' }
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
         }
       },
       animation: {
-        'fade-in': 'fade-in 0.75s cubic-bezier(.45,0,.55,1)',
+        "fade-up": "fade-up 0.6s cubic-bezier(.45,0,.55,1)",
       },
-      transitionTimingFunction: {
-        'pop': 'cubic-bezier(.22,1,.36,1)'
-      }
     }
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+

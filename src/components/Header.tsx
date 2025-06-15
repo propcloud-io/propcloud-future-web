@@ -1,7 +1,8 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
+import Logo from "./Logo";
 
 const navItems = [
   { label: "Home", to: "#home" },
@@ -12,11 +13,23 @@ const navItems = [
 ];
 
 export default function Header() {
-  const location = useLocation();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Listen to scroll for header transparency
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 8);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Smooth scroll handler for anchor links
-  const onAnchorClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, to: string) => {
+  const onAnchorClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    to: string
+  ) => {
     if (to.startsWith("#")) {
       e.preventDefault();
       const el = document.querySelector(to);
@@ -28,51 +41,62 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur border-b border-gray-100 shadow-sm">
+    <header
+      className={`fixed top-0 z-50 w-full transition-all duration-300 
+        ${scrolled ? "bg-white/85 shadow-sm backdrop-blur" : "bg-white/95 border-b border-gray-medium"}
+      `}
+      style={{ WebkitBackdropFilter: "blur(8px)", backdropFilter: "blur(8px)" }}
+    >
       <nav className="container flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center gap-2 font-bold text-primaryAccent text-xl tracking-tight hover:opacity-80 transition">
-          <span className="rounded bg-primaryAccent text-white px-2 py-1 font-extrabold text-lg">PropCloud</span>
+        <Link to="/" aria-label="PropCloud homepage" className="flex items-center min-w-fit">
+          <Logo size="text-2xl md:text-3xl" />
         </Link>
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-12 font-medium text-gray-900">
+        <div className="hidden md:flex items-center gap-9 font-medium text-propcloud-900">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.to}
               onClick={(e) => onAnchorClick(e, item.to)}
-              className="hover:text-primaryAccent transition px-1 py-0.5"
+              className="transition text-propcloud-900 hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
             >
               {item.label}
             </a>
           ))}
         </div>
         {/* About Us Button */}
-        <Link to="/about" className="hidden md:inline-block bg-primaryAccentGreen px-5 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:bg-primaryAccentGreen/90 transition ml-6">About Us</Link>
+        <Link
+          to="/about"
+          className="hidden md:inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 ml-6"
+        >
+          About Us
+        </Link>
         {/* Mobile Menu Button */}
         <button
-          className="flex md:hidden p-2 rounded hover:bg-gray-50"
+          className="flex md:hidden p-2 rounded hover:bg-propcloud-50 transition"
           aria-label="Open navigation menu"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          onClick={() => setShowMobileMenu((v) => !v)}
         >
           <Menu size={24} />
         </button>
       </nav>
       {/* Mobile Slide-down Menu */}
       {showMobileMenu && (
-        <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-100 flex flex-col gap-4">
-          {navItems.map((item) => (
+        <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
+          {navItems.map((item, idx) => (
             <a
               key={item.label}
               href={item.to}
               onClick={(e) => onAnchorClick(e, item.to)}
-              className="text-lg hover:text-primaryAccent transition"
+              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent transition"
+              style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
             >
               {item.label}
             </a>
           ))}
           <Link
             to="/about"
-            className="mt-2 inline-block bg-primaryAccentGreen text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:bg-primaryAccentGreen/90 transition"
+            className="mt-2 inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition"
             onClick={() => setShowMobileMenu(false)}
           >
             About Us
