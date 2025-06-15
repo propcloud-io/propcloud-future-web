@@ -98,6 +98,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    /* Remove the non-existent Tailwind classes to fix build error */
+    /* @apply bg-background text-foreground; */
+    /* Any global backgrounds/colors should instead be explicit in component classes, not here */
   }
 }
