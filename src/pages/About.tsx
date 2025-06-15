@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
@@ -13,7 +12,7 @@ export default function About() {
         id="about-hero"
       >
         <AbstractAccent position="top" color="blue" />
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 max-w-3xl leading-tight bg-gradient-to-r from-propcloud-600 to-propcloud-400 bg-clip-text text-transparent animate-fade-up">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 max-w-3xl leading-tight bg-gradient-to-r from-propcloud-600 to-mint-500 bg-clip-text text-transparent animate-fade-up">
           We’re Building the Future of Property Management
         </h1>
         <p className="text-xl md:text-2xl text-propcloud-900 mb-8 max-w-2xl mx-auto font-medium animate-fade-up" style={{animationDelay: '.13s', animationFillMode: 'both'}}>
@@ -24,13 +23,12 @@ export default function About() {
       {/* WHAT WE DO TODAY */}
       <section className="bg-surface px-4 py-14 md:py-20 flex justify-center">
         <div className="max-w-2xl flex flex-col gap-8 text-left">
-          <h2 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-propcloud-600 to-propcloud-400 bg-clip-text text-transparent animate-fade-up">
+          <h2 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-propcloud-600 to-mint-500 bg-clip-text text-transparent animate-fade-up">
             What We Do Today
           </h2>
           <p className="text-lg md:text-xl text-propcloud-900 leading-relaxed animate-fade-up" style={{animationDelay:'.06s', animationFillMode:'both'}}>
-            Right now, we provide full-service virtual property management for short-term rentals. Our human team handles everything from guest messaging to calendar syncing — powered by internal AI tools that streamline pricing, automate responses, and reduce delays.
-            <br /><br />
-            We're not waiting for the future — we’re building it in real-time, by managing real properties and learning from every interaction.
+            Today, PropCloud manages short-term rentals through a fully virtual, AI-augmented team. We handle guest communication, calendar syncs, pricing, and operations so property owners don’t have to.<br /><br />
+            Behind the scenes, we use custom-built AI tools to automate pricing, respond to guests instantly, and predict service needs — making our operations faster and more scalable.
           </p>
         </div>
       </section>
@@ -38,10 +36,10 @@ export default function About() {
       {/* MANIFESTO */}
       <section className="relative bg-white">
         <div className="max-w-2xl mx-auto px-4 py-16 md:py-20 text-left flex flex-col gap-6">
-          <h2 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-propcloud-600 to-propcloud-400 bg-clip-text text-transparent animate-fade-up">
+          <h2 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-propcloud-600 to-mint-500 bg-clip-text text-transparent animate-fade-up">
             The Manifesto
           </h2>
-          <div className="border-l-4 border-propcloud-500 pl-4 bg-surface/60 py-6 rounded leading-relaxed text-xl md:text-2xl text-propcloud-900 font-medium font-sans shadow-soft animate-fade-up" style={{animationDelay:".10s", animationFillMode:"both"}}>
+          <div className="border-l-4 border-mint-500 pl-4 bg-surface/60 py-6 rounded leading-relaxed text-xl md:text-2xl text-propcloud-900 font-medium font-sans shadow-soft animate-fade-up" style={{animationDelay:".10s", animationFillMode:"both"}}>
             <b>The way we manage properties today is fundamentally broken.</b>
             <br /><br />
             It’s reactive. It’s fragmented. It’s human-dependent in all the wrong places — draining time, energy, and opportunity.
@@ -62,7 +60,7 @@ export default function About() {
       {/* PHILOSOPHY */}
       <section className="bg-surface px-4 py-14 md:py-20 flex justify-center">
         <div className="max-w-2xl flex flex-col gap-8 text-left animate-fade-up">
-          <h3 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-propcloud-600 to-propcloud-400 bg-clip-text text-transparent mb-1">
+          <h3 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-propcloud-600 to-mint-500 bg-clip-text text-transparent mb-1">
             Our Philosophy
           </h3>
           <ul className="list-disc ml-6 space-y-2 text-lg md:text-xl text-propcloud-900 leading-normal">
@@ -79,15 +77,13 @@ export default function About() {
         <AbstractAccent position="bottom" color="blue" />
         <div className="max-w-2xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-extrabold text-propcloud-900 mb-8 animate-fade-up">
-            If you believe in a smarter way to run real estate — join us.
+            Want to be part of the future of hospitality? Let’s talk.
           </h3>
           <a
-            href="https://calendly.com/propcloud/ai-waitlist"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-gradient-to-r from-propcloud-600 to-propcloud-400 text-white font-bold rounded-lg px-8 py-4 text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all duration-150 animate-fade-up"
+            href="mailto:contact@propcloud.io"
+            className="inline-block bg-gradient-to-r from-mint-500 to-propcloud-600 text-white font-bold rounded-lg px-8 py-4 text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all duration-150 animate-fade-up"
           >
-            Join the Waitlist
+            Email Us to Learn More
           </a>
         </div>
       </section>

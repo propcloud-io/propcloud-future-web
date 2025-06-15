@@ -14,6 +14,19 @@ const propcloudBlue = {
   900: "#0c4a6e",
 };
 
+const mint = {
+  50:  "#ecfcf7",
+  100: "#d5f7ee",
+  200: "#b0efe0",
+  300: "#7ae9d1",
+  400: "#5eead4", // used as highlight accent
+  500: "#2dd4bf", // main mint accent, matches Tailwind syntax for "mint"
+  600: "#14b8a6",
+  700: "#0d9488",
+  800: "#0f766e",
+  900: "#115e59",
+};
+
 export default {
   darkMode: ["class"],
   content: [
@@ -36,10 +49,22 @@ export default {
       },
       colors: {
         ...propcloudBlue,
+        ...mint,
         propcloud: propcloudBlue,
+        mint,
+        "mint-50": mint[50],
+        "mint-200": mint[200],
+        "mint-400": mint[400],
+        "mint-500": mint[500],
+        "mint-600": mint[600],
+        "propcloud-50": propcloudBlue[50],
+        "propcloud-400": propcloudBlue[400],
+        "propcloud-500": propcloudBlue[500],
+        "propcloud-600": propcloudBlue[600],
+        "propcloud-900": propcloudBlue[900],
         primary: propcloudBlue[600],
         "primary-foreground": "#fff",
-        accent: propcloudBlue[400],
+        accent: mint[400],
         "accent-foreground": "#fff",
         background: "#fff",
         surface: "#f8fafc",
@@ -69,4 +94,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

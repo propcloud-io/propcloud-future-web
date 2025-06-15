@@ -1,14 +1,15 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import Logo from "./Logo";
+import SmoothScrollLink from "@/components/ui/SmoothScrollLink";
 
 const navItems = [
   { label: "Home", to: "#home" },
   { label: "Services", to: "#services" },
   { label: "How It Works", to: "#how-it-works" },
   { label: "AI", to: "#ai" },
+  { label: "Testimonials", to: "#testimonials" },
   { label: "Contact", to: "#contact" },
 ];
 
@@ -25,21 +26,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Smooth scroll handler for anchor links
-  const onAnchorClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    to: string
-  ) => {
-    if (to.startsWith("#")) {
-      e.preventDefault();
-      const el = document.querySelector(to);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        setShowMobileMenu(false);
-      }
-    }
-  };
-
+  // Smooth scroll now unified via SmoothScrollLink for anchors
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 
@@ -52,16 +39,15 @@ export default function Header() {
           <Logo size="text-2xl md:text-3xl" />
         </Link>
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-9 font-medium text-propcloud-900">
+        <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-900">
           {navItems.map((item) => (
-            <a
+            <SmoothScrollLink
               key={item.label}
-              href={item.to}
-              onClick={(e) => onAnchorClick(e, item.to)}
+              to={item.to}
               className="transition text-propcloud-900 hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
             >
               {item.label}
-            </a>
+            </SmoothScrollLink>
           ))}
         </div>
         {/* About Us Button */}
@@ -84,15 +70,15 @@ export default function Header() {
       {showMobileMenu && (
         <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
           {navItems.map((item, idx) => (
-            <a
+            <SmoothScrollLink
               key={item.label}
-              href={item.to}
-              onClick={(e) => onAnchorClick(e, item.to)}
+              to={item.to}
               className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-600 hover:to-propcloud-400 hover:bg-clip-text hover:text-transparent transition"
               style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
+              onClick={() => setShowMobileMenu(false)}
             >
               {item.label}
-            </a>
+            </SmoothScrollLink>
           ))}
           <Link
             to="/about"
