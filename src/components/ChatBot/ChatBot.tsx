@@ -137,7 +137,7 @@ export default function ChatBot() {
     // Send email notification
     try {
       await sendLeadEmail(data, messages);
-      console.log('Lead email sent successfully');
+      console.log('Lead email sent successfully to contact@propcloud.io');
     } catch (error) {
       console.error('Failed to send lead email:', error);
     }
@@ -150,7 +150,7 @@ export default function ChatBot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-4 rounded-full shadow-soft-lg hover:scale-110 transition-all duration-300 animate-pulse"
+          className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-4 rounded-full shadow-soft-lg hover:scale-110 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
         >
           <MessageCircle size={24} />
         </button>
