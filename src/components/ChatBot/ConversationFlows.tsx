@@ -20,6 +20,13 @@ interface ConversationFlowsProps {
   onFlowComplete: (data: FlowData) => void;
 }
 
+interface FlowConfig {
+  key: string;
+  question: string;
+  placeholder?: string;
+  type?: 'boolean';
+}
+
 export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   const [selectedFlow, setSelectedFlow] = useState<string | null>(null);
   const [step, setStep] = useState(0);
@@ -100,7 +107,7 @@ interface FlowStepProps {
 function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
   const [inputValue, setInputValue] = useState('');
 
-  const flowConfigs = {
+  const flowConfigs: Record<string, FlowConfig[]> = {
     waitlist: [
       { key: 'name', question: "What's your name?", placeholder: 'Your full name' },
       { key: 'email', question: "What's your email address?", placeholder: 'your@email.com' },
