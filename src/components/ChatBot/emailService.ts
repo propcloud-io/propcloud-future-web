@@ -23,11 +23,30 @@ export async function sendFlowEmail(flowData: FlowData, chatHistory: Message[]) 
   const emailBody = createFlowEmailBody(flowData, chatHistory);
   const subject = `New PropCloud ${getFlowDisplayName(flowData.flowType)}: ${flowData.name}`;
   
-  // Create mailto link for immediate email sending
-  const mailtoLink = `mailto:contact@propcloud.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-  
-  // Open email client
-  window.open(mailtoLink);
+  try {
+    const response = await fetch('https://formspree.io/f/mblyajdg', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        subject: subject,
+        message: emailBody,
+        flowType: flowData.flowType,
+        name: flowData.name,
+        email: flowData.email,
+        timestamp: new Date().toISOString()
+      })
+    });
+    
+    if (response.ok) {
+      console.log('Lead data sent successfully to Formspree');
+    } else {
+      console.error('Failed to send lead data to Formspree');
+    }
+  } catch (error) {
+    console.error('Error sending lead data:', error);
+  }
   
   // Also log to console for debugging
   console.log('New Flow Completion:', {
@@ -44,8 +63,30 @@ export async function sendLeadEmail(leadData: LeadData, chatHistory: Message[]) 
   const emailBody = createEmailBody(leadData, chatHistory);
   const subject = `New PropCloud Lead: ${leadData.name} (${leadData.properties} properties)`;
   
-  const mailtoLink = `mailto:contact@propcloud.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-  window.open(mailtoLink);
+  try {
+    const response = await fetch('https://formspree.io/f/mblyajdg', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        subject: subject,
+        message: emailBody,
+        flowType: 'legacy',
+        name: leadData.name,
+        email: leadData.email,
+        timestamp: new Date().toISOString()
+      })
+    });
+    
+    if (response.ok) {
+      console.log('Legacy lead data sent successfully to Formspree');
+    } else {
+      console.error('Failed to send legacy lead data to Formspree');
+    }
+  } catch (error) {
+    console.error('Error sending legacy lead data:', error);
+  }
   
   console.log('New Lead Captured:', {
     leadData,
