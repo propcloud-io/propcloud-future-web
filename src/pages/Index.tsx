@@ -5,35 +5,36 @@ import AbstractAccent from "@/components/AbstractAccent";
 import { CheckCircle, Calendar, DollarSign, MessageCircle, Wrench, TrendingUp } from "lucide-react";
 import Testimonials from "@/components/Testimonials";
 import AIFlowVisual from "@/components/AIFlowVisual";
+import SystemGraphic from "@/components/SystemGraphic";
 
 const services = [
   {
-    icon: <MessageCircle size={24} className="text-accent-600" />,
+    icon: <MessageCircle size={28} className="text-accent-600" />,
     title: "24/7 Guest Messaging & Support",
     description: "Your guests never wait. We handle every message — instantly, intelligently, and with care.",
   },
   {
-    icon: <Calendar size={24} className="text-propcloud-600" />,
+    icon: <Calendar size={28} className="text-propcloud-600" />,
     title: "Booking & Calendar Management",
     description: "We manage availability, sync listings, and eliminate double bookings across all platforms.",
   },
   {
-    icon: <DollarSign size={24} className="text-accent-600" />,
+    icon: <DollarSign size={28} className="text-accent-600" />,
     title: "Dynamic Pricing Optimization",
     description: "Our internal AI adjusts your rates daily — maximizing occupancy and revenue without lifting a finger.",
   },
   {
-    icon: <Wrench size={24} className="text-propcloud-600" />,
+    icon: <Wrench size={28} className="text-propcloud-600" />,
     title: "Housekeeping & Turnover Coordination",
     description: "We ensure every stay begins spotless and on time, using systems that prevent missed cleans or late check-ins.",
   },
   {
-    icon: <CheckCircle size={24} className="text-accent-600" />,
+    icon: <CheckCircle size={28} className="text-accent-600" />,
     title: "Maintenance Issue Handling",
     description: "We catch problems before they affect guests — tracking, resolving, and keeping you in the loop.",
   },
   {
-    icon: <TrendingUp size={24} className="text-propcloud-600" />,
+    icon: <TrendingUp size={28} className="text-propcloud-600" />,
     title: "Marketing",
     description: "From optimized listings to outreach automations, we help your properties get seen — and booked — more.",
   },
@@ -50,7 +51,12 @@ export default function Index() {
           className="relative flex flex-col items-center justify-center text-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
         >
           <AbstractAccent position="top" color="blue" />
-          <div className="max-w-6xl mx-auto">
+          {/* Enhanced hero background visual */}
+          <div className="absolute inset-0 pointer-events-none opacity-20">
+            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-accent-200 to-propcloud-200 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-gradient-to-br from-propcloud-200 to-accent-200 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}}></div>
+          </div>
+          <div className="max-w-6xl mx-auto relative z-10">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent animate-fade-up">
               Virtual Property Management,<br />
               Powered by People + AI
@@ -71,9 +77,20 @@ export default function Index() {
         {/* SERVICES SECTION */}
         <section
           id="services"
-          className="py-16 lg:py-24 bg-surface shadow-soft"
+          className="py-16 lg:py-24 bg-surface shadow-soft relative overflow-hidden"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 opacity-30">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="service-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                  <circle cx="30" cy="30" r="1" fill="#14b8a6" opacity="0.3"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#service-grid)" />
+            </svg>
+          </div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent animate-fade-up">
                 Everything You Need. Done For You.
@@ -85,11 +102,11 @@ export default function Index() {
                 {services.map((service, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col bg-white p-6 lg:p-8 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up h-full"
+                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 lg:p-8 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up h-full border border-gray-100/50"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex-shrink-0">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="flex-shrink-0 p-3 rounded-lg bg-gradient-to-br from-surface to-gray-50 group-hover:from-accent-50 group-hover:to-propcloud-50 transition-colors duration-200">
                         {service.icon}
                       </div>
                       <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight">
@@ -109,9 +126,15 @@ export default function Index() {
         {/* HOW IT WORKS */}
         <section
           id="how-it-works"
-          className="py-16 lg:py-24 bg-background"
+          className="py-16 lg:py-24 bg-background relative"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Enhanced background visual */}
+          <div className="absolute inset-0 overflow-hidden opacity-40">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
+              <SystemGraphic className="scale-75" />
+            </div>
+          </div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-5xl mx-auto">
               <h2 className="font-bold text-3xl sm:text-4xl lg:text-5xl mb-12 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent text-center animate-fade-up">
                 How It Works
@@ -127,8 +150,11 @@ export default function Index() {
                     className="flex flex-col items-center text-center gap-6 animate-fade-up"
                     style={{animationDelay: `${0.06 + idx * 0.08}s`, animationFillMode: "both"}}
                   >
-                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold shadow-soft text-2xl">
-                      {idx + 1}
+                    <div className="relative">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold shadow-soft text-2xl relative z-10">
+                        {idx + 1}
+                      </div>
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-propcloud-700 to-accent-600 blur-lg opacity-30 animate-pulse"></div>
                     </div>
                     <span className="block font-medium text-lg lg:text-xl text-propcloud-800 leading-relaxed max-w-xs">
                       {text}
@@ -143,11 +169,20 @@ export default function Index() {
         {/* AI SUMMARY */}
         <section
           id="ai"
-          className="py-16 lg:py-24 bg-surface"
+          className="py-16 lg:py-24 bg-surface relative overflow-hidden"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Enhanced AI section background */}
+          <AbstractAccent position="top" color="green" className="opacity-50" />
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-gradient-to-br from-accent-100 to-transparent rounded-full blur-3xl opacity-60"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-propcloud-100 to-transparent rounded-full blur-2xl opacity-60"></div>
+          </div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-8">
-              <AIFlowVisual />
+              <div className="relative">
+                <AIFlowVisual />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-sm"></div>
+              </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent animate-fade-up">
                 Built with AI Inside
               </h2>
@@ -170,9 +205,10 @@ export default function Index() {
         {/* CONTACT */}
         <section
           id="contact"
-          className="py-16 lg:py-24 bg-background flex flex-col items-center justify-center text-center"
+          className="py-16 lg:py-24 bg-background flex flex-col items-center justify-center text-center relative"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AbstractAccent position="bottom" color="blue" className="opacity-30" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent animate-fade-up">
                 Get Started with propcloud
