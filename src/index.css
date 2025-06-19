@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,8 +99,42 @@
   }
 
   body {
-    /* Remove the non-existent Tailwind classes to fix build error */
-    /* @apply bg-background text-foreground; */
-    /* Any global backgrounds/colors should instead be explicit in component classes, not here */
+    font-family: 'Inter', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Fix text clipping and ensure proper rendering */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    padding-bottom: 0.1em; /* Ensures descenders are not clipped */
+  }
+
+  p, span, div {
+    line-height: 1.6;
+    padding-bottom: 0.05em; /* Subtle padding to prevent descender clipping */
+  }
+
+  /* Ensure consistent spacing and alignment */
+  .leading-tight {
+    line-height: 1.25;
+    padding-bottom: 0.1em;
+  }
+
+  .leading-relaxed {
+    line-height: 1.625;
+    padding-bottom: 0.05em;
+  }
+}
+
+/* Custom utility classes for better typography */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .font-display {
+    font-display: swap;
   }
 }

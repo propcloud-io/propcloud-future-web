@@ -107,11 +107,30 @@ export default {
         "fade-up": {
           "0%": { opacity: "0", transform: "translateY(30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "scale-in": {
+          "0%": {
+            transform: "scale(0.95)",
+            opacity: "0"
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1"
+          }
         }
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(.45,0,.55,1)",
+        "scale-in": "scale-in 0.2s ease-out",
       },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+      },
+      lineHeight: {
+        'relaxed': '1.625',
+        'loose': '2',
+      }
     }
   },
   plugins: [require("tailwindcss-animate")],
