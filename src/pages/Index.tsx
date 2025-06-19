@@ -41,6 +41,10 @@ const services = [
 ];
 
 export default function Index() {
+  const openChatBot = () => {
+    window.dispatchEvent(new CustomEvent('openChatBot'));
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans overflow-x-hidden relative">
       <Header />
@@ -64,13 +68,13 @@ export default function Index() {
             <p className="text-lg sm:text-xl lg:text-2xl text-propcloud-700 mb-8 max-w-3xl mx-auto font-medium leading-relaxed animate-fade-up" style={{animationDelay: ".16s", animationFillMode: "both"}}>
               We manage your listings, guests, pricing, and operations — so you can focus on growth.
             </p>
-            <a
-              href="#contact"
+            <button
+              onClick={openChatBot}
               className="inline-block rounded-lg bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition duration-150 animate-fade-up"
               style={{animationDelay: ".27s", animationFillMode: "both"}}
             >
               Start Managing Today
-            </a>
+            </button>
           </div>
         </section>
 
@@ -171,7 +175,6 @@ export default function Index() {
           id="ai"
           className="py-16 lg:py-24 bg-surface relative overflow-hidden"
         >
-          {/* Enhanced AI section background */}
           <AbstractAccent position="top" color="green" className="opacity-50" />
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-gradient-to-br from-accent-100 to-transparent rounded-full blur-3xl opacity-60"></div>
@@ -189,12 +192,12 @@ export default function Index() {
               <p className="text-lg lg:text-xl text-propcloud-700 leading-relaxed animate-fade-up max-w-3xl">
                 We use proprietary AI to streamline guest support, pricing, and workflow automation. It's already working behind the scenes — and soon, it will do much more.
               </p>
-              <a
-                href="/about"
+              <button
+                onClick={openChatBot}
                 className="inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all animate-fade-up"
               >
                 Learn More
-              </a>
+              </button>
             </div>
           </div>
         </section>
@@ -211,19 +214,19 @@ export default function Index() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent animate-fade-up">
-                Get Started with propcloud
+                Get Started with PropCloud
               </h2>
               <p className="text-lg lg:text-xl text-propcloud-700 mb-8 leading-relaxed animate-fade-up">
                 We're accepting a limited number of new properties. Reach out to begin.
               </p>
-              <a
-                href="mailto:contact@propcloud.io"
+              <button
+                onClick={openChatBot}
                 className="inline-block bg-gradient-to-r from-accent-600 to-propcloud-700 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition mb-6 animate-fade-up"
               >
-                Email Us to Book a Call
-              </a>
+                Chat with PropBot
+              </button>
               <div className="text-base lg:text-lg text-accent-700 mt-2 animate-fade-up">
-                contact@propcloud.io
+                Or email us at contact@propcloud.io
               </div>
             </div>
           </div>

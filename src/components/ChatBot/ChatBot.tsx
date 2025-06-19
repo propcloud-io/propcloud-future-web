@@ -2,9 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { ChatMessage } from './ChatMessage';
-import { faqResponses } from './faqData';
-import { LeadForm } from './LeadForm';
-import { sendLeadEmail } from './emailService';
+import { ConversationFlows, FlowData } from './ConversationFlows';
+import { sendFlowEmail } from './emailService';
 
 interface Message {
   id: string;
@@ -13,24 +12,14 @@ interface Message {
   timestamp: Date;
 }
 
-interface LeadData {
-  name: string;
-  email: string;
-  properties: string;
-  location: string;
-  propertyType: string;
-  currentManagement: string;
-  wantsConsultation: boolean;
-}
-
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [showLeadForm, setShowLeadForm] = useState(false);
-  const [leadData, setLeadData] = useState<Partial<LeadData>>({});
+  const [showFlows, setShowFlows] = useState(false);
+  const [flowCompleted, setFlowCompleted] = useState(false);
 
   // Show chatbot after 4 seconds or when user scrolls
   useEffect(() => {
@@ -42,21 +31,28 @@ export default function ChatBot() {
       }
     };
 
+    const handleOpenChatBot = () => {
+      setIsOpen(true);
+    };
+
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('openChatBot', handleOpenChatBot);
+    
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('openChatBot', handleOpenChatBot);
     };
   }, []);
 
   // Initialize with welcome message when opened
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
+    if (isOpen && messages.length === 0 && !showFlows) {
       setTimeout(() => {
-        addBotMessage("Hi, I'm PropBot — your AI assistant at PropCloud. Looking to manage your properties or curious about our platform?");
+        setShowFlows(true);
       }, 500);
     }
-  }, [isOpen, messages.length]);
+  }, [isOpen, messages.length, showFlows]);
 
   const addMessage = (text: string, isBot: boolean) => {
     const newMessage: Message = {
@@ -77,69 +73,48 @@ export default function ChatBot() {
   };
 
   const handleSendMessage = () => {
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || showFlows) return;
 
     addMessage(inputText, false);
     const userMessage = inputText.toLowerCase();
     setInputText('');
 
-    // Check for FAQ responses
-    const faqResponse = findFAQResponse(userMessage);
-    if (faqResponse) {
-      addBotMessage(faqResponse);
-      
-      // After FAQ, offer to help further
+    // Simple responses for general chat
+    if (userMessage.includes('help') || userMessage.includes('support')) {
+      addBotMessage("I'd be happy to help! Would you like to start a new conversation to tell me more about what you need?");
       setTimeout(() => {
-        addBotMessage("Is there anything else you'd like to know? Or would you like me to help you get started with PropCloud?");
+        setShowFlows(true);
       }, 2000);
-      return;
+    } else {
+      addBotMessage("Thanks for your message! Let me help you get connected with the right information.");
+      setTimeout(() => {
+        setShowFlows(true);
+      }, 2000);
     }
-
-    // Check for interest indicators
-    if (isShowingInterest(userMessage)) {
-      setShowLeadForm(true);
-      addBotMessage("Great! I'd love to help you get started. Let me gather some quick details about your properties.");
-      return;
-    }
-
-    // Default response
-    addBotMessage("I'd be happy to help! You can ask me about our services, pricing, how we use AI, or anything else about PropCloud. Or if you're ready to get started, just let me know!");
   };
 
-  const findFAQResponse = (message: string): string | null => {
-    for (const [keywordString, response] of Object.entries(faqResponses)) {
-      const keywords = keywordString.split(',');
-      if (keywords.some(keyword => message.includes(keyword.trim()))) {
-        return response;
-      }
-    }
-    return null;
-  };
-
-  const isShowingInterest = (message: string): boolean => {
-    const interestKeywords = [
-      'get started', 'sign up', 'interested', 'want to try', 'help me',
-      'contact', 'consultation', 'demo', 'schedule', 'properties to manage'
-    ];
-    return interestKeywords.some(keyword => message.includes(keyword));
-  };
-
-  const handleLeadSubmit = async (data: LeadData) => {
-    setLeadData(data);
-    setShowLeadForm(false);
+  const handleFlowComplete = async (data: FlowData) => {
+    setShowFlows(false);
+    setFlowCompleted(true);
     
-    addBotMessage(`Thank you, ${data.name}! I've collected your information and our team will reach out to you at ${data.email} soon.`);
+    const flowTypeNames = {
+      waitlist: 'AI Waitlist',
+      management: 'Property Management',
+      connect: 'General Connection'
+    };
+
+    addBotMessage(`Perfect! Thank you, ${data.name}. I've collected your information for our ${flowTypeNames[data.flowType]} program.`);
     
-    if (data.wantsConsultation) {
-      addBotMessage("Since you're interested in a consultation, we'll prioritize scheduling that for you. Expect to hear from us within 24 hours!");
-    }
+    setTimeout(() => {
+      addBotMessage("Our team will reach out to you soon. In the meantime, feel free to explore our website or ask me any questions!");
+    }, 2000);
 
     // Send email notification
     try {
-      await sendLeadEmail(data, messages);
-      console.log('Lead email sent successfully to contact@propcloud.io');
+      await sendFlowEmail(data, messages);
+      console.log('Flow completion email sent successfully');
     } catch (error) {
-      console.error('Failed to send lead email:', error);
+      console.error('Failed to send flow completion email:', error);
     }
   };
 
@@ -150,9 +125,10 @@ export default function ChatBot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-4 rounded-full shadow-soft-lg hover:scale-110 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+          className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-4 rounded-full shadow-soft-lg hover:scale-110 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
         >
           <MessageCircle size={24} />
+          <div className="absolute -top-2 -right-2 w-4 h-4 bg-accent-500 rounded-full animate-pulse"></div>
         </button>
       )}
 
@@ -194,30 +170,32 @@ export default function ChatBot() {
               </div>
             )}
 
-            {showLeadForm && (
-              <LeadForm onSubmit={handleLeadSubmit} />
+            {showFlows && !flowCompleted && (
+              <ConversationFlows onFlowComplete={handleFlowComplete} />
             )}
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Type your message..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-600 focus:border-transparent text-sm"
-              />
-              <button
-                onClick={handleSendMessage}
-                className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-2 rounded-lg hover:brightness-110 transition-all"
-              >
-                <Send size={16} />
-              </button>
+          {!showFlows && (
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Type your message..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-600 focus:border-transparent text-sm"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-2 rounded-lg hover:brightness-110 transition-all"
+                >
+                  <Send size={16} />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

@@ -6,6 +6,10 @@ import SystemGraphic from "@/components/SystemGraphic";
 import { Handshake, Settings, Search, Brain } from "lucide-react";
 
 export default function About() {
+  const openChatBot = () => {
+    window.dispatchEvent(new CustomEvent('openChatBot'));
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col bg-background font-sans overflow-x-hidden">
       <Header />
@@ -21,13 +25,13 @@ export default function About() {
           <p className="text-xl md:text-2xl text-propcloud-700 mb-8 max-w-3xl mx-auto font-medium leading-relaxed animate-fade-up" style={{animationDelay: '.13s', animationFillMode: 'both'}}>
             At PropCloud, we believe intelligent systems should do the heavy lifting — not humans chained to spreadsheets and check-in calls.
           </p>
-          <a
-            href="mailto:contact@propcloud.io"
+          <button
+            onClick={openChatBot}
             className="inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold rounded-lg px-8 py-4 text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all duration-150 animate-fade-up"
             style={{animationDelay: '.26s', animationFillMode: 'both'}}
           >
             Join the Waitlist
-          </a>
+          </button>
         </div>
       </section>
 
@@ -129,12 +133,12 @@ export default function About() {
           <h3 className="text-2xl md:text-3xl font-bold text-propcloud-800 mb-6 animate-fade-up">
             Want to manage your properties the intelligent way?
           </h3>
-          <a
-            href="mailto:contact@propcloud.io"
+          <button
+            onClick={openChatBot}
             className="inline-block bg-gradient-to-r from-accent-600 to-propcloud-700 text-white font-bold rounded-lg px-8 py-4 text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all duration-150 animate-fade-up"
           >
             Let's Talk
-          </a>
+          </button>
         </div>
       </section>
 
