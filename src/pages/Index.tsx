@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
@@ -111,10 +110,47 @@ export default function Index() {
                 End-to-end property management that scales with your portfolio.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {services.map((service, idx) => (
+                {[
+                  {
+                    icon: <Bell size={28} className="text-accent-600" />,
+                    title: "Guest Messaging & Experience",
+                    subtitle: "24/7 AI-Powered Guest Support",
+                    description: "We instantly handle every guest question, concern, and request — so you never lose sleep over late-night messages.",
+                  },
+                  {
+                    icon: <Calendar size={28} className="text-propcloud-600" />,
+                    title: "Booking & Channel Management",
+                    subtitle: "Seamless Calendar Sync & Listing Control",
+                    description: "We centralize your calendar, eliminate double bookings, and optimize listing visibility across all platforms.",
+                  },
+                  {
+                    icon: <DollarSign size={28} className="text-accent-600" />,
+                    title: "Revenue Optimization",
+                    subtitle: "Dynamic Pricing Engine",
+                    description: "Our internal AI tracks market demand daily, adjusting your rates to maximize occupancy and income — automatically.",
+                  },
+                  {
+                    icon: <Wrench size={28} className="text-propcloud-600" />,
+                    title: "Turnover & Property Care",
+                    subtitle: "Smart Housekeeping & Maintenance Oversight",
+                    description: "We schedule, track, and verify cleanings, inspections, and repairs — before they become guest complaints.",
+                  },
+                  {
+                    icon: <Target size={28} className="text-accent-600" />,
+                    title: "Marketing & Visibility",
+                    subtitle: "Automated Listing Optimization",
+                    description: "We craft high-converting listings and automate outreach to keep your properties booked and top-ranked.",
+                  },
+                  {
+                    icon: <BarChart3 size={28} className="text-propcloud-600" />,
+                    title: "Owner Insights",
+                    subtitle: "Transparent Reporting & Human Support",
+                    description: "Stay in control with performance dashboards, regular updates, and real people when you need them.",
+                  },
+                ].map((service, idx) => (
                   <div
                     key={idx}
-                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up h-full border border-gray-100/50"
+                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up border border-gray-100/50 h-full"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
                     <div className="flex items-start gap-4 mb-4">
