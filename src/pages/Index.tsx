@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
@@ -109,55 +110,18 @@ export default function Index() {
               <p className="text-lg text-propcloud-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{animationDelay: ".1s", animationFillMode: "both"}}>
                 End-to-end property management that scales with your portfolio.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    icon: <Bell size={28} className="text-accent-600" />,
-                    title: "Guest Messaging & Experience",
-                    subtitle: "24/7 AI-Powered Guest Support",
-                    description: "We instantly handle every guest question, concern, and request — so you never lose sleep over late-night messages.",
-                  },
-                  {
-                    icon: <Calendar size={28} className="text-propcloud-600" />,
-                    title: "Booking & Channel Management",
-                    subtitle: "Seamless Calendar Sync & Listing Control",
-                    description: "We centralize your calendar, eliminate double bookings, and optimize listing visibility across all platforms.",
-                  },
-                  {
-                    icon: <DollarSign size={28} className="text-accent-600" />,
-                    title: "Revenue Optimization",
-                    subtitle: "Dynamic Pricing Engine",
-                    description: "Our internal AI tracks market demand daily, adjusting your rates to maximize occupancy and income — automatically.",
-                  },
-                  {
-                    icon: <Wrench size={28} className="text-propcloud-600" />,
-                    title: "Turnover & Property Care",
-                    subtitle: "Smart Housekeeping & Maintenance Oversight",
-                    description: "We schedule, track, and verify cleanings, inspections, and repairs — before they become guest complaints.",
-                  },
-                  {
-                    icon: <Target size={28} className="text-accent-600" />,
-                    title: "Marketing & Visibility",
-                    subtitle: "Automated Listing Optimization",
-                    description: "We craft high-converting listings and automate outreach to keep your properties booked and top-ranked.",
-                  },
-                  {
-                    icon: <BarChart3 size={28} className="text-propcloud-600" />,
-                    title: "Owner Insights",
-                    subtitle: "Transparent Reporting & Human Support",
-                    description: "Stay in control with performance dashboards, regular updates, and real people when you need them.",
-                  },
-                ].map((service, idx) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                {services.map((service, idx) => (
                   <div
                     key={idx}
-                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up border border-gray-100/50 h-full"
+                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up border border-gray-100/50 min-h-[280px]"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <div className="flex-shrink-0 p-3 rounded-lg bg-gradient-to-br from-surface to-gray-50 group-hover:from-accent-50 group-hover:to-propcloud-50 transition-colors duration-200">
                         {service.icon}
                       </div>
-                      <div className="flex-grow">
+                      <div className="flex-grow min-w-0">
                         <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight mb-2">
                           {service.title}
                         </h3>
@@ -166,9 +130,11 @@ export default function Index() {
                         </h4>
                       </div>
                     </div>
-                    <p className="text-propcloud-600 leading-relaxed flex-grow">
-                      {service.description}
-                    </p>
+                    <div className="flex-grow flex items-start">
+                      <p className="text-propcloud-600 leading-relaxed text-sm lg:text-base">
+                        {service.description}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>

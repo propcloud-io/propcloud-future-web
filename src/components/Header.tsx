@@ -27,24 +27,28 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Function to handle navigation - if on about page, go to index first
+  // Function to handle smooth navigation with proper offset
   const handleNavigation = (to: string) => {
     if (location.pathname !== '/') {
-      // If we're not on the index page, navigate to index first then scroll
+      // If we're not on the index page, navigate to index first
       window.location.href = `/${to}`;
     } else {
-      // If we're on index page, use smooth scroll
+      // If we're on index page, use smooth scroll with proper offset
       const el = document.querySelector(to);
       if (el) {
-        const headerHeight = 64; // Account for fixed header
+        const headerHeight = 80; // Account for fixed header height
         const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - headerHeight;
         
         window.scrollTo({
-          top: offsetPosition,
+          top: Math.max(0, offsetPosition), // Ensure we don't scroll above the page
           behavior: "smooth"
         });
-        window.history.replaceState(null, "", to);
+        
+        // Update URL hash after scrolling
+        setTimeout(() => {
+          window.history.replaceState(null, "", to);
+        }, 100);
       }
     }
   };
