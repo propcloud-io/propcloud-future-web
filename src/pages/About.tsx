@@ -4,11 +4,17 @@ import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
 import SystemGraphic from "@/components/SystemGraphic";
 import { Handshake, Settings, Search, Brain } from "lucide-react";
+import { useEffect } from "react";
 
 export default function About() {
   const openChatBot = () => {
     window.dispatchEvent(new CustomEvent('openChatBot'));
   };
+
+  // Always scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="relative min-h-screen flex flex-col bg-background font-sans overflow-x-hidden">

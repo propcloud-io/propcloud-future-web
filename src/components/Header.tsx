@@ -36,7 +36,14 @@ export default function Header() {
       // If we're on index page, use smooth scroll
       const el = document.querySelector(to);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        const headerHeight = 64; // Account for fixed header
+        const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
         window.history.replaceState(null, "", to);
       }
     }
