@@ -2,41 +2,48 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
-import { CheckCircle, Calendar, DollarSign, MessageCircle, Wrench, TrendingUp } from "lucide-react";
+import { CheckCircle, Calendar, DollarSign, MessageCircle, Wrench, TrendingUp, Bell, Zap, Target, BarChart3 } from "lucide-react";
 import Testimonials from "@/components/Testimonials";
 import AIFlowVisual from "@/components/AIFlowVisual";
 import SystemGraphic from "@/components/SystemGraphic";
+import { Link } from "react-router-dom";
 
 const services = [
   {
-    icon: <MessageCircle size={28} className="text-accent-600" />,
-    title: "24/7 Guest Messaging & Support",
-    description: "Your guests never wait. We handle every message — instantly, intelligently, and with care.",
+    icon: <Bell size={28} className="text-accent-600" />,
+    title: "A. Guest Messaging & Experience",
+    subtitle: "24/7 AI-Powered Guest Support",
+    description: "We instantly handle every guest question, concern, and request — so you never lose sleep over late-night messages.",
   },
   {
     icon: <Calendar size={28} className="text-propcloud-600" />,
-    title: "Booking & Calendar Management",
-    description: "We manage availability, sync listings, and eliminate double bookings across all platforms.",
+    title: "B. Booking & Channel Management",
+    subtitle: "Seamless Calendar Sync & Listing Control",
+    description: "We centralize your calendar, eliminate double bookings, and optimize listing visibility across all platforms.",
   },
   {
     icon: <DollarSign size={28} className="text-accent-600" />,
-    title: "Dynamic Pricing Optimization",
-    description: "Our internal AI adjusts your rates daily — maximizing occupancy and revenue without lifting a finger.",
+    title: "C. Revenue Optimization",
+    subtitle: "Dynamic Pricing Engine",
+    description: "Our internal AI tracks market demand daily, adjusting your rates to maximize occupancy and income — automatically.",
   },
   {
     icon: <Wrench size={28} className="text-propcloud-600" />,
-    title: "Housekeeping & Turnover Coordination",
-    description: "We ensure every stay begins spotless and on time, using systems that prevent missed cleans or late check-ins.",
+    title: "D. Turnover & Property Care",
+    subtitle: "Smart Housekeeping & Maintenance Oversight",
+    description: "We schedule, track, and verify cleanings, inspections, and repairs — before they become guest complaints.",
   },
   {
-    icon: <CheckCircle size={28} className="text-accent-600" />,
-    title: "Maintenance Issue Handling",
-    description: "We catch problems before they affect guests — tracking, resolving, and keeping you in the loop.",
+    icon: <Target size={28} className="text-accent-600" />,
+    title: "E. Marketing & Visibility",
+    subtitle: "Automated Listing Optimization",
+    description: "We craft high-converting listings and automate outreach to keep your properties booked and top-ranked.",
   },
   {
-    icon: <TrendingUp size={28} className="text-propcloud-600" />,
-    title: "Marketing",
-    description: "From optimized listings to outreach automations, we help your properties get seen — and booked — more.",
+    icon: <BarChart3 size={28} className="text-propcloud-600" />,
+    title: "F. Owner Insights",
+    subtitle: "Transparent Reporting & Human Support",
+    description: "Stay in control with performance dashboards, regular updates, and real people when you need them.",
   },
 ];
 
@@ -55,6 +62,7 @@ export default function Index() {
           className="relative flex flex-col items-center justify-center text-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
         >
           <AbstractAccent position="top" color="blue" />
+          <SystemGraphic className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-30 z-0" />
           {/* Enhanced hero background visual */}
           <div className="absolute inset-0 pointer-events-none opacity-20">
             <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-accent-200 to-propcloud-200 rounded-full blur-3xl animate-pulse"></div>
@@ -97,7 +105,7 @@ export default function Index() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent animate-fade-up">
-                Everything You Need. Done For You.
+                You Own. We Operate.
               </h2>
               <p className="text-lg text-propcloud-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{animationDelay: ".1s", animationFillMode: "both"}}>
                 End-to-end property management that scales with your portfolio.
@@ -113,9 +121,14 @@ export default function Index() {
                       <div className="flex-shrink-0 p-3 rounded-lg bg-gradient-to-br from-surface to-gray-50 group-hover:from-accent-50 group-hover:to-propcloud-50 transition-colors duration-200">
                         {service.icon}
                       </div>
-                      <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight">
-                        {service.title}
-                      </h3>
+                      <div className="flex-grow">
+                        <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight mb-2">
+                          {service.title}
+                        </h3>
+                        <h4 className="text-base font-medium text-accent-700 mb-3">
+                          {service.subtitle}
+                        </h4>
+                      </div>
                     </div>
                     <p className="text-propcloud-600 leading-relaxed flex-grow">
                       {service.description}
@@ -192,12 +205,12 @@ export default function Index() {
               <p className="text-lg lg:text-xl text-propcloud-700 leading-relaxed animate-fade-up max-w-3xl">
                 We use proprietary AI to streamline guest support, pricing, and workflow automation. It's already working behind the scenes — and soon, it will do much more.
               </p>
-              <button
-                onClick={openChatBot}
+              <Link
+                to="/about"
                 className="inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all animate-fade-up"
               >
                 Learn More
-              </button>
+              </Link>
             </div>
           </div>
         </section>

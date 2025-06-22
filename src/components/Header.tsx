@@ -17,6 +17,7 @@ const navItems = [
 export default function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   // Listen to scroll for header transparency
   useEffect(() => {
@@ -27,7 +28,21 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Smooth scroll now unified via SmoothScrollLink for anchors
+  // Function to handle navigation - if on about page, go to index first
+  const handleNavigation = (to: string) => {
+    if (location.pathname !== '/') {
+      // If we're not on the index page, navigate to index first then scroll
+      window.location.href = `/${to}`;
+    } else {
+      // If we're on index page, use smooth scroll
+      const el = document.querySelector(to);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.replaceState(null, "", to);
+      }
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 
@@ -42,13 +57,13 @@ export default function Header() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-800">
           {navItems.map((item) => (
-            <SmoothScrollLink
+            <button
               key={item.label}
-              to={item.to}
-              className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
+              onClick={() => handleNavigation(item.to)}
+              className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base bg-transparent border-none cursor-pointer"
             >
               {item.label}
-            </SmoothScrollLink>
+            </button>
           ))}
         </div>
         {/* About Us Button */}
@@ -71,15 +86,17 @@ export default function Header() {
       {showMobileMenu && (
         <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
           {navItems.map((item, idx) => (
-            <SmoothScrollLink
+            <button
               key={item.label}
-              to={item.to}
-              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition"
+              onClick={() => {
+                handleNavigation(item.to);
+                setShowMobileMenu(false);
+              }}
+              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition text-left bg-transparent border-none cursor-pointer"
               style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
-              onClick={() => setShowMobileMenu(false)}
             >
               {item.label}
-            </SmoothScrollLink>
+            </button>
           ))}
           <Link
             to="/about"
