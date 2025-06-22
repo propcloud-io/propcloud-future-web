@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import Logo from "./Logo";
-import SmoothScrollLink from "@/components/ui/SmoothScrollLink";
 
 const navItems = [
   { label: "Home", to: "#home" },

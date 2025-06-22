@@ -5,43 +5,42 @@ import AbstractAccent from "@/components/AbstractAccent";
 import { CheckCircle, Calendar, DollarSign, MessageCircle, Wrench, TrendingUp, Bell, Zap, Target, BarChart3 } from "lucide-react";
 import Testimonials from "@/components/Testimonials";
 import AIFlowVisual from "@/components/AIFlowVisual";
-import SystemGraphic from "@/components/SystemGraphic";
 import { Link } from "react-router-dom";
 
 const services = [
   {
     icon: <Bell size={28} className="text-accent-600" />,
-    title: "A. Guest Messaging & Experience",
+    title: "Guest Messaging & Experience",
     subtitle: "24/7 AI-Powered Guest Support",
     description: "We instantly handle every guest question, concern, and request — so you never lose sleep over late-night messages.",
   },
   {
     icon: <Calendar size={28} className="text-propcloud-600" />,
-    title: "B. Booking & Channel Management",
+    title: "Booking & Channel Management",
     subtitle: "Seamless Calendar Sync & Listing Control",
     description: "We centralize your calendar, eliminate double bookings, and optimize listing visibility across all platforms.",
   },
   {
     icon: <DollarSign size={28} className="text-accent-600" />,
-    title: "C. Revenue Optimization",
+    title: "Revenue Optimization",
     subtitle: "Dynamic Pricing Engine",
     description: "Our internal AI tracks market demand daily, adjusting your rates to maximize occupancy and income — automatically.",
   },
   {
     icon: <Wrench size={28} className="text-propcloud-600" />,
-    title: "D. Turnover & Property Care",
+    title: "Turnover & Property Care",
     subtitle: "Smart Housekeeping & Maintenance Oversight",
     description: "We schedule, track, and verify cleanings, inspections, and repairs — before they become guest complaints.",
   },
   {
     icon: <Target size={28} className="text-accent-600" />,
-    title: "E. Marketing & Visibility",
+    title: "Marketing & Visibility",
     subtitle: "Automated Listing Optimization",
     description: "We craft high-converting listings and automate outreach to keep your properties booked and top-ranked.",
   },
   {
     icon: <BarChart3 size={28} className="text-propcloud-600" />,
-    title: "F. Owner Insights",
+    title: "Owner Insights",
     subtitle: "Transparent Reporting & Human Support",
     description: "Stay in control with performance dashboards, regular updates, and real people when you need them.",
   },
@@ -62,7 +61,8 @@ export default function Index() {
           className="relative flex flex-col items-center justify-center text-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
         >
           <AbstractAccent position="top" color="blue" />
-          <SystemGraphic className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-30 z-0" />
+          {/* Different visual for homepage - using AIFlowVisual instead of SystemGraphic */}
+          <AIFlowVisual className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-20 z-0 scale-150" />
           {/* Enhanced hero background visual */}
           <div className="absolute inset-0 pointer-events-none opacity-20">
             <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-accent-200 to-propcloud-200 rounded-full blur-3xl animate-pulse"></div>
@@ -110,11 +110,11 @@ export default function Index() {
               <p className="text-lg text-propcloud-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{animationDelay: ".1s", animationFillMode: "both"}}>
                 End-to-end property management that scales with your portfolio.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {services.map((service, idx) => (
                   <div
                     key={idx}
-                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 lg:p-8 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up h-full border border-gray-100/50"
+                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up h-full border border-gray-100/50"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
                     <div className="flex items-start gap-4 mb-4">
@@ -148,7 +148,7 @@ export default function Index() {
           {/* Enhanced background visual */}
           <div className="absolute inset-0 overflow-hidden opacity-40">
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-              <SystemGraphic className="scale-75" />
+              <AIFlowVisual className="scale-75" />
             </div>
           </div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
