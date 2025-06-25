@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
@@ -10,39 +9,33 @@ import { Link } from "react-router-dom";
 const services = [
   {
     icon: <Bell size={28} className="text-accent-600" />,
-    title: "Guest Messaging & Experience",
-    subtitle: "24/7 AI-Powered Guest Support",
-    description: "We instantly handle every guest question, concern, and request — so you never lose sleep over late-night messages.",
+    title: "24/7 Guest Messaging & Support",
+    description: "We instantly handle every guest message with accuracy and care — day or night.",
   },
   {
     icon: <Calendar size={28} className="text-propcloud-600" />,
-    title: "Booking & Channel Management",
-    subtitle: "Seamless Calendar Sync & Listing Control",
-    description: "We centralize your calendar, eliminate double bookings, and optimize listing visibility across all platforms.",
+    title: "Booking & Calendar Management",
+    description: "We sync all your listings and prevent double bookings across every platform.",
   },
   {
     icon: <DollarSign size={28} className="text-accent-600" />,
-    title: "Revenue Optimization",
-    subtitle: "Dynamic Pricing Engine",
-    description: "Our internal AI tracks market demand daily, adjusting your rates to maximize occupancy and income — automatically.",
+    title: "Dynamic Pricing Optimization",
+    description: "Our AI updates your rates daily to maximize both occupancy and revenue.",
   },
   {
     icon: <Wrench size={28} className="text-propcloud-600" />,
-    title: "Turnover & Property Care",
-    subtitle: "Smart Housekeeping & Maintenance Oversight",
-    description: "We schedule, track, and verify cleanings, inspections, and repairs — before they become guest complaints.",
+    title: "Turnover & Housekeeping",
+    description: "We coordinate cleanings so every check-in is spotless and on time.",
   },
   {
     icon: <Target size={28} className="text-accent-600" />,
-    title: "Marketing & Visibility",
-    subtitle: "Automated Listing Optimization",
-    description: "We craft high-converting listings and automate outreach to keep your properties booked and top-ranked.",
+    title: "Proactive Maintenance",
+    description: "We monitor, report, and resolve issues before guests even notice.",
   },
   {
     icon: <BarChart3 size={28} className="text-propcloud-600" />,
-    title: "Owner Insights",
-    subtitle: "Transparent Reporting & Human Support",
-    description: "Stay in control with performance dashboards, regular updates, and real people when you need them.",
+    title: "Marketing & Visibility",
+    description: "We enhance your listings and boost visibility through smart outreach.",
   },
 ];
 

@@ -12,7 +12,6 @@ export interface FlowData {
   propertyCount?: string;
   location?: string;
   managementType?: string;
-  wantsCall?: boolean;
   helpMessage?: string;
 }
 
@@ -24,7 +23,6 @@ interface FlowConfig {
   key: string;
   question: string;
   placeholder?: string;
-  type?: 'boolean';
 }
 
 export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
@@ -38,13 +36,13 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
     setStep(1);
   };
 
-  const handleInputSubmit = (key: string, value: string | boolean) => {
+  const handleInputSubmit = (key: string, value: string) => {
     const newData = { ...formData, [key]: value };
     setFormData(newData);
 
     const flows = {
       waitlist: ['name', 'email', 'city', 'currentlyManaging', 'aiExcitement'],
-      management: ['name', 'email', 'propertyCount', 'location', 'managementType', 'wantsCall'],
+      management: ['name', 'email', 'propertyCount', 'location', 'managementType'],
       connect: ['name', 'email', 'helpMessage']
     };
 
@@ -101,7 +99,7 @@ interface FlowStepProps {
   flowType: 'waitlist' | 'management' | 'connect';
   step: number;
   formData: Partial<FlowData>;
-  onSubmit: (key: string, value: string | boolean) => void;
+  onSubmit: (key: string, value: string) => void;
 }
 
 function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
@@ -120,8 +118,7 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
       { key: 'email', question: "What's your email address?", placeholder: 'your@email.com' },
       { key: 'propertyCount', question: 'How many properties do you have?', placeholder: 'e.g., 1-3, 5-10, 20+' },
       { key: 'location', question: 'Where are your properties located?', placeholder: 'City, state/country' },
-      { key: 'managementType', question: 'Are they self-managed or with a company?', placeholder: 'Current management situation' },
-      { key: 'wantsCall', question: 'Would you like to schedule a call?', type: 'boolean' }
+      { key: 'managementType', question: 'Are they self-managed or with a company?', placeholder: 'Current management situation' }
     ],
     connect: [
       { key: 'name', question: "What's your name?", placeholder: 'Your full name' },
@@ -135,17 +132,10 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
   if (!currentConfig) return null;
 
   const handleSubmit = () => {
-    if (currentConfig.type === 'boolean') {
-      return;
-    }
     if (inputValue.trim()) {
       onSubmit(currentConfig.key, inputValue.trim());
       setInputValue('');
     }
-  };
-
-  const handleBooleanSubmit = (value: boolean) => {
-    onSubmit(currentConfig.key, value);
   };
 
   return (
@@ -159,41 +149,24 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
         </div>
       </div>
 
-      {currentConfig.type === 'boolean' ? (
-        <div className="space-y-2">
-          <Button
-            onClick={() => handleBooleanSubmit(true)}
-            className="w-full bg-gradient-to-r from-propcloud-700 to-accent-600 hover:brightness-110"
-          >
-            Yes, schedule a call
-          </Button>
-          <Button
-            onClick={() => handleBooleanSubmit(false)}
-            className="w-full bg-gray-600 hover:bg-gray-700"
-          >
-            No, just email me
-          </Button>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
-            placeholder={currentConfig.placeholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-600 focus:border-transparent text-sm"
-            autoFocus
-          />
-          <Button
-            onClick={handleSubmit}
-            disabled={!inputValue.trim()}
-            className="w-full bg-gradient-to-r from-propcloud-700 to-accent-600 hover:brightness-110 disabled:opacity-50"
-          >
-            Next
-          </Button>
-        </div>
-      )}
+      <div className="space-y-3">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
+          placeholder={currentConfig.placeholder}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-600 focus:border-transparent text-sm"
+          autoFocus
+        />
+        <Button
+          onClick={handleSubmit}
+          disabled={!inputValue.trim()}
+          className="w-full bg-gradient-to-r from-propcloud-700 to-accent-600 hover:brightness-110 disabled:opacity-50"
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }
