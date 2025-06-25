@@ -20,7 +20,7 @@ const services = [
   {
     icon: <DollarSign size={28} className="text-accent-600" />,
     title: "Dynamic Pricing Optimization",
-    description: "Our AI updates your rates daily to maximize both occupancy and revenue.",
+    description: "Our AI updates your rates daily to maximize both occupancy and revenue streams.",
   },
   {
     icon: <Wrench size={28} className="text-propcloud-600" />,
@@ -35,8 +35,15 @@ const services = [
   {
     icon: <BarChart3 size={28} className="text-propcloud-600" />,
     title: "Marketing & Visibility",
-    description: "We enhance your listings and boost visibility through smart outreach.",
+    description: "We enhance your listings and boost visibility through smart outreach campaigns.",
   },
+];
+
+const stats = [
+  { number: "99.8%", label: "Guest Satisfaction", color: "text-accent-600" },
+  { number: "24/7", label: "AI Response Time", color: "text-propcloud-600" },
+  { number: "15%+", label: "Revenue Increase", color: "text-accent-600" },
+  { number: "500+", label: "Properties Managed", color: "text-propcloud-600" },
 ];
 
 export default function Index() {
@@ -54,9 +61,7 @@ export default function Index() {
           className="relative flex flex-col items-center justify-center text-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
         >
           <AbstractAccent position="top" color="blue" />
-          {/* Different visual for homepage - using AIFlowVisual instead of SystemGraphic */}
           <AIFlowVisual className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-20 z-0 scale-150" />
-          {/* Enhanced hero background visual */}
           <div className="absolute inset-0 pointer-events-none opacity-20">
             <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-accent-200 to-propcloud-200 rounded-full blur-3xl animate-pulse"></div>
             <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-gradient-to-br from-propcloud-200 to-accent-200 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}}></div>
@@ -69,13 +74,36 @@ export default function Index() {
             <p className="text-lg sm:text-xl lg:text-2xl text-propcloud-700 mb-8 max-w-3xl mx-auto font-medium leading-relaxed animate-fade-up" style={{animationDelay: ".16s", animationFillMode: "both"}}>
               We manage your listings, guests, pricing, and operations — so you can focus on growth.
             </p>
-            <button
-              onClick={openChatBot}
-              className="inline-block rounded-lg bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition duration-150 animate-fade-up"
-              style={{animationDelay: ".27s", animationFillMode: "both"}}
-            >
-              Start Managing Today
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-8">
+              <button
+                onClick={openChatBot}
+                className="inline-block rounded-lg bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition duration-150 animate-fade-up"
+                style={{animationDelay: ".27s", animationFillMode: "both"}}
+              >
+                Start Managing Today
+              </button>
+              <Link
+                to="/about"
+                className="inline-block rounded-lg border-2 border-propcloud-300 text-propcloud-700 font-bold px-8 py-4 text-base lg:text-lg hover:bg-propcloud-50 hover:scale-105 transition duration-150 animate-fade-up"
+                style={{animationDelay: ".35s", animationFillMode: "both"}}
+              >
+                Learn Our Story
+              </Link>
+            </div>
+            
+            {/* STATS SECTION */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto animate-fade-up" style={{animationDelay: ".45s", animationFillMode: "both"}}>
+              {stats.map((stat, idx) => (
+                <div key={idx} className="text-center">
+                  <div className={`text-2xl lg:text-3xl font-bold ${stat.color} mb-1`}>
+                    {stat.number}
+                  </div>
+                  <div className="text-sm lg:text-base text-propcloud-600 font-medium">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -84,7 +112,6 @@ export default function Index() {
           id="services"
           className="py-16 lg:py-24 bg-surface shadow-soft relative overflow-hidden"
         >
-          {/* Subtle background pattern */}
           <div className="absolute inset-0 opacity-30">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -107,7 +134,7 @@ export default function Index() {
                 {services.map((service, idx) => (
                   <div
                     key={idx}
-                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up border border-gray-100/50 min-h-[280px]"
+                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-soft hover:shadow-md transition-all hover:scale-105 duration-200 animate-fade-up border border-gray-100/50"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
                     <div className="flex items-start gap-4 mb-4">
@@ -115,13 +142,13 @@ export default function Index() {
                         {service.icon}
                       </div>
                       <div className="flex-grow min-w-0">
-                        <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight mb-2">
+                        <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight mb-3">
                           {service.title}
                         </h3>
                       </div>
                     </div>
                     <div className="flex-grow flex items-start">
-                      <p className="text-propcloud-600 leading-relaxed text-sm lg:text-base">
+                      <p className="text-propcloud-600 leading-relaxed text-sm lg:text-base min-h-[2.5rem]">
                         {service.description}
                       </p>
                     </div>
@@ -137,7 +164,6 @@ export default function Index() {
           id="how-it-works"
           className="py-16 lg:py-24 bg-background relative"
         >
-          {/* Enhanced background visual */}
           <div className="absolute inset-0 overflow-hidden opacity-40">
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
               <AIFlowVisual className="scale-75" />
@@ -145,15 +171,27 @@ export default function Index() {
           </div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-5xl mx-auto">
-              <h2 className="font-bold text-3xl sm:text-4xl lg:text-5xl mb-12 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent text-center animate-fade-up">
+              <h2 className="font-bold text-3xl sm:text-4xl lg:text-5xl mb-4 bg-gradient-to-r from-propcloud-800 to-accent-600 bg-clip-text text-transparent text-center animate-fade-up">
                 How It Works
               </h2>
+              <p className="text-lg text-propcloud-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{animationDelay: ".1s", animationFillMode: "both"}}>
+                Get started in minutes, not months. Our streamlined onboarding gets you operational fast.
+              </p>
               <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
                 {[
-                  "Schedule your onboarding call",
-                  "We connect and configure your listings within 48 hours",
-                  "We handle day-to-day operations using people + AI",
-                ].map((text, idx) => (
+                  {
+                    title: "Schedule your onboarding call",
+                    description: "30-minute consultation to understand your properties and goals"
+                  },
+                  {
+                    title: "We connect and configure your listings within 48 hours",
+                    description: "Seamless integration with all major booking platforms"
+                  },
+                  {
+                    title: "We handle day-to-day operations using people + AI",
+                    description: "Sit back and watch your revenue grow while we handle everything"
+                  },
+                ].map((step, idx) => (
                   <div
                     key={idx}
                     className="flex flex-col items-center text-center gap-6 animate-fade-up"
@@ -165,9 +203,14 @@ export default function Index() {
                       </div>
                       <div className="absolute inset-0 rounded-full bg-gradient-to-r from-propcloud-700 to-accent-600 blur-lg opacity-30 animate-pulse"></div>
                     </div>
-                    <span className="block font-medium text-lg lg:text-xl text-propcloud-800 leading-relaxed max-w-xs">
-                      {text}
-                    </span>
+                    <div>
+                      <h3 className="font-semibold text-lg lg:text-xl text-propcloud-800 leading-relaxed mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-propcloud-600 text-sm lg:text-base max-w-xs">
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -197,12 +240,20 @@ export default function Index() {
               <p className="text-lg lg:text-xl text-propcloud-700 leading-relaxed animate-fade-up max-w-3xl">
                 We use proprietary AI to streamline guest support, pricing, and workflow automation. It's already working behind the scenes — and soon, it will do much more.
               </p>
-              <Link
-                to="/about"
-                className="inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all animate-fade-up"
-              >
-                Learn More
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <Link
+                  to="/about"
+                  className="inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition-all animate-fade-up"
+                >
+                  Learn More
+                </Link>
+                <Link
+                  to="/ai-vision"
+                  className="inline-block border-2 border-accent-600 text-accent-700 font-bold rounded-lg px-8 py-4 text-base lg:text-lg hover:bg-accent-50 hover:scale-105 transition-all animate-fade-up"
+                >
+                  See AI Vision
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -222,16 +273,24 @@ export default function Index() {
                 Get Started with PropCloud
               </h2>
               <p className="text-lg lg:text-xl text-propcloud-700 mb-8 leading-relaxed animate-fade-up">
-                We're accepting a limited number of new properties. Reach out to begin.
+                We're accepting a limited number of new properties. Reach out to begin your journey to effortless property management.
               </p>
-              <button
-                onClick={openChatBot}
-                className="inline-block bg-gradient-to-r from-accent-600 to-propcloud-700 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition mb-6 animate-fade-up"
-              >
-                Chat with PropBot
-              </button>
-              <div className="text-base lg:text-lg text-accent-700 mt-2 animate-fade-up">
-                Or email us at contact@propcloud.io
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-6">
+                <button
+                  onClick={openChatBot}
+                  className="inline-block bg-gradient-to-r from-accent-600 to-propcloud-700 text-white font-bold rounded-lg px-8 py-4 text-base lg:text-lg shadow-soft hover:brightness-110 hover:scale-105 transition animate-fade-up"
+                >
+                  Chat with PropBot
+                </button>
+                <a
+                  href="mailto:contact@propcloud.io"
+                  className="inline-block border-2 border-propcloud-300 text-propcloud-700 font-bold rounded-lg px-8 py-4 text-base lg:text-lg hover:bg-propcloud-50 hover:scale-105 transition animate-fade-up"
+                >
+                  Email Us Directly
+                </a>
+              </div>
+              <div className="text-base lg:text-lg text-accent-700 animate-fade-up">
+                <span className="font-semibold">Quick Response:</span> We typically respond within 2 hours during business hours
               </div>
             </div>
           </div>
