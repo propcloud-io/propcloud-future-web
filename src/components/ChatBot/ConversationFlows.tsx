@@ -57,26 +57,26 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
 
   if (!selectedFlow) {
     return (
-      <div className="space-y-4 p-4">
-        <p className="text-propcloud-800 font-medium mb-4">
+      <div className="space-y-4 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-white/60">
+        <p className="text-slate-800 font-medium mb-4">
           Hi! I'm PropBot. What brings you here today?
         </p>
         <div className="space-y-2">
           <Button
             onClick={() => handleFlowSelection('waitlist')}
-            className="w-full bg-gradient-to-r from-propcloud-700 to-accent-600 hover:brightness-110"
+            className="w-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 hover:brightness-110 shadow-md"
           >
             🚀 Join the AI Waitlist
           </Button>
           <Button
             onClick={() => handleFlowSelection('management')}
-            className="w-full bg-gradient-to-r from-accent-600 to-propcloud-700 hover:brightness-110"
+            className="w-full bg-gradient-to-r from-teal-600 via-accent-500 to-propcloud-600 hover:brightness-110 shadow-md"
           >
             🏠 Start Property Management
           </Button>
           <Button
             onClick={() => handleFlowSelection('connect')}
-            className="w-full bg-gray-600 hover:bg-gray-700"
+            className="w-full bg-slate-600 hover:bg-slate-700 shadow-md"
           >
             💬 Just Looking to Connect
           </Button>
@@ -139,12 +139,12 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-4 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-white/60">
       <div className="mb-4">
-        <p className="text-sm font-medium text-propcloud-800 mb-2">
+        <p className="text-sm font-medium text-slate-800 mb-2">
           {currentConfig.question}
         </p>
-        <div className="text-xs text-gray-500 mb-3">
+        <div className="text-xs text-slate-500 mb-3">
           Step {step} of {flowConfigs[flowType].length}
         </div>
       </div>
@@ -156,13 +156,13 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
           placeholder={currentConfig.placeholder}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-600 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
           autoFocus
         />
         <Button
           onClick={handleSubmit}
           disabled={!inputValue.trim()}
-          className="w-full bg-gradient-to-r from-propcloud-700 to-accent-600 hover:brightness-110 disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 hover:brightness-110 disabled:opacity-50 shadow-md"
         >
           Next
         </Button>

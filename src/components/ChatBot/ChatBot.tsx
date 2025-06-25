@@ -54,6 +54,19 @@ export default function ChatBot() {
     }
   }, [isOpen, messages.length, showFlows]);
 
+  // Reset chat state when closing
+  const handleClose = () => {
+    setIsOpen(false);
+    // Reset all state after a brief delay to allow close animation
+    setTimeout(() => {
+      setMessages([]);
+      setShowFlows(false);
+      setFlowCompleted(false);
+      setInputText('');
+      setIsTyping(false);
+    }, 200);
+  };
+
   const addMessage = (text: string, isBot: boolean) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -106,7 +119,7 @@ export default function ChatBot() {
     addBotMessage(`Perfect! Thank you, ${data.name}. I've collected your information for our ${flowTypeNames[data.flowType]} program.`);
     
     setTimeout(() => {
-      addBotMessage("Our team will reach out to you soon. In the meantime, feel free to explore our website or ask me any questions!");
+      addBotMessage("Our team will reach out to you soon. Thanks for your interest in PropCloud! 🚀");
     }, 2000);
 
     // Send email notification
@@ -125,17 +138,17 @@ export default function ChatBot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-4 rounded-full shadow-soft-lg hover:scale-110 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+          className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group"
         >
           <MessageCircle size={24} />
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-accent-500 rounded-full animate-pulse"></div>
+          <div className="absolute -top-2 -right-2 w-4 h-4 bg-teal-400 rounded-full animate-pulse"></div>
         </button>
       )}
 
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-soft-lg border border-gray-200 w-80 h-96 flex flex-col overflow-hidden animate-scale-in">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/60 w-80 h-96 flex flex-col overflow-hidden animate-scale-in">
           {/* Header */}
-          <div className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                 <MessageCircle size={18} />
@@ -146,25 +159,25 @@ export default function ChatBot() {
               </div>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
-              className="hover:bg-white/20 p-1 rounded"
+              onClick={handleClose}
+              className="hover:bg-white/20 p-1 rounded transition-colors"
             >
               <X size={18} />
             </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-br from-slate-50/50 to-teal-50/30">
             {messages.map((message) => (
               <ChatMessage key={message.id} message={message} />
             ))}
             
             {isTyping && (
-              <div className="flex items-center gap-2 text-gray-500">
+              <div className="flex items-center gap-2 text-slate-500">
                 <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-accent-600 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-accent-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-accent-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                 </div>
                 <span className="text-sm">PropBot is typing...</span>
               </div>
@@ -177,7 +190,7 @@ export default function ChatBot() {
 
           {/* Input */}
           {!showFlows && (
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -185,11 +198,11 @@ export default function ChatBot() {
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-600 focus:border-transparent text-sm"
+                  className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white p-2 rounded-lg hover:brightness-110 transition-all"
+                  className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-2 rounded-lg hover:brightness-110 transition-all shadow-md"
                 >
                   <Send size={16} />
                 </button>
