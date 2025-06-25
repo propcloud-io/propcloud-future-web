@@ -118,9 +118,6 @@ export default function Index() {
                         <h3 className="text-lg lg:text-xl text-propcloud-800 font-semibold leading-tight mb-2">
                           {service.title}
                         </h3>
-                        <h4 className="text-base font-medium text-accent-700 mb-3">
-                          {service.subtitle}
-                        </h4>
                       </div>
                     </div>
                     <div className="flex-grow flex items-start">

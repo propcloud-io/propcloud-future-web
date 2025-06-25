@@ -133,7 +133,6 @@ AI Excitement: ${flowData.aiExcitement}
 Number of Properties: ${flowData.propertyCount}
 Location: ${flowData.location}
 Management Type: ${flowData.managementType}
-Wants Call: ${flowData.wantsCall ? 'YES - Schedule ASAP' : 'No - Email follow-up only'}
 `;
   } else if (flowData.flowType === 'connect') {
     details += `
@@ -150,7 +149,7 @@ ${chatHistory.map(msg =>
 
 ---
 This ${flowDisplayName.toLowerCase()} was automatically captured by PropBot on the PropCloud website.
-${flowData.flowType === 'management' && flowData.wantsCall ? 'PRIORITY: User requested a consultation call - follow up within 24 hours.' : 'Please follow up within 48 hours for best conversion rates.'}
+Please follow up within 48 hours for best conversion rates.
 `;
 
   return details;
