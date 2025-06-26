@@ -59,7 +59,7 @@ export default function Index() {
         {/* HERO SECTION */}
         <section
           id="home"
-          className="relative flex flex-col items-center justify-center text-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 overflow-hidden"
+          className="relative flex flex-col items-center justify-center text-center pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 overflow-hidden"
         >
           <AbstractAccent position="top" color="blue" />
           <AIFlowVisual className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-15 z-0 scale-150" />
@@ -268,7 +268,9 @@ export default function Index() {
         </section>
 
         {/* TESTIMONIALS */}
-        <Testimonials />
+        <section id="testimonials" className="py-16 lg:py-24">
+          <Testimonials />
+        </section>
 
         {/* CONTACT */}
         <section

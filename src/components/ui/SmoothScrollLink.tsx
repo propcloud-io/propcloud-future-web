@@ -10,14 +10,27 @@ export default function SmoothScrollLink({ to, children, ...props }: SmoothScrol
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (to.startsWith("#")) {
       e.preventDefault();
-      const el = document.querySelector(to);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Optional: update hash
-        window.history.replaceState(null, "", to);
+      const targetId = to.substring(1);
+      const element = document.getElementById(targetId);
+      
+      if (element) {
+        const headerHeight = 80; // Consistent with Header component
+        const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementTop - headerHeight;
+        
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: "smooth"
+        });
+        
+        // Update hash after scrolling
+        setTimeout(() => {
+          window.history.replaceState(null, "", to);
+        }, 150);
       }
     }
   };
+
   return (
     <a href={to} onClick={handleClick} {...props}>
       {children}

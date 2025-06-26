@@ -27,31 +27,59 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Function to handle smooth navigation with proper offset
+  // Function to handle smooth navigation with consistent offset
   const handleNavigation = (to: string) => {
+    const targetId = to.substring(1); // Remove the # symbol
+    
     if (location.pathname !== '/') {
       // If we're not on the index page, navigate to index first
       window.location.href = `/${to}`;
-    } else {
-      // If we're on index page, use smooth scroll with proper offset
-      const el = document.querySelector(to);
-      if (el) {
-        const headerHeight = 80; // Account for fixed header height
-        const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerHeight;
+      return;
+    }
+
+    // If we're on index page, use smooth scroll with consistent offset
+    const scrollToElement = () => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        const headerHeight = 80; // Fixed header height
+        const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementTop - headerHeight;
         
         window.scrollTo({
-          top: Math.max(0, offsetPosition), // Ensure we don't scroll above the page
+          top: Math.max(0, offsetPosition),
           behavior: "smooth"
         });
         
-        // Update URL hash after scrolling
+        // Update URL hash after a brief delay
         setTimeout(() => {
           window.history.replaceState(null, "", to);
-        }, 100);
+        }, 150);
       }
-    }
+    };
+
+    // Small delay to ensure DOM is ready
+    setTimeout(scrollToElement, 50);
   };
+
+  // Handle hash navigation on page load
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      const targetId = location.hash.substring(1);
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          const headerHeight = 80;
+          const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementTop - headerHeight;
+          
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: "smooth"
+          });
+        }
+      }, 100);
+    }
+  }, [location]);
 
   return (
     <header
@@ -60,7 +88,7 @@ export default function Header() {
       `}
       style={{ WebkitBackdropFilter: "blur(8px)", backdropFilter: "blur(8px)" }}
     >
-      <nav className="container mx-auto flex items-center justify-between h-16 px-4">
+      <nav className="container mx-auto flex items-center justify-between h-20 px-4">
         <Link to="/" aria-label="propcloud homepage" className="flex items-center min-w-fit">
           <Logo size="text-2xl md:text-3xl" />
         </Link>
