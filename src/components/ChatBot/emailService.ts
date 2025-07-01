@@ -19,9 +19,27 @@ interface LeadData {
   wantsConsultation: boolean;
 }
 
+// Email validation function
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export async function sendFlowEmail(flowData: FlowData, chatHistory: Message[]) {
   const emailBody = createFlowEmailBody(flowData, chatHistory);
   const subject = `New PropCloud ${getFlowDisplayName(flowData.flowType)}: ${flowData.name}`;
+  
+  // Validate email before sending
+  if (!isValidEmail(flowData.email)) {
+    console.error('Invalid email address:', flowData.email);
+    // Still log the lead locally for debugging
+    console.log('New Flow Completion (Invalid Email):', {
+      flowData,
+      emailBody,
+      timestamp: new Date().toISOString()
+    });
+    return Promise.resolve();
+  }
   
   try {
     const response = await fetch('https://formspree.io/f/mblyajdg', {
@@ -42,7 +60,8 @@ export async function sendFlowEmail(flowData: FlowData, chatHistory: Message[]) 
     if (response.ok) {
       console.log('Lead data sent successfully to Formspree');
     } else {
-      console.error('Failed to send lead data to Formspree');
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Failed to send lead data to Formspree:', response.status, errorData);
     }
   } catch (error) {
     console.error('Error sending lead data:', error);
@@ -63,6 +82,17 @@ export async function sendLeadEmail(leadData: LeadData, chatHistory: Message[]) 
   const emailBody = createEmailBody(leadData, chatHistory);
   const subject = `New PropCloud Lead: ${leadData.name} (${leadData.properties} properties)`;
   
+  // Validate email before sending
+  if (!isValidEmail(leadData.email)) {
+    console.error('Invalid email address:', leadData.email);
+    console.log('New Lead Captured (Invalid Email):', {
+      leadData,
+      emailBody,
+      timestamp: new Date().toISOString()
+    });
+    return Promise.resolve();
+  }
+  
   try {
     const response = await fetch('https://formspree.io/f/mblyajdg', {
       method: 'POST',
@@ -82,7 +112,8 @@ export async function sendLeadEmail(leadData: LeadData, chatHistory: Message[]) 
     if (response.ok) {
       console.log('Legacy lead data sent successfully to Formspree');
     } else {
-      console.error('Failed to send legacy lead data to Formspree');
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Failed to send legacy lead data to Formspree:', response.status, errorData);
     }
   } catch (error) {
     console.error('Error sending legacy lead data:', error);
