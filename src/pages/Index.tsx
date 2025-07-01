@@ -13,6 +13,11 @@ import Testimonials from "@/components/Testimonials";
 import SmoothScrollLink from "@/components/ui/SmoothScrollLink";
 
 export default function Index() {
+  // Function to open chatbot
+  const openChatBot = () => {
+    window.dispatchEvent(new CustomEvent('openChatBot'));
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -29,15 +34,16 @@ export default function Index() {
               PropCloud manages your properties with AI precision and human oversight. Get dedicated property managers, 24/7 guest support, and advanced automation – all in one platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <SmoothScrollLink 
-                to="#contact"
-                className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 flex items-center gap-2"
+              <button
+                onClick={openChatBot}
+                className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-soft hover:shadow-lg hover:brightness-110 hover:scale-105 transition-all duration-200 flex items-center gap-2 group"
               >
-                Get Started <ArrowRight size={20} />
-              </SmoothScrollLink>
+                Get Started 
+                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-200" />
+              </button>
               <SmoothScrollLink 
                 to="#how-it-works"
-                className="text-propcloud-700 px-8 py-4 rounded-lg font-semibold text-lg border-2 border-propcloud-700 hover:bg-propcloud-700 hover:text-white transition duration-200"
+                className="text-propcloud-700 px-8 py-4 rounded-lg font-semibold text-lg border-2 border-propcloud-700 hover:bg-propcloud-700 hover:text-white hover:shadow-lg transition-all duration-200 hover:scale-105"
               >
                 See How It Works
               </SmoothScrollLink>
@@ -48,25 +54,25 @@ export default function Index() {
       </section>
 
       {/* Value Props Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-propcloud-50/30">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-6 bg-white rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Clock className="text-white" size={28} />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-propcloud-800">Response Time</h3>
               <p className="text-gray-600">Average 2-minute response to guest inquiries</p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-6 bg-white rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <TrendingUp className="text-white" size={28} />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-propcloud-800">Revenue Boost</h3>
               <p className="text-gray-600">Average 23% increase in rental income</p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-6 bg-white rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-16 h-16 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Star className="text-white" size={28} />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-propcloud-800">Guest Satisfaction</h3>
@@ -90,9 +96,9 @@ export default function Index() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Guest Messaging */}
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-0 shadow-soft">
               <CardContent className="p-6 h-full flex flex-col">
-                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
                   <MessageSquare className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-propcloud-800">Guest Messaging, 24/7</h3>
@@ -103,9 +109,9 @@ export default function Index() {
             </Card>
 
             {/* Calendar Management */}
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-0 shadow-soft">
               <CardContent className="p-6 h-full flex flex-col">
-                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
                   <Calendar className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-propcloud-800">Calendar Management</h3>
@@ -116,9 +122,9 @@ export default function Index() {
             </Card>
 
             {/* Dynamic Pricing */}
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-0 shadow-soft">
               <CardContent className="p-6 h-full flex flex-col">
-                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
                   <TrendingUp className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-propcloud-800">Dynamic Pricing</h3>
@@ -129,9 +135,9 @@ export default function Index() {
             </Card>
 
             {/* Turnover Coordination */}
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-0 shadow-soft">
               <CardContent className="p-6 h-full flex flex-col">
-                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
                   <CheckCircle className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-propcloud-800">Turnover Coordination</h3>
@@ -142,9 +148,9 @@ export default function Index() {
             </Card>
 
             {/* Maintenance Tracking */}
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-0 shadow-soft">
               <CardContent className="p-6 h-full flex flex-col">
-                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
                   <Wrench className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-propcloud-800">Maintenance Tracking</h3>
@@ -155,9 +161,9 @@ export default function Index() {
             </Card>
 
             {/* Listing Optimization */}
-            <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-0 shadow-soft">
               <CardContent className="p-6 h-full flex flex-col">
-                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
                   <Camera className="text-white" size={24} />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-propcloud-800">Listing Optimization</h3>
@@ -171,7 +177,7 @@ export default function Index() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 px-4 bg-gray-50">
+      <section id="how-it-works" className="py-24 px-4 bg-gradient-to-br from-gray-50 to-propcloud-50/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-propcloud-800 to-propcloud-600 bg-clip-text text-transparent">
@@ -184,8 +190,8 @@ export default function Index() {
           
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+              <div className="text-center bg-white p-8 rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-20 h-20 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
                   1
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-propcloud-800">Connect & Onboard</h3>
@@ -194,8 +200,8 @@ export default function Index() {
                 </p>
               </div>
               
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+              <div className="text-center bg-white p-8 rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-20 h-20 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
                   2
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-propcloud-800">AI + Human Management</h3>
@@ -204,8 +210,8 @@ export default function Index() {
                 </p>
               </div>
               
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+              <div className="text-center bg-white p-8 rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-20 h-20 bg-gradient-to-r from-propcloud-700 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
                   3
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-propcloud-800">Monitor & Optimize</h3>
@@ -243,7 +249,7 @@ export default function Index() {
       <VisualDivider />
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 px-4 bg-gray-50">
+      <section id="testimonials" className="py-24 px-4 bg-gradient-to-br from-gray-50 to-propcloud-50/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-propcloud-800 to-propcloud-600 bg-clip-text text-transparent">
@@ -268,7 +274,7 @@ export default function Index() {
               Join hundreds of property owners who've increased their revenue and reduced their workload with PropCloud's AI-powered management.
             </p>
             
-            <div className="bg-white p-8 rounded-2xl shadow-soft max-w-2xl mx-auto">
+            <div className="bg-white p-8 rounded-2xl shadow-soft max-w-2xl mx-auto hover:shadow-lg transition-all duration-300">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-propcloud-800 mb-2">23%</div>
@@ -285,10 +291,12 @@ export default function Index() {
               </p>
               
               <Button 
-                className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white px-8 py-6 text-lg font-semibold hover:brightness-110 hover:scale-105 transition duration-200"
+                onClick={openChatBot}
+                className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white px-8 py-6 text-lg font-semibold hover:shadow-lg hover:brightness-110 hover:scale-105 transition-all duration-200 group"
                 size="lg"
               >
                 Schedule Free Consultation
+                <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-200" />
               </Button>
             </div>
           </div>
