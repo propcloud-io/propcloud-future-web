@@ -93,35 +93,35 @@ export default function Header() {
           <Logo size="text-2xl md:text-3xl" />
         </Link>
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-800">
+        <div className="hidden lg:flex items-center gap-6 font-medium text-propcloud-800">
           {navItems.map((item) => (
             <button
               key={item.label}
               onClick={() => handleNavigation(item.to)}
-              className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base bg-transparent border-none cursor-pointer"
+              className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-sm bg-transparent border-none cursor-pointer whitespace-nowrap"
             >
               {item.label}
             </button>
           ))}
         </div>
         {/* Navigation Links */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
           <Link
             to="/app"
-            className="text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-4 py-2 font-semibold text-base transition duration-200"
+            className="text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-3 py-2 font-semibold text-sm transition duration-200 whitespace-nowrap"
           >
-            Dashboard
+            App
           </Link>
           <Link
             to="/about"
-            className="bg-gradient-to-r from-propcloud-700 to-accent-600 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200"
+            className="bg-gradient-to-r from-propcloud-700 to-accent-600 px-4 py-2 rounded-lg text-white font-semibold text-sm shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 whitespace-nowrap"
           >
             About Us
           </Link>
         </div>
         {/* Mobile Menu Button */}
         <button
-          className="flex md:hidden p-2 rounded hover:bg-propcloud-50 transition"
+          className="flex lg:hidden p-2 rounded hover:bg-propcloud-50 transition"
           aria-label="Open navigation menu"
           onClick={() => setShowMobileMenu((v) => !v)}
         >
@@ -130,7 +130,7 @@ export default function Header() {
       </nav>
       {/* Mobile Slide-down Menu */}
       {showMobileMenu && (
-        <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
+        <div className="lg:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
           {navItems.map((item, idx) => (
             <button
               key={item.label}
@@ -149,7 +149,7 @@ export default function Header() {
             className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition text-left"
             onClick={() => setShowMobileMenu(false)}
           >
-            Dashboard
+            App
           </Link>
           <Link
             to="/about"
