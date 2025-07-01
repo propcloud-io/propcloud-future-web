@@ -11,33 +11,33 @@ import { Link } from "react-router-dom";
 const services = [
   {
     icon: <Bell size={28} className="text-accent-500" />,
-    title: "24/7 Guest Messaging & Support",
-    description: "We instantly handle every guest message with accuracy and care — day or night.",
+    title: "Guest Messaging, 24/7",
+    description: "Instant, human-like replies to every message—day or night.",
   },
   {
     icon: <Calendar size={28} className="text-propcloud-500" />,
-    title: "Booking & Calendar Management",
-    description: "We sync all your listings and prevent double bookings across every platform.",
+    title: "Calendar Management",
+    description: "Sync calendars across OTAs and eliminate double bookings.",
   },
   {
     icon: <DollarSign size={28} className="text-accent-500" />,
-    title: "Dynamic Pricing Optimization",
-    description: "Our AI updates your rates daily to maximize both occupancy and revenue streams.",
+    title: "Dynamic Pricing",
+    description: "AI-driven price updates to maximize revenue every day.",
   },
   {
     icon: <Wrench size={28} className="text-propcloud-500" />,
-    title: "Turnover & Housekeeping",
-    description: "We coordinate cleanings so every check-in is spotless and on time.",
+    title: "Turnover Coordination",
+    description: "Auto-scheduled cleaning and inspections after each stay.",
   },
   {
     icon: <Target size={28} className="text-accent-500" />,
-    title: "Proactive Maintenance",
-    description: "We monitor, report, and resolve issues before guests even notice.",
+    title: "Maintenance Tracking",
+    description: "Track, resolve, and prevent guest-affecting issues.",
   },
   {
     icon: <BarChart3 size={28} className="text-propcloud-500" />,
-    title: "Marketing & Visibility",
-    description: "We enhance your listings and boost visibility through smart outreach campaigns.",
+    title: "Listing Optimization",
+    description: "Enhanced titles, photos, and keywords for max visibility.",
   },
 ];
 
@@ -141,7 +141,7 @@ export default function Index() {
                 {services.map((service, idx) => (
                   <div
                     key={idx}
-                    className="group relative flex flex-col bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-300 animate-fade-up border border-white/70"
+                    className="group relative flex flex-col bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-300 animate-fade-up border border-white/70 min-h-[180px]"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
                     <div className="flex items-start gap-4 mb-4">
@@ -155,7 +155,7 @@ export default function Index() {
                       </div>
                     </div>
                     <div className="flex-grow flex items-start">
-                      <p className="text-slate-600 leading-relaxed text-sm lg:text-base min-h-[2.5rem] flex items-center">
+                      <p className="text-slate-600 leading-relaxed text-sm lg:text-base">
                         {service.description}
                       </p>
                     </div>

@@ -104,13 +104,21 @@ export default function Header() {
             </button>
           ))}
         </div>
-        {/* About Us Button */}
-        <Link
-          to="/about"
-          className="hidden md:inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200 ml-6"
-        >
-          About Us
-        </Link>
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center gap-4">
+          <Link
+            to="/app"
+            className="bg-gradient-to-r from-propcloud-700 to-accent-600 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/about"
+            className="border-2 border-propcloud-300 px-6 py-2 rounded-lg text-propcloud-700 font-semibold text-base hover:bg-propcloud-50 hover:scale-105 transition duration-200"
+          >
+            About Us
+          </Link>
+        </div>
         {/* Mobile Menu Button */}
         <button
           className="flex md:hidden p-2 rounded hover:bg-propcloud-50 transition"
@@ -137,8 +145,15 @@ export default function Header() {
             </button>
           ))}
           <Link
-            to="/about"
+            to="/app"
             className="mt-2 inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition"
+            onClick={() => setShowMobileMenu(false)}
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/about"
+            className="mt-2 inline-block border-2 border-propcloud-300 text-propcloud-700 py-2 px-4 rounded-lg font-semibold text-base hover:bg-propcloud-50 transition"
             onClick={() => setShowMobileMenu(false)}
           >
             About Us
