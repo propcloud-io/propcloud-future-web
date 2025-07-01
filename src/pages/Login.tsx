@@ -8,6 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export default function Login() {
+  const handleContactUs = () => {
+    // Dispatch custom event to open chatbot
+    window.dispatchEvent(new CustomEvent('openChatBot'));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col">
       <Header />
@@ -59,9 +64,6 @@ export default function Login() {
               </div>
               
               <div className="bg-teal-50/80 border border-teal-200 rounded-xl p-4 text-center">
-                <p className="text-teal-800 font-medium mb-3">
-                  🚀 No Backend Connected Yet
-                </p>
                 <p className="text-sm text-teal-700 mb-4">
                   Click the demo button below to explore the dashboard with sample data
                 </p>
@@ -75,9 +77,12 @@ export default function Login() {
               <div className="text-center">
                 <p className="text-sm text-gray-500">
                   Don't have an account?{' '}
-                  <Link to="/contact" className="text-teal-600 hover:text-teal-700 font-medium">
+                  <button 
+                    onClick={handleContactUs}
+                    className="text-teal-600 hover:text-teal-700 font-medium cursor-pointer bg-transparent border-none underline"
+                  >
                     Contact us to get started
-                  </Link>
+                  </button>
                 </p>
               </div>
             </form>

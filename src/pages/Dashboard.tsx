@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetricCard from '@/components/Dashboard/MetricCard';
 import MiniChart from '@/components/Dashboard/MiniChart';
 import ChatAssistant from '@/components/Dashboard/ChatAssistant';
+import DetailedView from '@/components/Dashboard/DetailedView';
 import { 
   Home, 
   DollarSign, 
@@ -18,6 +19,16 @@ import {
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
 export default function Dashboard() {
+  const [selectedView, setSelectedView] = useState<string | null>(null);
+
+  const handleCardClick = (type: string) => {
+    setSelectedView(type);
+  };
+
+  const handleCloseView = () => {
+    setSelectedView(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col">
       <Header />
@@ -38,6 +49,8 @@ export default function Dashboard() {
               value="8 Properties"
               subtext="Active listings"
               delay={0.1}
+              clickable={true}
+              onClick={() => handleCardClick('properties')}
             />
             
             <MetricCard
@@ -70,6 +83,8 @@ export default function Dashboard() {
               value="5 Turnovers"
               subtext="Scheduled cleanings"
               delay={0.5}
+              clickable={true}
+              onClick={() => handleCardClick('turnovers')}
             />
             
             <MetricCard
@@ -78,6 +93,8 @@ export default function Dashboard() {
               value="2 Issues"
               subtext="Pending resolution"
               delay={0.6}
+              clickable={true}
+              onClick={() => handleCardClick('maintenance')}
             />
           </div>
 
@@ -111,6 +128,14 @@ export default function Dashboard() {
       </main>
       
       <Footer />
+
+      {/* Detailed View Modal */}
+      {selectedView && (
+        <DetailedView 
+          type={selectedView} 
+          onClose={handleCloseView} 
+        />
+      )}
     </div>
   );
 }
