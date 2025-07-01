@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
@@ -250,18 +249,12 @@ export default function Index() {
               <p className="text-lg lg:text-xl text-slate-700 leading-relaxed animate-fade-up max-w-3xl">
                 We use proprietary AI to streamline guest support, pricing, and workflow automation. It's already working behind the scenes — and soon, it will do <span className="font-semibold text-teal-600">much more</span>.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
                 <Link
                   to="/about"
                   className="inline-block bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 text-white font-bold rounded-xl px-8 py-4 text-base lg:text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-fade-up"
                 >
                   Learn More
-                </Link>
-                <Link
-                  to="/ai-vision"
-                  className="inline-block border-2 border-teal-400 bg-white/80 backdrop-blur-sm text-teal-700 font-bold rounded-xl px-8 py-4 text-base lg:text-lg hover:bg-white hover:border-teal-500 hover:scale-105 transition-all animate-fade-up shadow-lg"
-                >
-                  See AI Vision
                 </Link>
               </div>
             </div>

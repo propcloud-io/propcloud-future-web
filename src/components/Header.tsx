@@ -100,14 +100,14 @@ export default function Header() {
           <Logo size="text-2xl md:text-3xl" />
         </Link>
         
-        {/* Desktop Nav - Center aligned navigation items */}
-        <div className="hidden md:flex items-center justify-center flex-1 gap-6 font-medium text-propcloud-800">
+        {/* Desktop Nav - Center aligned navigation items with consistent spacing */}
+        <div className="hidden md:flex items-center justify-center flex-1 gap-8 font-medium text-propcloud-800">
           {navItems.map((item) => (
             item.to === "/about" ? (
               <Link
                 key={item.label}
                 to={item.to}
-                className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
+                className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-3 py-2 font-semibold text-base whitespace-nowrap"
               >
                 {item.label}
               </Link>
@@ -115,7 +115,7 @@ export default function Header() {
               <button
                 key={item.label}
                 onClick={() => handleNavigation(item.to, item.label)}
-                className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base bg-transparent border-none cursor-pointer"
+                className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-3 py-2 font-semibold text-base bg-transparent border-none cursor-pointer whitespace-nowrap"
               >
                 {item.label}
               </button>
@@ -126,7 +126,7 @@ export default function Header() {
         {/* Dashboard Button - Top Right */}
         <div className="hidden md:flex items-center">
           <Link
-            to="/app"
+            to="/login"
             className="bg-gradient-to-r from-propcloud-700 to-accent-600 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200"
           >
             Dashboard
@@ -172,7 +172,7 @@ export default function Header() {
             )
           ))}
           <Link
-            to="/app"
+            to="/login"
             className="mt-2 inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white py-2 px-4 rounded-lg font-semibold text-base shadow hover:brightness-110 transition"
             onClick={() => setShowMobileMenu(false)}
           >

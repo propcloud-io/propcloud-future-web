@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AIVision from "./pages/AIVision";
 import About from "./pages/About";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ChatBot from "./components/ChatBot/ChatBot";
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/ai-vision" element={<AIVision />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/app" element={<Dashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
