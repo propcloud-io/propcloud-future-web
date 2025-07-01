@@ -90,12 +90,12 @@ export default function SystemGraphic({ className = "" }: { className?: string }
         
         {/* Connection flows */}
         <g stroke="url(#collaboration-gradient)" strokeWidth="3" fill="none" opacity="0.8">
-          <!-- Human to Center -->
+          {/* Human to Center */}
           <path d="M140 150 Q270 120, 320 250" filter="url(#soft-glow)">
             <animate attributeName="stroke-dasharray" values="0,400;80,320;0,400" dur="4s" repeatCount="indefinite" />
           </path>
           
-          <!-- AI to Center -->
+          {/* AI to Center */}
           <path d="M660 150 Q530 120, 480 250" filter="url(#soft-glow)">
             <animate attributeName="stroke-dasharray" values="0,400;80,320;0,400" dur="4s" begin="2s" repeatCount="indefinite" />
           </path>
@@ -103,7 +103,7 @@ export default function SystemGraphic({ className = "" }: { className?: string }
         
         {/* Task bubbles showing workflow */}
         <g opacity="0.9">
-          <!-- Guest Messages -->
+          {/* Guest Messages */}
           <g transform="translate(200, 50)">
             <circle cx="0" cy="0" r="25" fill="#14b8a6" opacity="0.8">
               <animate attributeName="cy" values="0;-10;0" dur="2s" repeatCount="indefinite" />
@@ -112,7 +112,7 @@ export default function SystemGraphic({ className = "" }: { className?: string }
             <text x="0" y="50" textAnchor="middle" fill="#64748b" fontSize="11">AI Responds</text>
           </g>
           
-          <!-- Pricing -->
+          {/* Pricing */}
           <g transform="translate(600, 50)">
             <circle cx="0" cy="0" r="25" fill="#0f766e" opacity="0.8">
               <animate attributeName="cy" values="0;-10;0" dur="2s" begin="1s" repeatCount="indefinite" />
@@ -121,7 +121,7 @@ export default function SystemGraphic({ className = "" }: { className?: string }
             <text x="0" y="50" textAnchor="middle" fill="#64748b" fontSize="11">AI Optimizes</text>
           </g>
           
-          <!-- Complex Issues -->
+          {/* Complex Issues */}
           <g transform="translate(150, 400)">
             <circle cx="0" cy="0" r="25" fill="#1e293b" opacity="0.8">
               <animate attributeName="cy" values="0;-10;0" dur="2s" begin="0.5s" repeatCount="indefinite" />
@@ -130,7 +130,7 @@ export default function SystemGraphic({ className = "" }: { className?: string }
             <text x="0" y="50" textAnchor="middle" fill="#64748b" fontSize="11">Human Resolves</text>
           </g>
           
-          <!-- Performance -->
+          {/* Performance */}
           <g transform="translate(650, 400)">
             <circle cx="0" cy="0" r="25" fill="#334155" opacity="0.8">
               <animate attributeName="cy" values="0;-10;0" dur="2s" begin="1.5s" repeatCount="indefinite" />

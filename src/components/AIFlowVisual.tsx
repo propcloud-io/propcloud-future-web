@@ -69,14 +69,14 @@ export default function AIFlowVisual({ className = "" }: { className?: string })
         
         {/* Processing stages with labels */}
         
-        <!-- Stage 1: Data Ingestion -->
+        {/* Stage 1: Data Ingestion */}
         <g transform="translate(100, 150)">
           <circle cx="0" cy="0" r="30" fill="url(#stage-gradient)" filter="url(#pipeline-glow)">
             <animate attributeName="r" values="30;35;30" dur="4s" repeatCount="indefinite" />
           </circle>
           <circle cx="0" cy="0" r="15" fill="#1e293b" opacity="0.8" />
           
-          <!-- Data intake symbol -->
+          {/* Data intake symbol */}
           <g stroke="white" strokeWidth="2" fill="none">
             <rect x="-8" y="-8" width="16" height="16" rx="2" />
             <path d="M-4 -4 L4 -4 M-4 0 L4 0 M-4 4 L4 4" stroke="white" strokeWidth="1" />
@@ -86,14 +86,14 @@ export default function AIFlowVisual({ className = "" }: { className?: string })
           <text x="0" y="70" textAnchor="middle" fill="#64748b" fontSize="10">Guest messages, bookings</text>
         </g>
         
-        <!-- Stage 2: AI Analysis -->
+        {/* Stage 2: AI Analysis */}
         <g transform="translate(300, 120)">
           <circle cx="0" cy="0" r="35" fill="url(#stage-gradient)" filter="url(#pipeline-glow)">
             <animate attributeName="r" values="35;40;35" dur="4.5s" begin="1s" repeatCount="indefinite" />
           </circle>
           <circle cx="0" cy="0" r="18" fill="#0f766e" opacity="0.8" />
           
-          <!-- AI brain pattern -->
+          {/* AI brain pattern */}
           <g stroke="white" strokeWidth="2" fill="none">
             <path d="M-10 -5 Q0 -12, 10 -5" />
             <path d="M-10 0 Q0 -7, 10 0" />
@@ -107,14 +107,14 @@ export default function AIFlowVisual({ className = "" }: { className?: string })
           <text x="0" y="80" textAnchor="middle" fill="#64748b" fontSize="10">Pattern recognition</text>
         </g>
         
-        <!-- Stage 3: Smart Processing -->
+        {/* Stage 3: Smart Processing */}
         <g transform="translate(500, 180)">
           <circle cx="0" cy="0" r="32" fill="url(#stage-gradient)" filter="url(#pipeline-glow)">
             <animate attributeName="r" values="32;37;32" dur="4.2s" begin="2s" repeatCount="indefinite" />
           </circle>
           <circle cx="0" cy="0" r="16" fill="#14b8a6" opacity="0.8" />
           
-          <!-- Processing gears -->
+          {/* Processing gears */}
           <g stroke="white" strokeWidth="2" fill="none">
             <circle cx="-5" cy="0" r="6" />
             <circle cx="5" cy="0" r="6" />
@@ -126,14 +126,14 @@ export default function AIFlowVisual({ className = "" }: { className?: string })
           <text x="0" y="70" textAnchor="middle" fill="#64748b" fontSize="10">Dynamic pricing, scheduling</text>
         </g>
         
-        <!-- Stage 4: Automated Actions -->
+        {/* Stage 4: Automated Actions */}
         <g transform="translate(700, 130)">
           <circle cx="0" cy="0" r="33" fill="url(#stage-gradient)" filter="url(#pipeline-glow)">
             <animate attributeName="r" values="33;38;33" dur="4.8s" begin="3s" repeatCount="indefinite" />
           </circle>
           <circle cx="0" cy="0" r="17" fill="#2dd4bf" opacity="0.8" />
           
-          <!-- Action symbol -->
+          {/* Action symbol */}
           <g stroke="white" strokeWidth="2" fill="white">
             <path d="M-8 0 L8 0 M4 -4 L8 0 L4 4" strokeWidth="2" fill="none" />
             <circle cx="-6" cy="0" r="2" />
