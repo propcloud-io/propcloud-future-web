@@ -11,6 +11,7 @@ const navItems = [
   { label: "AI", to: "#ai" },
   { label: "Testimonials", to: "#testimonials" },
   { label: "Contact", to: "#contact" },
+  { label: "About Us", to: "/about" },
 ];
 
 export default function Header() {
@@ -28,7 +29,13 @@ export default function Header() {
   }, []);
 
   // Function to handle smooth navigation with consistent offset
-  const handleNavigation = (to: string) => {
+  const handleNavigation = (to: string, label: string) => {
+    // Handle About Us page navigation
+    if (to === "/about") {
+      // Direct navigation to About page
+      return;
+    }
+    
     const targetId = to.substring(1); // Remove the # symbol
     
     if (location.pathname !== '/') {
@@ -92,33 +99,40 @@ export default function Header() {
         <Link to="/" aria-label="propcloud homepage" className="flex items-center min-w-fit">
           <Logo size="text-2xl md:text-3xl" />
         </Link>
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 font-medium text-propcloud-800">
+        
+        {/* Desktop Nav - Center aligned navigation items */}
+        <div className="hidden md:flex items-center justify-center flex-1 gap-6 font-medium text-propcloud-800">
           {navItems.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => handleNavigation(item.to)}
-              className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base bg-transparent border-none cursor-pointer"
-            >
-              {item.label}
-            </button>
+            item.to === "/about" ? (
+              <Link
+                key={item.label}
+                to={item.to}
+                className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.label}
+                onClick={() => handleNavigation(item.to, item.label)}
+                className="transition text-propcloud-800 hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent px-2 py-1 font-semibold text-base bg-transparent border-none cursor-pointer"
+              >
+                {item.label}
+              </button>
+            )
           ))}
         </div>
-        {/* Navigation Links */}
-        <div className="hidden md:flex items-center gap-4">
+        
+        {/* Dashboard Button - Top Right */}
+        <div className="hidden md:flex items-center">
           <Link
             to="/app"
             className="bg-gradient-to-r from-propcloud-700 to-accent-600 px-6 py-2 rounded-lg text-white font-semibold text-base shadow-soft hover:brightness-110 hover:scale-105 transition duration-200"
           >
             Dashboard
           </Link>
-          <Link
-            to="/about"
-            className="border-2 border-propcloud-300 px-6 py-2 rounded-lg text-propcloud-700 font-semibold text-base hover:bg-propcloud-50 hover:scale-105 transition duration-200"
-          >
-            About Us
-          </Link>
         </div>
+        
         {/* Mobile Menu Button */}
         <button
           className="flex md:hidden p-2 rounded hover:bg-propcloud-50 transition"
@@ -128,21 +142,34 @@ export default function Header() {
           <Menu size={24} />
         </button>
       </nav>
+      
       {/* Mobile Slide-down Menu */}
       {showMobileMenu && (
         <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
           {navItems.map((item, idx) => (
-            <button
-              key={item.label}
-              onClick={() => {
-                handleNavigation(item.to);
-                setShowMobileMenu(false);
-              }}
-              className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition text-left bg-transparent border-none cursor-pointer"
-              style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
-            >
-              {item.label}
-            </button>
+            item.to === "/about" ? (
+              <Link
+                key={item.label}
+                to={item.to}
+                className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition text-left"
+                onClick={() => setShowMobileMenu(false)}
+                style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.label}
+                onClick={() => {
+                  handleNavigation(item.to, item.label);
+                  setShowMobileMenu(false);
+                }}
+                className="text-lg p-2 font-semibold hover:bg-gradient-to-r hover:from-propcloud-700 hover:to-accent-600 hover:bg-clip-text hover:text-transparent transition text-left bg-transparent border-none cursor-pointer"
+                style={{ animation: `fade-up 0.3s cubic-bezier(.4,0,.2,1) ${0.04 * idx}s both` }}
+              >
+                {item.label}
+              </button>
+            )
           ))}
           <Link
             to="/app"
@@ -150,13 +177,6 @@ export default function Header() {
             onClick={() => setShowMobileMenu(false)}
           >
             Dashboard
-          </Link>
-          <Link
-            to="/about"
-            className="mt-2 inline-block border-2 border-propcloud-300 text-propcloud-700 py-2 px-4 rounded-lg font-semibold text-base hover:bg-propcloud-50 transition"
-            onClick={() => setShowMobileMenu(false)}
-          >
-            About Us
           </Link>
         </div>
       )}
