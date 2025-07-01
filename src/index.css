@@ -45,6 +45,31 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* PropCloud brand colors - maintain green theme */
+    --propcloud-50: 142 76% 96%;
+    --propcloud-100: 142 83% 91%;
+    --propcloud-200: 142 85% 82%;
+    --propcloud-300: 142 83% 68%;
+    --propcloud-400: 142 77% 52%;
+    --propcloud-500: 142 71% 45%;
+    --propcloud-600: 142 76% 36%;
+    --propcloud-700: 142 74% 29%;
+    --propcloud-800: 142 70% 24%;
+    --propcloud-900: 142 67% 20%;
+    --propcloud-950: 142 85% 11%;
+
+    /* Accent colors */
+    --accent-50: 210 100% 98%;
+    --accent-100: 210 100% 95%;
+    --accent-200: 210 100% 89%;
+    --accent-300: 210 100% 78%;
+    --accent-400: 210 100% 66%;
+    --accent-500: 210 100% 56%;
+    --accent-600: 210 100% 47%;
+    --accent-700: 210 100% 39%;
+    --accent-800: 210 100% 31%;
+    --accent-900: 210 100% 24%;
   }
 
   .dark {
@@ -83,6 +108,31 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* PropCloud brand colors for dark mode - keep green visible */
+    --propcloud-50: 142 67% 20%;
+    --propcloud-100: 142 70% 24%;
+    --propcloud-200: 142 74% 29%;
+    --propcloud-300: 142 76% 36%;
+    --propcloud-400: 142 71% 45%;
+    --propcloud-500: 142 77% 52%;
+    --propcloud-600: 142 83% 68%;
+    --propcloud-700: 142 85% 82%;
+    --propcloud-800: 142 83% 91%;
+    --propcloud-900: 142 76% 96%;
+    --propcloud-950: 142 85% 98%;
+
+    /* Accent colors for dark mode */
+    --accent-50: 210 100% 24%;
+    --accent-100: 210 100% 31%;
+    --accent-200: 210 100% 39%;
+    --accent-300: 210 100% 47%;
+    --accent-400: 210 100% 56%;
+    --accent-500: 210 100% 66%;
+    --accent-600: 210 100% 78%;
+    --accent-700: 210 100% 89%;
+    --accent-800: 210 100% 95%;
+    --accent-900: 210 100% 98%;
   }
 }
 
@@ -145,15 +195,16 @@
   }
 
   .dark ::-webkit-scrollbar-track {
-    @apply bg-gray-800;
+    background-color: hsl(var(--muted));
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600 rounded-full;
+    background-color: hsl(var(--muted-foreground));
+    border-radius: 9999px;
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
+    background-color: hsl(var(--accent-foreground));
   }
 }
 
@@ -175,6 +226,23 @@
   /* Enhanced focus states for dark mode */
   .focus-visible-dark {
     @apply focus-visible:ring-2 focus-visible:ring-propcloud-500 dark:focus-visible:ring-propcloud-400;
+  }
+
+  /* PropCloud brand utilities that work in both modes */
+  .text-propcloud-primary {
+    color: hsl(var(--propcloud-600));
+  }
+
+  .dark .text-propcloud-primary {
+    color: hsl(var(--propcloud-400));
+  }
+
+  .bg-propcloud-primary {
+    background-color: hsl(var(--propcloud-600));
+  }
+
+  .dark .bg-propcloud-primary {
+    background-color: hsl(var(--propcloud-500));
   }
 }
 
@@ -204,6 +272,21 @@
   }
 
   .dark .card-hover {
-    @apply hover:shadow-2xl hover:shadow-propcloud-900/20;
+    @apply hover:shadow-2xl;
+  }
+
+  /* Chart container fixes for proper boundaries */
+  .chart-container {
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+
+  .chart-container .recharts-responsive-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .chart-container .recharts-wrapper {
+    overflow: hidden;
   }
 }

@@ -21,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, LineChart, Line, BarChart, Bar } from 'recharts';
+import { useTheme } from '@/components/ThemeProvider';
 import Header from '@/components/Header';
 
 // Enhanced mock data for better UX simulation
@@ -46,7 +47,7 @@ const revenueData = [
 const chartConfig = {
   occupancy: {
     label: "Occupancy Rate",
-    color: "hsl(var(--primary))",
+    color: "hsl(var(--propcloud-600))",
   },
   revenue: {
     label: "Revenue",
@@ -62,7 +63,7 @@ interface Message {
 }
 
 const Dashboard = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, setTheme } = useTheme();
   const [activeChart, setActiveChart] = useState<'occupancy' | 'revenue'>('occupancy');
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -84,14 +85,6 @@ const Dashboard = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -160,17 +153,21 @@ const Dashboard = () => {
     }
   };
 
+  const handleThemeToggle = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   const metrics = [
-    { title: "Properties Under Management", value: "8 Properties", change: "+2 this quarter", icon: Home, color: "text-blue-600" },
-    { title: "Monthly Revenue", value: "$14,800", change: "+15% vs last month", icon: TrendingUp, color: "text-green-600" },
-    { title: "Occupancy Rate", value: "91%", change: "+12% vs market avg", icon: BarChart3, color: "text-purple-600" },
-    { title: "Guest Satisfaction", value: "4.8 / 5 ⭐️", change: "+0.3 this quarter", icon: Star, color: "text-yellow-600" },
-    { title: "Upcoming Turnovers", value: "5 Turnovers", change: "All confirmed", icon: Calendar, color: "text-indigo-600" },
-    { title: "Open Maintenance Issues", value: "2 Issues", change: "Both in progress", icon: Wrench, color: "text-red-600" },
+    { title: "Properties Under Management", value: "8 Properties", change: "+2 this quarter", icon: Home, color: "text-blue-600 dark:text-blue-400" },
+    { title: "Monthly Revenue", value: "$14,800", change: "+15% vs last month", icon: TrendingUp, color: "text-green-600 dark:text-green-400" },
+    { title: "Occupancy Rate", value: "91%", change: "+12% vs market avg", icon: BarChart3, color: "text-purple-600 dark:text-purple-400" },
+    { title: "Guest Satisfaction", value: "4.8 / 5 ⭐️", change: "+0.3 this quarter", icon: Star, color: "text-yellow-600 dark:text-yellow-400" },
+    { title: "Upcoming Turnovers", value: "5 Turnovers", change: "All confirmed", icon: Calendar, color: "text-indigo-600 dark:text-indigo-400" },
+    { title: "Open Maintenance Issues", value: "2 Issues", change: "Both in progress", icon: Wrench, color: "text-red-600 dark:text-red-400" },
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Header />
       
       <div className="pt-24 pb-12 px-4">
@@ -178,10 +175,10 @@ const Dashboard = () => {
           {/* Enhanced Dashboard Header */}
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-propcloud-800 to-propcloud-600 bg-clip-text text-transparent dark:from-propcloud-300 dark:to-accent-400">
+              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-propcloud-800 to-propcloud-600 bg-clip-text text-transparent dark:from-propcloud-300 dark:to-propcloud-500">
                 Performance Dashboard
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 text-lg">
+              <p className="text-muted-foreground text-lg">
                 Real-time insights into your property performance
               </p>
             </div>
@@ -201,9 +198,9 @@ const Dashboard = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={handleThemeToggle}
               >
-                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
               <Button variant="outline" size="sm">
                 <Settings className="h-4 w-4" />
@@ -214,30 +211,30 @@ const Dashboard = () => {
           {/* Enhanced Performance Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {metrics.map((metric, index) => (
-              <Card key={metric.title} className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] dark:bg-gray-800 dark:border-gray-700">
+              <Card key={metric.title} className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">{metric.title}</CardTitle>
-                  <metric.icon className={`h-4 w-4 ${metric.color} dark:opacity-80`} />
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{metric.title}</CardTitle>
+                  <metric.icon className={`h-4 w-4 ${metric.color}`} />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-propcloud-800 dark:text-propcloud-200">{metric.value}</div>
+                  <div className="text-2xl font-bold text-propcloud-primary">{metric.value}</div>
                   <p className="text-xs text-green-600 dark:text-green-400 mt-1 font-medium">{metric.change}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          {/* Enhanced Charts Section */}
+          {/* Enhanced Charts Section with fixed boundaries */}
           <div className="grid lg:grid-cols-2 gap-6 mb-12">
             {/* Booking Trend Chart */}
-            <Card className="dark:bg-gray-800 dark:border-gray-700">
+            <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold text-propcloud-800 dark:text-propcloud-200">
+                    <CardTitle className="text-lg font-semibold text-propcloud-primary">
                       Weekly Performance
                     </CardTitle>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Daily occupancy and booking trends</p>
+                    <p className="text-sm text-muted-foreground">Daily occupancy and booking trends</p>
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -257,71 +254,76 @@ const Dashboard = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-64">
-                  <AreaChart data={bookingTrendData}>
-                    <XAxis dataKey="day" />
-                    <YAxis />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Area
-                      type="monotone"
-                      dataKey={activeChart}
-                      stroke="hsl(var(--primary))"
-                      fill="hsl(var(--primary))"
-                      fillOpacity={0.1}
-                    />
-                  </AreaChart>
+              <CardContent className="chart-container">
+                <ChartContainer config={chartConfig} className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={bookingTrendData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <XAxis dataKey="day" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Area
+                        type="monotone"
+                        dataKey={activeChart}
+                        stroke={activeChart === 'occupancy' ? "hsl(var(--propcloud-600))" : "hsl(var(--accent-600))"}
+                        fill={activeChart === 'occupancy' ? "hsl(var(--propcloud-600))" : "hsl(var(--accent-600))"}
+                        fillOpacity={0.2}
+                        strokeWidth={2}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </ChartContainer>
               </CardContent>
             </Card>
 
             {/* Revenue Trend Chart */}
-            <Card className="dark:bg-gray-800 dark:border-gray-700">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-propcloud-800 dark:text-propcloud-200">
+                <CardTitle className="text-lg font-semibold text-propcloud-primary">
                   Revenue vs Target
                 </CardTitle>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Monthly performance tracking</p>
+                <p className="text-sm text-muted-foreground">Monthly performance tracking</p>
               </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-64">
-                  <LineChart data={revenueData}>
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Line
-                      type="monotone"
-                      dataKey="revenue"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={3}
-                      dot={{ r: 4 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="target"
-                      stroke="hsl(var(--muted-foreground))"
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                      dot={{ r: 3 }}
-                    />
-                  </LineChart>
+              <CardContent className="chart-container">
+                <ChartContainer config={chartConfig} className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={revenueData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Line
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="hsl(var(--propcloud-600))"
+                        strokeWidth={3}
+                        dot={{ r: 4, fill: "hsl(var(--propcloud-600))" }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="target"
+                        stroke="hsl(var(--muted-foreground))"
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={{ r: 3, fill: "hsl(var(--muted-foreground))" }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </ChartContainer>
               </CardContent>
             </Card>
           </div>
 
           {/* Enhanced AI Assistant */}
-          <Card className="max-w-4xl mx-auto dark:bg-gray-800 dark:border-gray-700">
+          <Card className="max-w-4xl mx-auto">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-propcloud-800 dark:text-propcloud-200">
-                <Bot className="h-5 w-5 text-accent-600" />
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-propcloud-primary">
+                <Bot className="h-5 w-5 text-propcloud-600 dark:text-propcloud-400" />
                 AI Performance Assistant
               </CardTitle>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Get instant insights about your property portfolio</p>
+              <p className="text-sm text-muted-foreground">Get instant insights about your property portfolio</p>
             </CardHeader>
             <CardContent>
               {/* Enhanced Chat Interface */}
-              <div className="h-80 overflow-y-auto mb-4 space-y-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border dark:border-gray-600">
+              <div className="h-80 overflow-y-auto mb-4 space-y-4 p-4 bg-muted/30 rounded-lg border">
                 {messages.map((message) => (
                   <div
                     key={message.id}
@@ -330,8 +332,8 @@ const Dashboard = () => {
                     <div
                       className={`max-w-xs px-4 py-3 rounded-lg ${
                         message.isBot
-                          ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow-sm border dark:border-gray-600'
-                          : 'bg-gradient-to-r from-propcloud-700 to-accent-600 text-white'
+                          ? 'bg-card text-card-foreground shadow-sm border'
+                          : 'bg-propcloud-600 dark:bg-propcloud-500 text-white'
                       }`}
                     >
                       <p className="text-sm leading-relaxed">{message.text}</p>
@@ -344,11 +346,11 @@ const Dashboard = () => {
                 
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow-sm border dark:border-gray-600 max-w-xs px-4 py-3 rounded-lg">
+                    <div className="bg-card text-card-foreground shadow-sm border max-w-xs px-4 py-3 rounded-lg">
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     </div>
                   </div>
@@ -364,12 +366,12 @@ const Dashboard = () => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about occupancy, revenue, guest satisfaction..."
-                  className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-propcloud-500 dark:focus:ring-propcloud-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="flex-1 px-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-propcloud-500 dark:focus:ring-propcloud-400 bg-background text-foreground"
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
-                  className="bg-gradient-to-r from-propcloud-700 to-accent-600 text-white px-6 py-3 rounded-lg hover:brightness-110 transition duration-200 disabled:opacity-50"
+                  className="bg-propcloud-600 hover:bg-propcloud-700 dark:bg-propcloud-500 dark:hover:bg-propcloud-600 text-white px-6 py-3 rounded-lg transition duration-200 disabled:opacity-50"
                 >
                   <Send className="h-4 w-4" />
                 </Button>
