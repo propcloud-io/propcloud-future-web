@@ -225,16 +225,6 @@ export default function Index() {
           <div className="mt-16">
             <SystemGraphic />
           </div>
-          
-          <div className="text-center mt-12">
-            <SmoothScrollLink 
-              to="/about"
-              className="inline-flex items-center gap-2 text-propcloud-700 px-6 py-3 rounded-lg font-semibold border-2 border-propcloud-700 hover:bg-propcloud-700 hover:text-white hover:shadow-lg transition-all duration-200 hover:scale-105"
-            >
-              Learn More About Us
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-200" />
-            </SmoothScrollLink>
-          </div>
         </div>
       </section>
 
@@ -252,23 +242,6 @@ export default function Index() {
           
           <div className="max-w-6xl mx-auto">
             <AIFlowVisual />
-          </div>
-          
-          <div className="mt-16 bg-white p-8 rounded-2xl shadow-soft max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-3xl font-bold text-propcloud-800 mb-2">Smart Analysis</div>
-                <p className="text-gray-600">AI processes guest behavior, market trends, and property performance in real-time</p>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-propcloud-800 mb-2">Instant Response</div>
-                <p className="text-gray-600">Automated guest messaging and dynamic pricing updates happen 24/7</p>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-propcloud-800 mb-2">Human Oversight</div>
-                <p className="text-gray-600">Expert property managers review and optimize all AI decisions</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>

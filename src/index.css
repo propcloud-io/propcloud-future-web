@@ -38,48 +38,30 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
+
     --sidebar-foreground: 240 5.3% 26.1%;
+
     --sidebar-primary: 240 5.9% 10%;
+
     --sidebar-primary-foreground: 0 0% 98%;
+
     --sidebar-accent: 240 4.8% 95.9%;
+
     --sidebar-accent-foreground: 240 5.9% 10%;
+
     --sidebar-border: 220 13% 91%;
+
     --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* PropCloud brand colors - maintain green theme */
-    --propcloud-50: 142 76% 96%;
-    --propcloud-100: 142 83% 91%;
-    --propcloud-200: 142 85% 82%;
-    --propcloud-300: 142 83% 68%;
-    --propcloud-400: 142 77% 52%;
-    --propcloud-500: 142 71% 45%;
-    --propcloud-600: 142 76% 36%;
-    --propcloud-700: 142 74% 29%;
-    --propcloud-800: 142 70% 24%;
-    --propcloud-900: 142 67% 20%;
-    --propcloud-950: 142 85% 11%;
-
-    /* Accent colors */
-    --accent-50: 210 100% 98%;
-    --accent-100: 210 100% 95%;
-    --accent-200: 210 100% 89%;
-    --accent-300: 210 100% 78%;
-    --accent-400: 210 100% 66%;
-    --accent-500: 210 100% 56%;
-    --accent-600: 210 100% 47%;
-    --accent-700: 210 100% 39%;
-    --accent-800: 210 100% 31%;
-    --accent-900: 210 100% 24%;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 217.2 32.6% 17.5%;
+    --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217.2 32.6% 17.5%;
+    --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 40% 98%;
@@ -108,31 +90,6 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* PropCloud brand colors for dark mode - keep green visible */
-    --propcloud-50: 142 67% 20%;
-    --propcloud-100: 142 70% 24%;
-    --propcloud-200: 142 74% 29%;
-    --propcloud-300: 142 76% 36%;
-    --propcloud-400: 142 71% 45%;
-    --propcloud-500: 142 77% 52%;
-    --propcloud-600: 142 83% 68%;
-    --propcloud-700: 142 85% 82%;
-    --propcloud-800: 142 83% 91%;
-    --propcloud-900: 142 76% 96%;
-    --propcloud-950: 142 85% 98%;
-
-    /* Accent colors for dark mode */
-    --accent-50: 210 100% 24%;
-    --accent-100: 210 100% 31%;
-    --accent-200: 210 100% 39%;
-    --accent-300: 210 100% 47%;
-    --accent-400: 210 100% 56%;
-    --accent-500: 210 100% 66%;
-    --accent-600: 210 100% 78%;
-    --accent-700: 210 100% 89%;
-    --accent-800: 210 100% 95%;
-    --accent-900: 210 100% 98%;
   }
 }
 
@@ -146,25 +103,17 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  /* Enhanced dark mode support */
-  .dark {
-    color-scheme: dark;
   }
 
   /* Fix text clipping and ensure proper rendering */
   h1, h2, h3, h4, h5, h6 {
     line-height: 1.2;
-    padding-bottom: 0.1em;
+    padding-bottom: 0.1em; /* Ensures descenders are not clipped */
   }
 
   p, span, div {
     line-height: 1.6;
-    padding-bottom: 0.05em;
+    padding-bottom: 0.05em; /* Subtle padding to prevent descender clipping */
   }
 
   /* Ensure consistent spacing and alignment */
@@ -177,35 +126,6 @@
     line-height: 1.625;
     padding-bottom: 0.05em;
   }
-
-  /* Enhanced gradient text support for dark mode */
-  .bg-gradient-to-r {
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
-
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Custom scrollbar for dark mode */
-  .dark ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .dark ::-webkit-scrollbar-track {
-    background-color: hsl(var(--muted));
-  }
-
-  .dark ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground));
-    border-radius: 9999px;
-  }
-
-  .dark ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--accent-foreground));
-  }
 }
 
 /* Custom utility classes for better typography */
@@ -216,77 +136,5 @@
   
   .font-display {
     font-display: swap;
-  }
-
-  /* Dark mode utilities */
-  .dark-mode-transition {
-    @apply transition-colors duration-300 ease-in-out;
-  }
-
-  /* Enhanced focus states for dark mode */
-  .focus-visible-dark {
-    @apply focus-visible:ring-2 focus-visible:ring-propcloud-500 dark:focus-visible:ring-propcloud-400;
-  }
-
-  /* PropCloud brand utilities that work in both modes */
-  .text-propcloud-primary {
-    color: hsl(var(--propcloud-600));
-  }
-
-  .dark .text-propcloud-primary {
-    color: hsl(var(--propcloud-400));
-  }
-
-  .bg-propcloud-primary {
-    background-color: hsl(var(--propcloud-600));
-  }
-
-  .dark .bg-propcloud-primary {
-    background-color: hsl(var(--propcloud-500));
-  }
-}
-
-/* Animation enhancements for dark mode */
-@layer components {
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.2s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  /* Card hover effects that work in both modes */
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:scale-[1.02];
-  }
-
-  .dark .card-hover {
-    @apply hover:shadow-2xl;
-  }
-
-  /* Chart container fixes for proper boundaries */
-  .chart-container {
-    overflow: hidden;
-    border-radius: 0.5rem;
-  }
-
-  .chart-container .recharts-responsive-container {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .chart-container .recharts-wrapper {
-    overflow: hidden;
   }
 }
