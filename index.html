@@ -45,25 +45,95 @@
     <link rel="canonical" href="https://propcloud.io/" />
     <meta name="robots" content="index, follow" />
 
-    <!-- JSON-LD Schema -->
+    <!-- Enhanced JSON-LD Schema for Business -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "PropCloud Inc.",
+      "legalName": "PropCloud Inc.",
       "url": "https://propcloud.io",
       "logo": "https://propcloud.io/logo.png",
       "description": "PropCloud is a fully virtual property management company powered by AI — providing hands-off operations for short-term rental owners.",
       "foundingDate": "2025",
-      "founder": {
-        "@type": "Person",
-        "name": "PropCloud"
-      },
+      "email": "contact@propcloud.io",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Global",
+        "streetAddress": "1111B S Governors Ave, Suite 34285",
+        "addressLocality": "Dover",
+        "addressRegion": "DE",
+        "postalCode": "19904",
         "addressCountry": "US"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-XXX-XXX-XXXX",
+        "contactType": "customer service",
+        "email": "contact@propcloud.io",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://propcloud.io"
+      ],
+      "serviceArea": {
+        "@type": "Place",
+        "name": "United States"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Property Management Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Virtual Property Management",
+              "description": "AI-powered virtual property management for short-term rentals"
+            }
+          }
+        ]
       }
+    }
+    </script>
+
+    <!-- Local Business Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "PropCloud Inc.",
+      "image": "https://propcloud.io/logo.png",
+      "telephone": "+1-XXX-XXX-XXXX",
+      "email": "contact@propcloud.io",
+      "url": "https://propcloud.io",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1111B S Governors Ave, Suite 34285",
+        "addressLocality": "Dover",
+        "addressRegion": "DE",
+        "postalCode": "19904",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "39.1612",
+        "longitude": "-75.5264"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday", 
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "priceRange": "$$"
     }
     </script>
   </head>
