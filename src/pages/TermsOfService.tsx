@@ -79,6 +79,16 @@ export default function TermsOfService() {
                   <strong>PropCloud Inc.</strong><br />
                   Email: <a href="mailto:contact@propcloud.io" className="text-teal-600 hover:text-teal-700 underline">contact@propcloud.io</a>
                 </p>
+                
+                <div className="mt-4 pt-4 border-t border-teal-200">
+                  <p className="text-teal-700 text-sm">
+                    <strong>Business Address:</strong><br />
+                    PropCloud Inc.<br />
+                    1111B S Governors Ave, Suite 34285<br />
+                    Dover, DE 19904<br />
+                    United States
+                  </p>
+                </div>
               </div>
             </div>
           </div>
