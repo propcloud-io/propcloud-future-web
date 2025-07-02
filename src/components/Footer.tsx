@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-medium mt-16">
       <div className="container mx-auto py-10 px-4 flex flex-col md:flex-row gap-8 md:gap-0 items-center justify-between text-sm text-propcloud-800">
-        <nav className="flex gap-6 justify-center mb-2 md:mb-0">
+        <nav className="flex flex-wrap gap-6 justify-center mb-2 md:mb-0">
           <a href="#home" className="hover:text-accent-600 transition font-semibold">
             Home
           </a>
@@ -27,6 +27,12 @@ export default function Footer() {
           </a>
           <Link to="/about" className="hover:text-accent-600 transition font-semibold">
             About Us
+          </Link>
+          <Link to="/privacy-policy" className="hover:text-accent-600 transition font-semibold">
+            Privacy Policy
+          </Link>
+          <Link to="/terms-of-service" className="hover:text-accent-600 transition font-semibold">
+            Terms of Service
           </Link>
         </nav>
         <div className="flex flex-col items-center md:items-end gap-1">
