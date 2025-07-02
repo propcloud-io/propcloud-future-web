@@ -31,9 +31,9 @@ export default function Header() {
 
   // Function to handle smooth navigation with consistent offset
   const handleNavigation = (to: string, label: string) => {
-    // Handle About Us page navigation
-    if (to === "/about") {
-      // Direct navigation to About page
+    // Handle About Us and Blog page navigation
+    if (to === "/about" || to === "/blog") {
+      // Direct navigation to these pages
       return;
     }
     
@@ -104,7 +104,7 @@ export default function Header() {
         {/* Desktop Nav - Center aligned navigation items with consistent spacing */}
         <div className="hidden md:flex items-center justify-center flex-1 gap-8 font-medium text-propcloud-800">
           {navItems.map((item) => (
-            item.to === "/about" ? (
+            item.to === "/about" || item.to === "/blog" ? (
               <Link
                 key={item.label}
                 to={item.to}
@@ -148,7 +148,7 @@ export default function Header() {
       {showMobileMenu && (
         <div className="md:hidden animate-fade-in bg-white shadow px-4 pb-4 border-b border-gray-medium flex flex-col gap-2">
           {navItems.map((item, idx) => (
-            item.to === "/about" ? (
+            item.to === "/about" || item.to === "/blog" ? (
               <Link
                 key={item.label}
                 to={item.to}
