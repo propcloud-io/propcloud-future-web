@@ -12,6 +12,7 @@ const navItems = [
   { label: "Testimonials", to: "#testimonials" },
   { label: "Contact", to: "#contact" },
   { label: "About Us", to: "/about" },
+  { label: "Blog", to: "/blog" },
 ];
 
 export default function Header() {
