@@ -76,117 +76,153 @@ export default function BlogPost() {
                 What Is Virtual Property Management?
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Managing a short-term rental property can be rewarding — but it's also time-consuming, stressful, and filled with surprises.
+                Managing a short-term rental property used to mean being on call 24/7 — juggling bookings, guest messages, cleaner schedules, and pricing updates.
               </p>
               <p className="text-xl text-gray-600 leading-relaxed mt-4">
-                That's where <strong>Virtual Property Management</strong> comes in.
+                Today, there's a better way.
+              </p>
+              <p className="text-xl text-gray-600 leading-relaxed mt-4">
+                <strong>Virtual property management</strong> uses technology and remote systems to handle all day-to-day operations — so you can focus on growth, not micromanagement.
               </p>
             </header>
 
             <div className="prose prose-lg max-w-none text-gray-700">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🧠 A Smarter Way to Manage Properties</h2>
-              <p className="mb-6">
-                Virtual property management means you don't need to be physically present — or even hands-on — to manage your Airbnb or short-term rental.
-              </p>
-              <p className="mb-4">Instead, everything is handled remotely using:</p>
-              <ul className="mb-6 space-y-2">
-                <li>Automated guest messaging systems</li>
-                <li>Centralized booking calendars</li>
-                <li>AI-powered pricing tools</li>
-                <li>Cloud-based coordination with cleaning and maintenance teams</li>
-                <li>Real-time owner dashboards and reporting</li>
-              </ul>
-              <p className="mb-6">
-                It's the <strong>same result as a full-service manager</strong> — but faster, smarter, and often more affordable.
-              </p>
+              <hr className="my-8 border-gray-200" />
 
-              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🔄 How It Works with PropCloud</h2>
-              <p className="mb-4">At PropCloud, we provide <strong>full-service virtual property management</strong> — meaning we handle:</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🔍 What Does "Virtual" Actually Mean?</h2>
+              <p className="mb-4">It doesn't mean DIY. And it doesn't mean a chatbot running your business.</p>
+              <p className="mb-6">
+                It means your entire management system — from guest messaging to maintenance coordination — is handled <strong>remotely by professionals</strong>, using tools built for scale and speed.
+              </p>
+              <p className="mb-4">Instead of needing to be near the property (or hire a full local team), you get:</p>
               <ul className="mb-6 space-y-2">
-                <li>24/7 guest communication</li>
-                <li>Booking and listing optimization</li>
-                <li>Dynamic pricing using AI</li>
-                <li>Housekeeping and maintenance coordination</li>
-                <li>Owner reports and performance insights</li>
-                <li>Strategic marketing</li>
+                <li>AI-powered guest messaging & support</li>
+                <li>Booking and channel calendar sync</li>
+                <li>Dynamic pricing algorithms</li>
+                <li>Remote housekeeping coordination</li>
+                <li>Maintenance tracking</li>
+                <li>Owner dashboards with real-time data</li>
               </ul>
               <p className="mb-6">
-                And the best part? <strong>You still own. We operate.</strong> Seamlessly.
+                This is how the next generation of hosting is being done — across short-term rentals, boutique hotels, and hybrid portfolios.
               </p>
-              <p className="mb-8">
-                <Link to="/#services" className="text-propcloud-700 hover:text-accent-600 font-semibold underline">
-                  Learn more about our services →
-                </Link>
-              </p>
-
-              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">💡 Why Property Owners Are Switching</h2>
-              <p className="mb-4">More Airbnb hosts are leaving traditional agencies behind and switching to virtual management because:</p>
-              <ul className="mb-6 space-y-2">
-                <li>They're tired of paying 20–30% commissions for poor service</li>
-                <li>They want to keep control — without doing the work</li>
-                <li>They need tech-first solutions that scale with their portfolio</li>
-                <li>They live far from their property, or just want peace of mind</li>
-              </ul>
-              <p className="mb-4">Virtual property management is ideal for:</p>
-              <ul className="mb-6 space-y-2">
-                <li>Remote owners</li>
-                <li>Busy professionals</li>
-                <li>Multi-property hosts</li>
-                <li>First-time Airbnb entrepreneurs</li>
-              </ul>
-
-              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">⚙️ Is It Really "Hands-Off"?</h2>
-              <p className="mb-4">Yes — with PropCloud, you don't lift a finger.</p>
-              <p className="mb-4">
-                We've designed our platform to give you complete control without needing to be involved in the day-to-day. Want to see how it works?
-              </p>
-              <p className="mb-8">
-                <Link to="/app" className="text-propcloud-700 hover:text-accent-600 font-semibold underline">
-                  Check out our owner dashboard →
-                </Link>
-              </p>
-
-              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🛠️ Why PropCloud?</h2>
-              <p className="mb-4">We're not just another agency using WhatsApp to text cleaners.</p>
-              <p className="mb-4">
-                We're building the future of hospitality — using AI, automation, and human-first design. PropCloud combines high-touch service with cutting-edge tech to give you:
-              </p>
-              <ul className="mb-6 space-y-2">
-                <li>✅ Higher revenue</li>
-                <li>✅ Happier guests</li>
-                <li>✅ Fewer headaches</li>
-              </ul>
-
-              <div className="bg-gradient-to-r from-propcloud-50 to-accent-50 border border-propcloud-200 rounded-xl p-6 my-8">
-                <blockquote className="text-xl font-semibold text-propcloud-800 mb-4">
-                  Ready to stop managing — and start scaling?
-                </blockquote>
-                <Link 
-                  to="/#contact" 
-                  className="inline-block bg-gradient-to-r from-propcloud-700 to-accent-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:brightness-110 transition"
-                >
-                  Talk to our team →
-                </Link>
-              </div>
 
               <hr className="my-8 border-gray-200" />
 
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">🤖 Frequently Asked Questions</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">💼 Who Uses Virtual Property Management?</h2>
+              <p className="mb-4">It's not just solo Airbnb hosts. In fact, we work with:</p>
+              <ul className="mb-6 space-y-2">
+                <li><strong>Remote owners</strong> who want peace of mind</li>
+                <li><strong>Professional hosts and real estate investors</strong> scaling portfolios</li>
+                <li><strong>Property managers</strong> looking to modernize their back office with tech</li>
+                <li><strong>Hospitality teams</strong> seeking support, structure, or scale</li>
+              </ul>
+              <p className="mb-6">
+                Virtual doesn't mean impersonal — it means optimized, systematized, and streamlined.
+              </p>
+
+              <hr className="my-8 border-gray-200" />
+
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">⚙️ How PropCloud Works</h2>
+              <p className="mb-4">PropCloud is a full-service virtual property operations partner.</p>
+              <p className="mb-4">We act as your <strong>off-site team</strong>, covering:</p>
+              <ul className="mb-6 space-y-2">
+                <li>Guest communication (24/7, AI + human-backed)</li>
+                <li>Booking optimization and listing sync</li>
+                <li>Revenue management through real-time pricing</li>
+                <li>Scheduling and coordinating housekeeping</li>
+                <li>Managing maintenance and vendor follow-up</li>
+                <li>Transparent owner insights and monthly reporting</li>
+                <li>Future AI-powered features under development</li>
+              </ul>
+              <p className="mb-8">
+                <Link to="/#how-it-works" className="text-propcloud-700 hover:text-accent-600 font-semibold underline">
+                  See how we do it →
+                </Link>
+              </p>
+
+              <hr className="my-8 border-gray-200" />
+
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🤖 Is It Really "Hands-Off"?</h2>
+              <p className="mb-4">That depends on what <em>you</em> want.</p>
+              <p className="mb-4">
+                Some of our clients want weekly reports and performance check-ins. Others just want to know everything is handled. Either way — <strong>we run the ops so you don't have to.</strong>
+              </p>
+              <p className="mb-4">No chasing cleaners. No guest emergencies at 2 AM. No missed pricing opportunities.</p>
+              <p className="mb-6">Just seamless, tech-powered operations.</p>
+
+              <hr className="my-8 border-gray-200" />
+
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🌎 Why People Are Making the Switch</h2>
+              <p className="mb-4">From seasoned hosts to first-timers, many are exploring virtual management for:</p>
+              <ul className="mb-6 space-y-2">
+                <li>Greater transparency</li>
+                <li>Smarter automation</li>
+                <li>Scalability without hiring</li>
+                <li>Lower operational overhead</li>
+                <li>Modern guest experience</li>
+              </ul>
+              <p className="mb-4">
+                And unlike many traditional models, <strong>you stay in control</strong> — with live dashboards, clear communications, and full property visibility.
+              </p>
+              <p className="mb-8">
+                <Link to="/app" className="text-propcloud-700 hover:text-accent-600 font-semibold underline">
+                  Take a peek at our client dashboard →
+                </Link>
+              </p>
+
+              <hr className="my-8 border-gray-200" />
+
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">📘 Frequently Asked Questions</h2>
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Q: How is this different from a property manager?</h3>
-                  <p>A: Traditional managers operate in-person and often charge high fees. PropCloud operates virtually — faster, smarter, and with more visibility.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Q: Does this replace local property managers?</h3>
+                  <p>A: Not necessarily — we often work <em>with</em> on-site partners. PropCloud focuses on centralizing and optimizing the backend. Many local teams plug into our system for execution.</p>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Q: Can you handle check-ins, cleaners, and repairs?</h3>
-                  <p>A: Yes! We coordinate all local tasks remotely through vetted vendors.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Q: Can PropCloud handle turnovers and maintenance if I'm remote?</h3>
+                  <p>A: Yes. We coordinate with local cleaning and repair vendors, using automated workflows to keep everything running on time.</p>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Q: Is there AI involved?</h3>
+                  <p>A: Yes — we use AI to power guest messaging, pricing, and internal workflows. We're also developing tools to give owners intelligent insights in real time.</p>
                 </div>
                 
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Q: How do I get started?</h3>
-                  <p>A: Just talk to us through the chat or visit our contact form. We'll learn about your property and handle the rest.</p>
+                  <p>A: Just connect with us through the chatbot or contact form. We'll learn about your property and walk you through the next steps.</p>
+                </div>
+              </div>
+
+              <hr className="my-8 border-gray-200" />
+
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 mt-8">🧭 Final Thought</h2>
+              <p className="mb-4">Virtual property management isn't a trend — it's the future of efficient hosting.</p>
+              <p className="mb-6">
+                Whether you manage one property or 100, there's a smarter way to operate — and PropCloud is here to make it seamless, scalable, and stress-free.
+              </p>
+
+              <div className="bg-gradient-to-r from-propcloud-50 to-accent-50 border border-propcloud-200 rounded-xl p-6 my-8">
+                <div className="space-y-4">
+                  <p className="text-lg font-semibold text-propcloud-800">
+                    <Link 
+                      to="/#contact" 
+                      className="text-propcloud-700 hover:text-accent-600 underline"
+                    >
+                      Have a question? →
+                    </Link>
+                  </p>
+                  <p className="text-lg font-semibold text-propcloud-800">
+                    <Link 
+                      to="/#contact" 
+                      className="text-propcloud-700 hover:text-accent-600 underline"
+                    >
+                      Want to explore if PropCloud is a fit for you? →
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>
