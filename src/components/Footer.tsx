@@ -28,6 +28,9 @@ export default function Footer() {
           <Link to="/about" className="hover:text-accent-600 transition font-semibold">
             About Us
           </Link>
+          <Link to="/blog" className="hover:text-accent-600 transition font-semibold">
+            Blog
+          </Link>
           <Link to="/privacy-policy" className="hover:text-accent-600 transition font-semibold">
             Privacy Policy
           </Link>
@@ -39,9 +42,16 @@ export default function Footer() {
           <span>
             <a href="mailto:contact@propcloud.io" className="hover:text-propcloud-600 transition font-semibold">contact@propcloud.io</a>
           </span>
-          <span className="text-xs text-accent-700 mt-1">
-            © propcloud Inc. — All rights reserved
-          </span>
+          <div className="text-xs text-accent-700 text-center md:text-right">
+            <div className="mb-1">
+              PropCloud Inc.<br />
+              1111B S Governors Ave, Suite 34285<br />
+              Dover, DE 19904, United States
+            </div>
+            <div className="mt-1">
+              © propcloud Inc. — All rights reserved
+            </div>
+          </div>
         </div>
       </div>
     </footer>
