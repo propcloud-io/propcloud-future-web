@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,6 +12,19 @@ export default function Login() {
     // Dispatch custom event to open chatbot
     window.dispatchEvent(new CustomEvent('openChatBot'));
   };
+
+  useEffect(() => {
+    // Update page-specific metadata for login page
+    document.title = "Login | PropCloud";
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    if (metaRobots) {
+      metaRobots.setAttribute('content', 'noindex, nofollow');
+    }
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', 'https://propcloud.io/login');
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col">

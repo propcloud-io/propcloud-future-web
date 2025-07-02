@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetricCard from '@/components/Dashboard/MetricCard';
@@ -28,6 +28,19 @@ export default function Dashboard() {
   const handleCloseView = () => {
     setSelectedView(null);
   };
+
+  useEffect(() => {
+    // Update page-specific metadata for dashboard
+    document.title = "Your Dashboard | PropCloud";
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    if (metaRobots) {
+      metaRobots.setAttribute('content', 'noindex, nofollow');
+    }
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', 'https://propcloud.io/app');
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col">

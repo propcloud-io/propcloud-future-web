@@ -11,9 +11,20 @@ export default function About() {
     window.dispatchEvent(new CustomEvent('openChatBot'));
   };
 
-  // Always scroll to top when component mounts
+  // Always scroll to top when component mounts and update page metadata
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Update page-specific metadata
+    document.title = "About PropCloud | Vision & Operations";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Learn how PropCloud operates today and our future vision for AI-powered hospitality.');
+    }
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', 'https://propcloud.io/about');
+    }
   }, []);
 
   return (

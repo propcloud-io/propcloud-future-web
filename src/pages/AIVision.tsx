@@ -2,8 +2,22 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AbstractAccent from "@/components/AbstractAccent";
+import { useEffect } from "react";
 
 export default function AIVision() {
+  useEffect(() => {
+    // Update page-specific metadata
+    document.title = "The Future of AI in Hospitality | PropCloud";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'We\'re building the AI Operating System for property managers. Explore our vision for the future.');
+    }
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', 'https://propcloud.io/ai-vision');
+    }
+  }, []);
+
   return (
     <div className="relative min-h-screen flex flex-col bg-white font-sans overflow-x-hidden">
       <Header />
@@ -108,4 +122,3 @@ export default function AIVision() {
     </div>
   );
 }
-
