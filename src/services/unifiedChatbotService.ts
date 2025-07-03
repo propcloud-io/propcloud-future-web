@@ -85,11 +85,13 @@ export async function createLead(leadData: LeadData): Promise<any> {
 // Create properties for a lead
 async function createPropertiesForLead(leadId: string, leadData: LeadData): Promise<void> {
   const propertyCount = Math.min(parseInt(leadData.numberOfProperties), 10);
-  const locations = leadData.locations.split(',').map(loc => loc.trim());
+  const locations = typeof leadData.locations === 'string' && leadData.locations 
+    ? leadData.locations.split(',').map(loc => loc.trim()) 
+    : ['Unknown Location'];
   
   for (let i = 0; i < propertyCount; i++) {
     try {
-      const propertyLocation = locations[i % locations.length] || locations[0] || leadData.locations;
+      const propertyLocation = locations[i % locations.length] || locations[0] || 'Unknown Location';
       
       const propertyRecord = {
         name: `Property ${i + 1}`,
