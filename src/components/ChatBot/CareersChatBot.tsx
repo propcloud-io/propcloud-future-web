@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X, Send, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import {
   RateLimiter,
   sanitizeFileName
 } from '@/lib/security';
+import { createJobApplication, createConversation } from './supabaseService';
 
 interface Message {
   id: string;
@@ -183,6 +183,26 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     addBotMessage("Submitting your application...");
 
     try {
+      // Store in Supabase
+      const jobApplicationData = {
+        name: sanitizeText(applicationData.fullName),
+        email: sanitizeText(applicationData.email),
+        role_applied: sanitizeText(applicationData.role),
+        motivation: sanitizeText(applicationData.motivation),
+        linkedin_url: applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : undefined,
+        source: 'careers_chatbot'
+      };
+
+      await createJobApplication(jobApplicationData);
+
+      // Store conversation
+      await createConversation({
+        message: `Job application submitted: ${JSON.stringify(jobApplicationData)}`,
+        is_from_user: false,
+        page_context: '/careers'
+      });
+
+      // Also submit to Formspree as backup
       const formData = new FormData();
       formData.append('name', sanitizeText(applicationData.fullName));
       formData.append('email', sanitizeText(applicationData.email));
