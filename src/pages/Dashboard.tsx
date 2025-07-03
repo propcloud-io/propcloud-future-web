@@ -6,6 +6,7 @@ import MetricCard from '@/components/Dashboard/MetricCard';
 import MiniChart from '@/components/Dashboard/MiniChart';
 import ChatAssistant from '@/components/Dashboard/ChatAssistant';
 import DetailedView from '@/components/Dashboard/DetailedView';
+import AbstractAccent from '@/components/AbstractAccent';
 import { 
   Home, 
   DollarSign, 
@@ -48,15 +49,21 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-teal-50 flex flex-col">
       <Header />
       
-      <main className="flex-1 pt-24 pb-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 pt-24 pb-16 relative">
+        <AbstractAccent position="top" color="blue" className="opacity-30" />
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-br from-teal-200/40 to-transparent rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/6 w-40 h-40 bg-gradient-to-br from-slate-200/40 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        </div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Performance Overview</h1>
-            <p className="text-gray-600">Monitor your properties and track key metrics</p>
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent mb-2">Performance Overview</h1>
+            <p className="text-gray-600">Monitor your properties and track key metrics in real-time</p>
           </div>
 
           {/* Performance Dashboard Grid */}
@@ -77,6 +84,7 @@ export default function Dashboard() {
               value="$14,800"
               subtext="Revenue this month"
               delay={0.2}
+              isLive={true}
             />
             
             <MetricCard
@@ -85,6 +93,7 @@ export default function Dashboard() {
               value="91%"
               subtext="Across all units"
               delay={0.3}
+              isLive={true}
             />
             
             <MetricCard
@@ -119,16 +128,16 @@ export default function Dashboard() {
           {/* Booking Trend Chart */}
           <div className="mb-12">
             <div 
-              className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-up"
+              className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/80 animate-fade-up hover:shadow-2xl transition-all duration-300"
               style={{ animationDelay: "0.7s", animationFillMode: "both" }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-teal-50 to-teal-100">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-teal-50 to-teal-100 shadow-lg">
                   <TrendingUp size={24} className="text-teal-600" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">Booking Trend (Last 7 Days)</h3>
-                  <p className="text-sm text-gray-500">Daily occupancy percentage</p>
+                  <p className="text-sm text-gray-500">Daily occupancy percentage • Live updates</p>
                 </div>
               </div>
               <MiniChart data={mockChartData} />
@@ -145,7 +154,7 @@ export default function Dashboard() {
 
           {/* CTA Section */}
           <div 
-            className="bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 rounded-2xl p-8 text-center text-white animate-fade-up"
+            className="bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 rounded-2xl p-8 text-center text-white animate-fade-up shadow-2xl"
             style={{ animationDelay: "0.9s", animationFillMode: "both" }}
           >
             <h3 className="text-2xl font-bold mb-4">Want to see your data here?</h3>

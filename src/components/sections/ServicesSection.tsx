@@ -1,6 +1,8 @@
+
 import { services } from "@/data/services";
 import { ServiceCardSkeleton } from "@/components/ui/SkeletonLoader";
 import { useState, useEffect } from "react";
+import AbstractAccent from "@/components/AbstractAccent";
 
 export default function ServicesSection() {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,18 +15,24 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="py-16 lg:py-24 bg-gradient-to-br from-white via-slate-50/50 to-teal-50/30 shadow-soft relative overflow-hidden"
+      className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 via-white to-slate-100 shadow-soft relative overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-15">
+      <AbstractAccent position="top" color="blue" className="opacity-60" />
+      <div className="absolute inset-0 opacity-20">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="service-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <circle cx="30" cy="30" r="1.5" fill="#14b8a6" opacity="0.4"/>
-              <circle cx="15" cy="15" r="0.8" fill="#1e293b" opacity="0.3"/>
-              <circle cx="45" cy="45" r="0.8" fill="#0f766e" opacity="0.3"/>
+              <circle cx="30" cy="30" r="1.5" fill="#14b8a6" opacity="0.6"/>
+              <circle cx="15" cy="15" r="0.8" fill="#1e293b" opacity="0.4"/>
+              <circle cx="45" cy="45" r="0.8" fill="#0f766e" opacity="0.4"/>
             </pattern>
+            <radialGradient id="service-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.1"/>
+              <stop offset="100%" stopColor="transparent"/>
+            </radialGradient>
           </defs>
           <rect width="100%" height="100%" fill="url(#service-grid)" />
+          <rect width="100%" height="100%" fill="url(#service-glow)" />
         </svg>
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -46,11 +54,12 @@ export default function ServicesSection() {
                 return (
                   <div
                     key={idx}
-                    className="group relative flex flex-col bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-300 animate-fade-up border border-white/70 min-h-[180px]"
+                    className="group relative flex flex-col bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 duration-300 animate-fade-up border border-white/80 min-h-[180px]"
                     style={{animationDelay: `${0.07 + idx * 0.06}s`, animationFillMode: "both"}}
                   >
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-white to-slate-50 group-hover:from-teal-50 group-hover:to-teal-50 transition-colors duration-300 shadow-md border border-white/60">
+                    <div className="absolute inset-0 bg-gradient-to-br from-teal-50/50 to-slate-50/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="flex items-start gap-4 mb-4 relative z-10">
+                      <div className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-white to-slate-50 group-hover:from-teal-50 group-hover:to-teal-100 transition-colors duration-300 shadow-lg border border-white/80">
                         <IconComponent size={28} className={idx % 2 === 0 ? "text-accent-500" : "text-propcloud-500"} />
                       </div>
                       <div className="flex-grow min-w-0">
@@ -59,7 +68,7 @@ export default function ServicesSection() {
                         </h3>
                       </div>
                     </div>
-                    <div className="flex-grow flex items-start">
+                    <div className="flex-grow flex items-start relative z-10">
                       <p className="text-slate-600 leading-relaxed text-sm lg:text-base">
                         {service.description}
                       </p>

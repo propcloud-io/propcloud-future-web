@@ -1,3 +1,4 @@
+
 import { stats } from "@/data/stats";
 import { StatSkeleton } from "./ui/SkeletonLoader";
 import { useState, useEffect } from "react";
@@ -12,7 +13,7 @@ export default function StatsGrid() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/70 shadow-xl">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-2xl">
         {Array.from({ length: 4 }).map((_, idx) => (
           <StatSkeleton key={idx} />
         ))}
@@ -21,13 +22,13 @@ export default function StatsGrid() {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto animate-fade-up bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/70 shadow-xl" style={{animationDelay: ".45s", animationFillMode: "both"}}>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto animate-fade-up bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-2xl" style={{animationDelay: ".45s", animationFillMode: "both"}}>
       {stats.map((stat, idx) => (
         <div key={idx} className="text-center">
-          <div className={`text-2xl lg:text-3xl font-bold ${stat.color} mb-1`}>
+          <div className={`text-2xl lg:text-3xl font-bold text-white mb-1`}>
             {stat.number}
           </div>
-          <div className="text-sm lg:text-base text-slate-600 font-medium">
+          <div className="text-sm lg:text-base text-slate-200 font-medium">
             {stat.label}
           </div>
         </div>

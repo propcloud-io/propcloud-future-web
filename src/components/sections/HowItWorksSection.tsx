@@ -1,5 +1,7 @@
+
 import AIFlowVisual from "@/components/AIFlowVisual";
 import SystemGraphic from "@/components/SystemGraphic";
+import AbstractAccent from "@/components/AbstractAccent";
 
 const steps = [
   {
@@ -20,8 +22,9 @@ export default function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
-      className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 via-white to-teal-50/30 relative overflow-hidden"
+      className="py-16 lg:py-24 bg-gradient-to-br from-slate-100 via-slate-50 to-teal-50 relative overflow-hidden"
     >
+      <AbstractAccent position="bottom" color="green" className="opacity-50" />
       <div className="absolute inset-0 overflow-hidden opacity-15">
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-75">
           <AIFlowVisual />
@@ -29,6 +32,8 @@ export default function HowItWorksSection() {
         <div className="absolute bottom-0 right-0 w-64 h-64 opacity-50">
           <SystemGraphic />
         </div>
+        <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-br from-teal-200/60 to-transparent rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/6 w-40 h-40 bg-gradient-to-br from-slate-200/60 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-5xl mx-auto">
@@ -42,20 +47,20 @@ export default function HowItWorksSection() {
             {steps.map((step, idx) => (
               <div
                 key={idx}
-                className="flex flex-col items-center text-center gap-6 animate-fade-up bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/70 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="flex flex-col items-center text-center gap-6 animate-fade-up bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-white/80 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                 style={{animationDelay: `${0.06 + idx * 0.08}s`, animationFillMode: "both"}}
               >
                 <div className="relative">
-                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white font-bold shadow-xl text-2xl relative z-10">
+                  <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white font-bold shadow-2xl text-3xl relative z-10">
                     {idx + 1}
                   </div>
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 blur-lg opacity-30 animate-pulse"></div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 blur-xl opacity-40 animate-pulse"></div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg lg:text-xl text-slate-800 leading-relaxed mb-2">
+                  <h3 className="font-semibold text-lg lg:text-xl text-slate-800 leading-relaxed mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-slate-600 text-sm lg:text-base max-w-xs">
+                  <p className="text-slate-600 text-sm lg:text-base max-w-xs leading-relaxed">
                     {step.description}
                   </p>
                 </div>
