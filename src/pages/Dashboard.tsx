@@ -66,7 +66,7 @@ export default function Dashboard() {
         {/* Premium background system */}
         <div className="fixed inset-0 pointer-events-none z-0">
           <AnimatedGradient variant="dark" intensity="medium" />
-          <AdvancedParticles density="high" color="gradient" className="opacity-40" />
+          <AdvancedParticles density="dense" color="gradient" className="opacity-40" />
           <FloatingGeometry variant="mixed" className="opacity-30" />
           
           {/* Dynamic light rays */}
