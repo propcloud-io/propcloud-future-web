@@ -43,6 +43,14 @@ export async function createLead(leadData: LeadData): Promise<any> {
   console.log('💾 Creating lead with data:', leadData);
   
   try {
+    // Handle platforms field properly
+    let platformUsage: string[] = [];
+    if (Array.isArray(leadData.platforms)) {
+      platformUsage = leadData.platforms;
+    } else if (typeof leadData.platforms === 'string') {
+      platformUsage = leadData.platforms.split(',').map(p => p.trim());
+    }
+
     // Correct field mapping to match database schema
     const leadRecord = {
       name: leadData.name,
@@ -50,9 +58,7 @@ export async function createLead(leadData: LeadData): Promise<any> {
       location: leadData.locations || '', // Fixed: locations -> location, with fallback
       message: leadData.additionalNotes || '',
       number_of_properties: parseInt(leadData.numberOfProperties) || 1,
-      platform_usage: Array.isArray(leadData.platforms) ? leadData.platforms : 
-                     typeof leadData.platforms === 'string' ? leadData.platforms.split(',').map(p => p.trim()) : 
-                     [],
+      platform_usage: platformUsage,
       source: 'website_chatbot'
     };
 
