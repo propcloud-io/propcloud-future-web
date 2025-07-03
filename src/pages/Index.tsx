@@ -16,24 +16,24 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col font-sans overflow-x-hidden relative">
       <ScrollProgressBar />
       
-      {/* Interactive background orbs */}
+      {/* Interactive background orbs - Fixed visibility with contrasting colors */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <GlowingOrb 
           size={300} 
-          color="#14b8a6" 
-          intensity={0.2}
+          color="#0f766e" 
+          intensity={0.3}
           className="top-20 -left-20"
         />
         <GlowingOrb 
           size={200} 
-          color="#0f766e" 
-          intensity={0.15}
+          color="#1e293b" 
+          intensity={0.25}
           className="top-1/2 -right-20"
         />
         <GlowingOrb 
           size={150} 
-          color="#1e293b" 
-          intensity={0.1}
+          color="#14b8a6" 
+          intensity={0.2}
           className="bottom-1/4 left-1/4"
           animate={false}
         />
@@ -57,8 +57,8 @@ export default function Index() {
           <AISection />
         </ParallaxSection>
 
-        {/* TESTIMONIALS */}
-        <section id="testimonials" className="py-16 lg:py-24">
+        {/* TESTIMONIALS - Enhanced background contrast */}
+        <section id="testimonials" className="py-16 lg:py-24 bg-gradient-to-br from-slate-100 via-white to-teal-50">
           <ParallaxSection speed={0.05}>
             <Testimonials />
           </ParallaxSection>

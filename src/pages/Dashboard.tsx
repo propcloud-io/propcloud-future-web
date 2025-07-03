@@ -60,12 +60,12 @@ export default function Dashboard() {
       <ScrollProgressBar />
       <Header />
       
-      <main className="flex-1 pt-24 pb-32 relative">
+      <main className="flex-1 pt-24 pb-32 relative z-10">
         <AbstractAccent position="top" color="blue" className="opacity-60" />
         <ParticleBackground density="medium" className="opacity-30" />
         
-        {/* Enhanced background visuals with interactive orbs */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Enhanced background visuals with interactive orbs - Fixed z-index */}
+        <div className="absolute inset-0 pointer-events-none z-0">
           <GlowingOrb 
             size={200} 
             color="#14b8a6" 
@@ -87,8 +87,8 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Decorative pattern overlay */}
-        <div className="absolute inset-0 opacity-15">
+        {/* Decorative pattern overlay - Fixed z-index */}
+        <div className="absolute inset-0 opacity-15 z-0">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="dashboard-dots" width="60" height="60" patternUnits="userSpaceOnUse">
@@ -101,10 +101,10 @@ export default function Dashboard() {
           </svg>
         </div>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Enhanced Page Header with parallax */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+          {/* Enhanced Page Header with parallax - Fixed z-index */}
           <ParallaxSection speed={0.3}>
-            <div className="mb-12 text-center relative">
+            <div className="mb-12 text-center relative z-30">
               <div className="relative bg-white/90 backdrop-blur-md rounded-3xl p-12 shadow-2xl border border-white/60 max-w-3xl mx-auto hover:shadow-3xl transition-all duration-500 group">
                 <div className="absolute -top-4 -right-4">
                   <Sparkles className="w-8 h-8 text-teal-500 animate-pulse" />
@@ -119,9 +119,9 @@ export default function Dashboard() {
             </div>
           </ParallaxSection>
 
-          {/* Performance Dashboard Grid with staggered hover effects */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-10 relative">
+          {/* Performance Dashboard Grid with staggered hover effects - Fixed z-index */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 relative z-30">
+            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative">
               <MetricCard
                 icon={<Home size={24} className="text-teal-600" />}
                 label="Properties Under Management"
@@ -133,7 +133,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-10 relative" style={{animationDelay: '0.1s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.1s'}}>
               <MetricCard
                 icon={<DollarSign size={24} className="text-teal-600" />}
                 label="Monthly Revenue"
@@ -144,7 +144,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-10 relative" style={{animationDelay: '0.2s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.2s'}}>
               <MetricCard
                 icon={<Users size={24} className="text-teal-600" />}
                 label="Occupancy Rate"
@@ -155,7 +155,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-10 relative" style={{animationDelay: '0.3s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.3s'}}>
               <MetricCard
                 icon={<Star size={24} className="text-teal-600" />}
                 label="Guest Satisfaction"
@@ -165,7 +165,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-10 relative" style={{animationDelay: '0.4s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.4s'}}>
               <MetricCard
                 icon={<Calendar size={24} className="text-teal-600" />}
                 label="Upcoming Turnovers"
@@ -177,7 +177,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-10 relative" style={{animationDelay: '0.5s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.5s'}}>
               <MetricCard
                 icon={<Wrench size={24} className="text-teal-600" />}
                 label="Open Maintenance Issues"
@@ -190,9 +190,9 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Enhanced Booking Trend Chart with parallax */}
+          {/* Enhanced Booking Trend Chart with parallax - Fixed z-index */}
           <ParallaxSection speed={0.2}>
-            <div className="mb-16">
+            <div className="mb-16 relative z-30">
               <div 
                 className="bg-white/90 backdrop-blur-md rounded-3xl p-10 shadow-2xl border border-white/60 animate-fade-up hover:shadow-3xl transition-all duration-500 group overflow-hidden relative"
                 style={{ animationDelay: "0.7s", animationFillMode: "both" }}
@@ -214,18 +214,18 @@ export default function Dashboard() {
             </div>
           </ParallaxSection>
 
-          {/* Enhanced AI Chat Assistant - Fixed z-index to prevent overlay */}
+          {/* Enhanced AI Chat Assistant - Fixed z-index */}
           <div 
-            className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative z-20"
+            className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative z-30"
             style={{ animationDelay: "0.8s", animationFillMode: "both" }}
           >
             <ChatAssistant />
           </div>
 
-          {/* Enhanced CTA Section with magnetic button - Adjusted margin for better spacing */}
+          {/* Enhanced CTA Section with magnetic button - Fixed z-index */}
           <ParallaxSection speed={0.1}>
             <div 
-              className="relative bg-gradient-to-br from-white/95 via-teal-50/90 to-slate-50/95 backdrop-blur-md rounded-3xl p-12 text-center shadow-2xl border border-white/60 animate-fade-up overflow-hidden group mb-20"
+              className="relative bg-gradient-to-br from-white/95 via-teal-50/90 to-slate-50/95 backdrop-blur-md rounded-3xl p-12 text-center shadow-2xl border border-white/60 animate-fade-up overflow-hidden group mb-20 z-30"
               style={{ animationDelay: "0.9s", animationFillMode: "both" }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-100/30 to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
@@ -253,12 +253,14 @@ export default function Dashboard() {
       <Footer />
       <FloatingActionButton />
 
-      {/* Detailed View Modal */}
+      {/* Detailed View Modal - Fixed z-index */}
       {selectedView && (
-        <DetailedView 
-          type={selectedView} 
-          onClose={handleCloseView} 
-        />
+        <div className="fixed inset-0 z-50">
+          <DetailedView 
+            type={selectedView} 
+            onClose={handleCloseView} 
+          />
+        </div>
       )}
     </div>
   );

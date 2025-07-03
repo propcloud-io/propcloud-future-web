@@ -25,15 +25,15 @@ export default function HowItWorksSection() {
       className="py-16 lg:py-24 bg-gradient-to-br from-slate-100 via-slate-50 to-teal-50 relative overflow-hidden"
     >
       <AbstractAccent position="bottom" color="green" className="opacity-50" />
-      <div className="absolute inset-0 overflow-hidden opacity-15">
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-75">
+      <div className="absolute inset-0 overflow-hidden opacity-10">
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-75 opacity-30">
           <AIFlowVisual />
         </div>
-        <div className="absolute bottom-0 right-0 w-64 h-64 opacity-50">
+        <div className="absolute bottom-0 right-0 w-64 h-64 opacity-20">
           <SystemGraphic />
         </div>
-        <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-br from-teal-200/60 to-transparent rounded-full blur-2xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/6 w-40 h-40 bg-gradient-to-br from-slate-200/60 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-br from-teal-300/40 to-slate-300/40 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/6 w-40 h-40 bg-gradient-to-br from-slate-400/40 to-teal-400/40 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-5xl mx-auto">
