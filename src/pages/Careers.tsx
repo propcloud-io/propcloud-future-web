@@ -137,13 +137,12 @@ export default function Careers() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-teal-100 to-white bg-clip-text text-transparent animate-fade-up">
                 Join Our Mission-Driven Team
               </h1>
-              <p className="text-xl sm:text-2xl text-slate-200 mb-10 max-w-3xl mx-auto animate-fade-up" style={{animationDelay: '0.2s', animationFillMode: 'both'}}>
+              <p className="text-xl sm:text-2xl text-slate-200 mb-10 max-w-3xl mx-auto animate-fade-up [animation-delay:0.2s] [animation-fill-mode:both]">
                 We're reimagining the future of hospitality — one intelligent system at a time.
               </p>
               <MagneticButton
                 onClick={scrollToJobs}
-                className="inline-block rounded-2xl bg-gradient-to-r from-teal-500 to-teal-400 text-slate-900 font-bold px-10 py-5 text-lg shadow-2xl hover:shadow-3xl animate-fade-up"
-                style={{animationDelay: '0.4s', animationFillMode: 'both'}}
+                className="inline-block rounded-2xl bg-gradient-to-r from-teal-500 to-teal-400 text-slate-900 font-bold px-10 py-5 text-lg shadow-2xl hover:shadow-3xl animate-fade-up [animation-delay:0.4s] [animation-fill-mode:both]"
                 magneticStrength={0.15}
               >
                 <span className="flex items-center gap-3">
@@ -194,8 +193,7 @@ export default function Careers() {
               ].map((item, index) => (
                 <div
                   key={item.title}
-                  className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 animate-fade-up"
-                  style={{animationDelay: `${0.1 * index}s`, animationFillMode: 'both'}}
+                  className={`bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 animate-fade-up [animation-delay:${0.1 * index}s] [animation-fill-mode:both]`}
                 >
                   <div className="mb-6">{item.icon}</div>
                   <h3 className="text-xl font-bold mb-4">{item.title}</h3>
@@ -213,7 +211,7 @@ export default function Careers() {
               <h2 className="text-3xl sm:text-4xl font-bold mb-4 animate-fade-up">
                 Open Positions
               </h2>
-              <p className="text-xl text-slate-200 animate-fade-up" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
+              <p className="text-xl text-slate-200 animate-fade-up [animation-delay:0.1s] [animation-fill-mode:both]">
                 Join us in building the future of property management
               </p>
             </div>
@@ -222,8 +220,7 @@ export default function Careers() {
               {jobPositions.map((job, index) => (
                 <div
                   key={job.id}
-                  className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 overflow-hidden animate-fade-up"
-                  style={{animationDelay: `${0.1 * index}s`, animationFillMode: 'both'}}
+                  className={`bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 overflow-hidden animate-fade-up [animation-delay:${0.1 * index}s] [animation-fill-mode:both]`}
                 >
                   <div 
                     className="p-8 cursor-pointer hover:bg-white/5 transition-all duration-300"
@@ -291,7 +288,7 @@ export default function Careers() {
               <h2 className="text-3xl sm:text-4xl font-bold mb-8 animate-fade-up">
                 We're serious — with soul.
               </h2>
-              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 animate-fade-up" style={{animationDelay: '0.2s', animationFillMode: 'both'}}>
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 animate-fade-up [animation-delay:0.2s] [animation-fill-mode:both]">
                 <p className="text-xl text-slate-200 leading-relaxed">
                   At PropCloud, we believe in intelligent systems guided by human empathy. 
                   Our team blends discipline with curiosity, structure with innovation, 
@@ -320,8 +317,7 @@ export default function Careers() {
               ].map((trait, index) => (
                 <div
                   key={trait}
-                  className="bg-gradient-to-br from-teal-500/20 to-slate-500/20 backdrop-blur-md rounded-2xl p-6 border border-white/20 text-center hover:scale-105 transition-all duration-300 animate-fade-up"
-                  style={{animationDelay: `${0.1 * index}s`, animationFillMode: 'both'}}
+                  className={`bg-gradient-to-br from-teal-500/20 to-slate-500/20 backdrop-blur-md rounded-2xl p-6 border border-white/20 text-center hover:scale-105 transition-all duration-300 animate-fade-up [animation-delay:${0.1 * index}s] [animation-fill-mode:both]`}
                 >
                   <p className="text-lg font-semibold">{trait}</p>
                 </div>
