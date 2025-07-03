@@ -13,7 +13,8 @@ import {
   Star, 
   Calendar, 
   Wrench,
-  TrendingUp
+  TrendingUp,
+  MessageCircle
 } from 'lucide-react';
 
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
@@ -27,6 +28,10 @@ export default function Dashboard() {
 
   const handleCloseView = () => {
     setSelectedView(null);
+  };
+
+  const openChatBot = () => {
+    window.dispatchEvent(new CustomEvent('openChatBot'));
   };
 
   useEffect(() => {
@@ -132,10 +137,28 @@ export default function Dashboard() {
 
           {/* AI Chat Assistant */}
           <div 
-            className="animate-fade-up"
+            className="animate-fade-up mb-12"
             style={{ animationDelay: "0.8s", animationFillMode: "both" }}
           >
             <ChatAssistant />
+          </div>
+
+          {/* CTA Section */}
+          <div 
+            className="bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 rounded-2xl p-8 text-center text-white animate-fade-up"
+            style={{ animationDelay: "0.9s", animationFillMode: "both" }}
+          >
+            <h3 className="text-2xl font-bold mb-4">Want to see your data here?</h3>
+            <p className="text-lg mb-6 opacity-90">Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.</p>
+            <button
+              onClick={openChatBot}
+              className="inline-block rounded-xl bg-white text-slate-800 font-bold px-8 py-4 text-base lg:text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+            >
+              <span className="flex items-center gap-2">
+                <MessageCircle size={20} />
+                Get Started Today
+              </span>
+            </button>
           </div>
         </div>
       </main>

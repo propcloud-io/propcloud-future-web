@@ -15,6 +15,11 @@ const mockResponses: Record<string, string> = {
   'maintenance': "There are 2 maintenance issues still being resolved - both are minor and won't affect guest experience.",
   'revenue': "Villa Nova generated the highest revenue this month with $3,420, followed by Ocean View at $2,890.",
   'performance': "This week you're up 12% compared to last week, with particularly strong performance from your beachfront properties.",
+  'properties': "You're managing 8 active properties. Villa Nova and Ocean View are your top performers, generating $3,420 and $2,890 respectively this month.",
+  'best': "Villa Nova is your best performing property with $3,420 in revenue this month and 95% occupancy rate.",
+  'worst': "Sunset Cottage is underperforming with only 78% occupancy, but we've identified pricing optimization opportunities.",
+  'help': "I can analyze your property performance data including revenue, occupancy rates, guest satisfaction, maintenance issues, and upcoming turnovers. What would you like to know?",
+  'overview': "Your portfolio is performing well: 91% average occupancy, $14,800 monthly revenue, 4.8-star guest rating, with 5 upcoming turnovers and 2 minor maintenance items.",
   'default': "I can help you understand your property performance. Try asking about occupancy rates, turnovers, maintenance issues, or revenue by property."
 };
 
@@ -30,14 +35,62 @@ export default function ChatAssistant() {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  const getResponse = (userInput: string): string => {
+  const getIntelligentResponse = (userInput: string): string => {
     const input = userInput.toLowerCase();
     
-    if (input.includes('occupancy')) return mockResponses.occupancy;
-    if (input.includes('turnover')) return mockResponses.turnovers;
-    if (input.includes('maintenance') || input.includes('issues')) return mockResponses.maintenance;
-    if (input.includes('revenue') || input.includes('property') || input.includes('most')) return mockResponses.revenue;
-    if (input.includes('performance') || input.includes('week') || input.includes('compared')) return mockResponses.performance;
+    // Help-related queries
+    if (input.includes('help') || input.includes('assist') || input.includes('what can') || input.includes('how can')) {
+      return mockResponses.help;
+    }
+    
+    // Overview/summary queries
+    if (input.includes('overview') || input.includes('summary') || input.includes('show me') || input.includes('tell me about')) {
+      return mockResponses.overview;
+    }
+    
+    // Occupancy queries
+    if (input.includes('occupancy') || input.includes('occupied') || input.includes('full') || input.includes('booked')) {
+      return mockResponses.occupancy;
+    }
+    
+    // Revenue/money/earnings queries
+    if (input.includes('revenue') || input.includes('money') || input.includes('earning') || input.includes('income') || 
+        input.includes('profit') || input.includes('making') || input.includes('generated') || input.includes('$')) {
+      return mockResponses.revenue;
+    }
+    
+    // Best/top/highest performing queries
+    if ((input.includes('best') || input.includes('top') || input.includes('highest') || input.includes('most') || 
+         input.includes('which one') || input.includes('what property')) && 
+        (input.includes('perform') || input.includes('revenue') || input.includes('money') || input.includes('earning'))) {
+      return mockResponses.best;
+    }
+    
+    // Worst/lowest performing queries
+    if ((input.includes('worst') || input.includes('lowest') || input.includes('underperform') || input.includes('struggling')) &&
+        (input.includes('perform') || input.includes('property'))) {
+      return mockResponses.worst;
+    }
+    
+    // Properties/portfolio queries
+    if (input.includes('properties') || input.includes('portfolio') || input.includes('units') || input.includes('listings')) {
+      return mockResponses.properties;
+    }
+    
+    // Performance queries
+    if (input.includes('performance') || input.includes('doing') || input.includes('trend') || input.includes('compared')) {
+      return mockResponses.performance;
+    }
+    
+    // Maintenance queries
+    if (input.includes('maintenance') || input.includes('issues') || input.includes('problems') || input.includes('repairs')) {
+      return mockResponses.maintenance;
+    }
+    
+    // Turnover/cleaning queries
+    if (input.includes('turnover') || input.includes('cleaning') || input.includes('checkout') || input.includes('upcoming')) {
+      return mockResponses.turnovers;
+    }
     
     return mockResponses.default;
   };
@@ -60,7 +113,7 @@ export default function ChatAssistant() {
     setTimeout(() => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: getResponse(inputValue),
+        text: getIntelligentResponse(inputValue),
         sender: 'assistant',
         timestamp: new Date()
       };
