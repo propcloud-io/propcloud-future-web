@@ -63,34 +63,40 @@ export default function DashboardTour({ onComplete, onSkip }: DashboardTourProps
         
         switch (step.position) {
           case 'bottom':
-            top = rect.bottom + scrollTop + 10;
+            top = rect.bottom + scrollTop + 20;
             left = rect.left + rect.width / 2;
             break;
           case 'top':
-            top = rect.top + scrollTop - 10;
+            top = rect.top + scrollTop - 20;
             left = rect.left + rect.width / 2;
             break;
           case 'right':
             top = rect.top + scrollTop + rect.height / 2;
-            left = rect.right + 10;
+            left = rect.right + 20;
             break;
           case 'left':
             top = rect.top + scrollTop + rect.height / 2;
-            left = rect.left - 10;
+            left = rect.left - 20;
             break;
         }
         
         setPosition({ top, left });
+        
+        // Smooth scroll to keep target in view
+        target.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center',
+          inline: 'center' 
+        });
       }
     };
 
-    updatePosition();
+    const timeoutId = setTimeout(updatePosition, 100);
     window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
     
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
     };
   }, [currentStep]);
 
