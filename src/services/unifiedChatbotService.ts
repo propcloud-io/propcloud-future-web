@@ -43,12 +43,14 @@ export async function createLead(leadData: LeadData): Promise<any> {
   console.log('💾 Creating lead with data:', leadData);
   
   try {
-    // Handle platforms field properly
+    // Handle platforms field properly with explicit type checking
     let platformUsage: string[] = [];
-    if (Array.isArray(leadData.platforms)) {
-      platformUsage = leadData.platforms;
-    } else if (typeof leadData.platforms === 'string') {
-      platformUsage = leadData.platforms.split(',').map(p => p.trim());
+    const platforms = leadData.platforms;
+    
+    if (Array.isArray(platforms)) {
+      platformUsage = platforms;
+    } else if (platforms && typeof platforms === 'string') {
+      platformUsage = platforms.split(',').map(p => p.trim());
     }
 
     // Correct field mapping to match database schema
