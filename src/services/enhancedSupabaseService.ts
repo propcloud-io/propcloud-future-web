@@ -42,6 +42,16 @@ export async function createEnhancedLead(leadData: LeadData): Promise<any> {
   console.log('💾 Creating enhanced lead:', leadData);
   
   try {
+    // Handle platforms field with explicit type checking and proper fallbacks
+    let platformUsage: string[] = [];
+    if (leadData.platforms) {
+      if (Array.isArray(leadData.platforms)) {
+        platformUsage = leadData.platforms;
+      } else if (typeof leadData.platforms === 'string' && leadData.platforms.trim().length > 0) {
+        platformUsage = leadData.platforms.split(',').map(p => p.trim()).filter(p => p.length > 0);
+      }
+    }
+
     const leadRecord = {
       name: leadData.name,
       email: leadData.email,
@@ -49,7 +59,7 @@ export async function createEnhancedLead(leadData: LeadData): Promise<any> {
       location: leadData.locations,
       message: leadData.additionalNotes || '',
       number_of_properties: parseInt(leadData.numberOfProperties) || 1,
-      platform_usage: leadData.platforms || []
+      platform_usage: platformUsage
     };
 
     console.log('📝 Lead record to insert:', leadRecord);
