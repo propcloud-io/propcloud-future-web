@@ -32,6 +32,7 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   const [leadId, setLeadId] = useState<string | null>(null);
 
   const handleFlowSelection = async (flowType: 'waitlist' | 'management' | 'connect') => {
+    console.log('Flow selected:', flowType);
     setSelectedFlow(flowType);
     setFormData({ flowType });
     setStep(1);
@@ -49,6 +50,7 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   };
 
   const handleInputSubmit = async (key: string, value: string) => {
+    console.log('Input submitted:', { key, value });
     const newData = { ...formData, [key]: value };
     setFormData(newData);
 
@@ -80,33 +82,40 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   };
 
   const handleFlowCompletion = async (data: FlowData) => {
+    console.log('Completing flow with data:', data);
+    
     try {
       // Create lead in Supabase
-      const leadData: any = {
+      const leadData = {
         name: data.name!,
         email: data.email!,
         source: 'website_chatbot',
+        location: '',
+        message: '',
+        number_of_properties: undefined as number | undefined,
+        property_type: undefined as string | undefined,
       };
 
       if (data.flowType === 'waitlist') {
-        leadData.location = data.city;
+        leadData.location = data.city || '';
         leadData.message = `AI Waitlist: Currently managing: ${data.currentlyManaging}, Excitement: ${data.aiExcitement}`;
       } else if (data.flowType === 'management') {
-        leadData.location = data.location;
-        leadData.number_of_properties = data.propertyCount ? parseInt(data.propertyCount) : null;
+        leadData.location = data.location || '';
+        leadData.number_of_properties = data.propertyCount ? parseInt(data.propertyCount) : undefined;
         leadData.message = `Property Management: ${data.managementType}`;
-        leadData.property_type = 'rental'; // Default assumption
+        leadData.property_type = 'rental';
       } else if (data.flowType === 'connect') {
-        leadData.message = data.helpMessage;
+        leadData.message = data.helpMessage || '';
       }
 
+      console.log('Creating lead with processed data:', leadData);
       const createdLead = await createLead(leadData);
       setLeadId(createdLead.id);
 
       // If management flow and has property details, create property record
       if (data.flowType === 'management' && data.location && data.propertyCount) {
         const propertyCount = parseInt(data.propertyCount) || 1;
-        for (let i = 0; i < Math.min(propertyCount, 5); i++) { // Limit to 5 properties
+        for (let i = 0; i < Math.min(propertyCount, 5); i++) {
           await createProperty({
             name: `Property ${i + 1}`,
             lead_id: createdLead.id,
@@ -124,10 +133,12 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
         lead_id: createdLead.id,
       });
 
+      console.log('Flow completed successfully');
       onFlowComplete(data);
     } catch (error) {
       console.error('Error completing flow:', error);
-      onFlowComplete(data); // Still complete the flow for user experience
+      // Still complete the flow for user experience
+      onFlowComplete(data);
     }
   };
 

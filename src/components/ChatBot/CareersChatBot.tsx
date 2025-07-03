@@ -194,13 +194,15 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     addBotMessage("Submitting your application...");
 
     try {
-      // Save to Supabase first
+      console.log('Submitting job application:', applicationData);
+      
+      // Save to Supabase
       await createJobApplication({
         name: sanitizeText(applicationData.fullName),
         email: sanitizeText(applicationData.email),
         role_applied: sanitizeText(applicationData.role),
         motivation: sanitizeText(applicationData.motivation),
-        linkedin_url: applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : null,
+        linkedin_url: applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : undefined,
         source: 'careers_chatbot',
       });
 

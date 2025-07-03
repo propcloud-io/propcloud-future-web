@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -15,7 +14,7 @@ import AdvancedParticles from '@/components/InteractiveElements/AdvancedParticle
 import FloatingGeometry from '@/components/InteractiveElements/FloatingGeometry';
 import AnimatedGradient from '@/components/InteractiveElements/AnimatedGradient';
 import GlassMorphCard from '@/components/InteractiveElements/GlassMorphCard';
-import { getDashboardProperties, getDashboardReports } from '@/services/supabaseService';
+import { getDashboardProperties, getDashboardReports, testSupabaseConnection } from '@/services/supabaseService';
 import { 
   Home, 
   DollarSign, 
@@ -35,19 +34,42 @@ export default function Dashboard() {
   const [properties, setProperties] = useState<any[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [connectionStatus, setConnectionStatus] = useState<boolean | null>(null);
 
   // Load real data from Supabase
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const [propertiesData, reportsData] = await Promise.all([
-          getDashboardProperties(),
-          getDashboardReports()
-        ]);
-        setProperties(propertiesData);
-        setReports(reportsData);
+        console.log('Testing Supabase connection...');
+        const isConnected = await testSupabaseConnection();
+        setConnectionStatus(isConnected);
+        
+        if (isConnected) {
+          console.log('Loading dashboard data...');
+          const [propertiesData, reportsData] = await Promise.all([
+            getDashboardProperties(),
+            getDashboardReports()
+          ]);
+          setProperties(propertiesData);
+          setReports(reportsData);
+          console.log('Dashboard data loaded:', { properties: propertiesData.length, reports: reportsData.length });
+        } else {
+          console.warn('Supabase connection failed, using fallback data');
+          // Set minimal fallback data for demo
+          setProperties([
+            { id: '1', name: 'Demo Property 1', city: 'Miami', active: true },
+            { id: '2', name: 'Demo Property 2', city: 'Dubai', active: true },
+          ]);
+          setReports([
+            { id: '1', revenue: 15000, occupancy_rate: 85, maintenance_issues: 2, guest_rating: 4.5 },
+            { id: '2', revenue: 12000, occupancy_rate: 92, maintenance_issues: 0, guest_rating: 4.8 },
+          ]);
+        }
       } catch (error) {
         console.error('Error loading dashboard data:', error);
+        // Use fallback data on error
+        setProperties([]);
+        setReports([]);
       } finally {
         setIsLoading(false);
       }
@@ -157,6 +179,13 @@ export default function Dashboard() {
               <p className="text-white/80 text-xl animate-fade-up leading-relaxed" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
                 Monitor your properties and track key metrics in real-time
               </p>
+              {connectionStatus === false && (
+                <div className="mt-4 p-3 bg-yellow-500/20 border border-yellow-400/30 rounded-lg">
+                  <p className="text-yellow-200 text-sm">
+                    ⚠️ Demo Mode: Using sample data. Supabase connection not available.
+                  </p>
+                </div>
+              )}
             </GlassMorphCard>
           </div>
 
