@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -28,7 +29,6 @@ const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
 export default function Dashboard() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleCardClick = (type: string) => {
     setSelectedView(type);
@@ -55,21 +55,12 @@ export default function Dashboard() {
     }
   }, []);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 via-propcloud-800 to-teal-800 flex flex-col relative overflow-hidden">
       <ScrollProgressBar />
       <Header />
       
-      <main className="flex-1 pt-24 pb-16 relative">
+      <main className="flex-1 pt-24 pb-32 relative">
         <AbstractAccent position="top" color="blue" className="opacity-60" />
         <ParticleBackground density="medium" className="opacity-30" />
         
@@ -95,16 +86,6 @@ export default function Dashboard() {
             className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           />
         </div>
-
-        {/* Interactive cursor follower */}
-        <div
-          className="fixed w-8 h-8 border-2 border-teal-400/50 rounded-full pointer-events-none z-30 transition-all duration-300 ease-out"
-          style={{
-            left: mousePosition.x - 16,
-            top: mousePosition.y - 16,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
 
         {/* Decorative pattern overlay */}
         <div className="absolute inset-0 opacity-15">
@@ -233,18 +214,18 @@ export default function Dashboard() {
             </div>
           </ParallaxSection>
 
-          {/* Enhanced AI Chat Assistant */}
+          {/* Enhanced AI Chat Assistant - Fixed z-index to prevent overlay */}
           <div 
-            className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300"
+            className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative z-20"
             style={{ animationDelay: "0.8s", animationFillMode: "both" }}
           >
             <ChatAssistant />
           </div>
 
-          {/* Enhanced CTA Section with magnetic button */}
+          {/* Enhanced CTA Section with magnetic button - Adjusted margin for better spacing */}
           <ParallaxSection speed={0.1}>
             <div 
-              className="relative bg-gradient-to-br from-white/95 via-teal-50/90 to-slate-50/95 backdrop-blur-md rounded-3xl p-12 text-center shadow-2xl border border-white/60 animate-fade-up overflow-hidden group"
+              className="relative bg-gradient-to-br from-white/95 via-teal-50/90 to-slate-50/95 backdrop-blur-md rounded-3xl p-12 text-center shadow-2xl border border-white/60 animate-fade-up overflow-hidden group mb-20"
               style={{ animationDelay: "0.9s", animationFillMode: "both" }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-100/30 to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500" />

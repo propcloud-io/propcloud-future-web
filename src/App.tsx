@@ -10,6 +10,7 @@ import AIVision from "./pages/AIVision";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Careers from "./pages/Careers";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Blog from "./pages/Blog";
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/ai-vision" element={<AIVision />} />
           <Route path="/login" element={<Login />} />
           <Route path="/app" element={<Dashboard />} />
+          <Route path="/careers" element={<Careers />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/blog" element={<Blog />} />

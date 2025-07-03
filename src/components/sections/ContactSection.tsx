@@ -1,5 +1,5 @@
 
-import { Phone, MapPin, Mail, HelpCircle } from "lucide-react";
+import { Phone, MapPin, Mail, HelpCircle, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import AbstractAccent from "@/components/AbstractAccent";
 
@@ -46,6 +46,25 @@ export default function ContactSection() {
                 <p className="text-slate-300">
                   Managing properties worldwide with 24/7 support and local expertise.
                 </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-lg bg-teal-600/20 backdrop-blur-sm">
+                <Users size={24} className="text-teal-300" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Join Our Team</h3>
+                <p className="text-slate-300 mb-4">
+                  We're building the future of hospitality and looking for passionate people to join us.
+                </p>
+                <Link
+                  to="/careers"
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-lg hover:bg-white/20 transition-all duration-300"
+                >
+                  <Users size={18} />
+                  View Careers
+                </Link>
               </div>
             </div>
 
