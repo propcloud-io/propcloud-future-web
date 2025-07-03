@@ -9,34 +9,25 @@ import AISection from "@/components/sections/AISection";
 import ContactSection from "@/components/sections/ContactSection";
 import ScrollProgressBar from "@/components/InteractiveElements/ScrollProgressBar";
 import ParallaxSection from "@/components/InteractiveElements/ParallaxSection";
-import GlowingOrb from "@/components/InteractiveElements/GlowingOrb";
+import AdvancedParticles from "@/components/InteractiveElements/AdvancedParticles";
+import FloatingGeometry from "@/components/InteractiveElements/FloatingGeometry";
+import AnimatedGradient from "@/components/InteractiveElements/AnimatedGradient";
 
 export default function Index() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col font-sans overflow-x-hidden relative">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden relative">
       <ScrollProgressBar />
       
-      {/* Interactive background orbs - Enhanced visibility with teal colors on white background */}
+      {/* Advanced background system */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <GlowingOrb 
-          size={300} 
-          color="#14b8a6" 
-          intensity={0.5}
-          className="top-20 -left-20"
-        />
-        <GlowingOrb 
-          size={200} 
-          color="#0f766e" 
-          intensity={0.4}
-          className="top-1/2 -right-20"
-        />
-        <GlowingOrb 
-          size={150} 
-          color="#134e4a" 
-          intensity={0.3}
-          className="bottom-1/4 left-1/4"
-          animate={false}
-        />
+        <AnimatedGradient variant="primary" intensity="medium" />
+        <AdvancedParticles density="medium" color="gradient" className="opacity-60" />
+        <FloatingGeometry variant="mixed" className="opacity-40" />
+        
+        {/* Dynamic flowing elements */}
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-teal-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-40 right-20 w-48 h-48 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-2xl animate-bounce" style={{animationDuration: '3s'}} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}} />
       </div>
 
       <Header />
@@ -57,8 +48,9 @@ export default function Index() {
           <AISection />
         </ParallaxSection>
 
-        {/* TESTIMONIALS - Enhanced background contrast */}
-        <section id="testimonials" className="py-16 lg:py-24 bg-gradient-to-br from-slate-100 via-white to-teal-50">
+        {/* TESTIMONIALS with enhanced styling */}
+        <section id="testimonials" className="py-16 lg:py-24 relative overflow-hidden">
+          <AnimatedGradient variant="secondary" intensity="medium" />
           <ParallaxSection speed={0.05}>
             <Testimonials />
           </ParallaxSection>
