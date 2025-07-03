@@ -26,6 +26,7 @@ import {
   Sparkles,
   RefreshCw
 } from 'lucide-react';
+import EnhancedChatAssistant from '@/components/Dashboard/EnhancedChatAssistant';
 
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
@@ -399,7 +400,7 @@ export default function Dashboard() {
           </div>
 
           <div className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative">
-            <ChatAssistant />
+            <EnhancedChatAssistant />
           </div>
 
           <GlassMorphCard 

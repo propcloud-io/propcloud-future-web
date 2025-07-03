@@ -1,37 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { createJobApplication, saveConversation } from '@/services/supabaseService';
+import { ChatMessage, JobApplicationData } from '@/types/chatbot';
+import { validateEmail, validateLinkedInUrl, validateFileUpload, sanitizeInput, generateId, delay } from '@/utils/chatbotUtils';
+import { createEnhancedJobApplication, saveEnhancedConversation, testSupabaseConnection, getMockKnowledgeBase } from '@/services/enhancedSupabaseService';
+import { submitJobApplicationToFormspree } from '@/services/formspreeService';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  sanitizeText, 
-  validateFile, 
-  emailSchema, 
-  nameSchema, 
-  urlSchema, 
-  textSchema,
-  RateLimiter,
-  sanitizeFileName
-} from '@/lib/security';
-
-interface Message {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-}
-
-interface ApplicationData {
-  fullName: string;
-  email: string;
-  role: string;
-  motivation: string;
-  linkedinPortfolio: string;
-  additionalNotes: string;
-  resume: File | null;
-}
 
 interface CareersChatBotProps {
   isOpen: boolean;
@@ -39,269 +14,315 @@ interface CareersChatBotProps {
   initialRole?: string;
 }
 
-// Create rate limiter instance
-const rateLimiter = new RateLimiter(3, 300000); // 3 attempts per 5 minutes
+interface FormStep {
+  field: keyof JobApplicationData;
+  question: string;
+  placeholder?: string;
+  type: 'text' | 'email' | 'select' | 'textarea' | 'file';
+  options?: string[];
+  optional?: boolean;
+}
+
+const jobRoles = [
+  'Product Designer',
+  'AI Engineer', 
+  'Operations Intern'
+];
+
+const formSteps: FormStep[] = [
+  { field: 'name', question: "What's your full name?", placeholder: 'Enter your full name', type: 'text' },
+  { field: 'email', question: "What's your email address?", placeholder: 'your@email.com', type: 'email' },
+  { field: 'role', question: 'Which role are you applying for?', type: 'select', options: jobRoles },
+  { field: 'linkedinUrl', question: 'What\'s your LinkedIn URL? (optional)', placeholder: 'https://linkedin.com/in/yourname', type: 'text', optional: true },
+  { field: 'motivation', question: 'Why do you want to join PropCloud?', placeholder: 'Tell us what excites you about this opportunity...', type: 'textarea' },
+  { field: 'resume', question: 'Please upload your resume (PDF, DOC, DOCX)', type: 'file' }
+];
 
 export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: CareersChatBotProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [applicationData, setApplicationData] = useState<ApplicationData>({
-    fullName: '',
-    email: '',
-    role: initialRole,
-    motivation: '',
-    linkedinPortfolio: '',
-    additionalNotes: '',
-    resume: null
-  });
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [isInForm, setIsInForm] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState<Partial<JobApplicationData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [validationError, setValidationError] = useState<string>('');
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [knowledgeBase, setKnowledgeBase] = useState<any>({});
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-
-  const steps = [
-    { field: 'fullName', question: 'What\'s your full name?', type: 'text', validation: nameSchema },
-    { field: 'email', question: 'What\'s your email address?', type: 'email', validation: emailSchema },
-    { field: 'role', question: 'Which role are you applying for?', type: 'select', options: ['Full-Stack Developer (AI-Enabled SaaS)', 'Customer Success & Onboarding Lead', 'AI Product Manager'] },
-    { field: 'motivation', question: 'Why do you want to work with PropCloud?', type: 'textarea', validation: textSchema },
-    { field: 'linkedinPortfolio', question: 'LinkedIn or Portfolio URL (optional)?', type: 'text', optional: true, validation: urlSchema },
-    { field: 'additionalNotes', question: 'Any additional notes or questions? (optional)', type: 'textarea', optional: true, validation: textSchema },
-    { field: 'resume', question: 'Please upload your resume', type: 'file' }
-  ];
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      addBotMessage("Hi! I'm here to help you apply for a position at PropCloud. Let's get started! 🚀");
-      setTimeout(() => {
-        addBotMessage(steps[0].question);
-      }, 1000);
+      initializeBot();
     }
   }, [isOpen]);
 
   useEffect(() => {
-    if (initialRole && applicationData.role !== initialRole) {
-      setApplicationData(prev => ({ ...prev, role: initialRole }));
+    if (initialRole && jobRoles.includes(initialRole)) {
+      setFormData(prev => ({ ...prev, role: initialRole }));
     }
   }, [initialRole]);
 
-  const addMessage = async (text: string, isBot: boolean) => {
-    // Sanitize message text to prevent XSS
-    const sanitizedText = sanitizeText(text);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const initializeBot = async () => {
+    // Test connection
+    const connected = await testSupabaseConnection();
+    setIsConnected(connected);
     
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: sanitizedText,
+    // Load knowledge base
+    const kb = await getMockKnowledgeBase();
+    setKnowledgeBase(kb);
+    
+    // Add welcome message
+    await delay(500);
+    addBotMessage("Excited to join PropCloud? Let's walk through your application.");
+  };
+
+  const addMessage = async (text: string, isBot: boolean, isTyping = false) => {
+    const message: ChatMessage = {
+      id: generateId(),
+      text: sanitizeInput(text),
       isBot,
-      timestamp: new Date()
+      timestamp: new Date(),
+      isTyping
     };
-    setMessages(prev => [...prev, newMessage]);
-
-    // Save conversation to Supabase
-    try {
-      await saveConversation({
-        message: sanitizedText,
-        is_from_user: !isBot,
-        page_context: 'careers_page',
-      });
-    } catch (error) {
-      console.error('⚠️ Error saving conversation:', error);
-      // Don't block UI for conversation save errors
-    }
-  };
-
-  const addBotMessage = (text: string) => {
-    addMessage(text, true);
-  };
-
-  const validateInput = (value: string, step: typeof steps[0]): boolean => {
-    setValidationError('');
     
-    if (!step.optional && !value.trim()) {
-      setValidationError('This field is required');
-      return false;
+    setMessages(prev => [...prev, message]);
+    
+    // Save to conversations
+    if (!isTyping) {
+      await saveEnhancedConversation(text, !isBot, 'careers');
     }
-
-    if (value.trim() && step.validation) {
-      try {
-        step.validation.parse(value.trim());
-      } catch (error: any) {
-        setValidationError(error.errors?.[0]?.message || 'Invalid input');
-        return false;
-      }
-    }
-
-    return true;
   };
 
-  const handleInputSubmit = async () => {
-    if (!inputValue.trim() && steps[currentStep].type !== 'file') return;
+  const addBotMessage = async (text: string) => {
+    // Add typing indicator
+    const typingId = generateId();
+    setMessages(prev => [...prev, {
+      id: typingId,
+      text: 'Thinking...',
+      isBot: true,
+      timestamp: new Date(),
+      isTyping: true
+    }]);
+    
+    await delay(800 + Math.random() * 800);
+    
+    // Remove typing indicator and add real message
+    setMessages(prev => prev.filter(msg => msg.id !== typingId));
+    await addMessage(text, true);
+  };
 
-    const currentStepData = steps[currentStep];
+  const handleUserMessage = async (message: string) => {
+    const sanitized = sanitizeInput(message);
+    await addMessage(sanitized, false);
+    
+    if (isInForm) {
+      await handleFormInput(sanitized);
+    } else {
+      await handleGeneralQuery(sanitized);
+    }
+  };
+
+  const handleGeneralQuery = async (query: string) => {
+    const lowerQuery = query.toLowerCase();
+    let response = '';
+    
+    // Intelligent responses based on query
+    if (lowerQuery.includes('remote') || lowerQuery.includes('location') || lowerQuery.includes('where')) {
+      response = knowledgeBase.remote || "Yes, we're a fully remote team with members across different time zones.";
+    } else if (lowerQuery.includes('team') || lowerQuery.includes('based') || lowerQuery.includes('office')) {
+      response = knowledgeBase.team || "Our team is distributed globally with members in multiple countries.";
+    } else if (lowerQuery.includes('interview') || lowerQuery.includes('process') || lowerQuery.includes('next')) {
+      response = knowledgeBase.interview || "Our interview process includes a skills assessment, team fit interview, and final discussion with founders.";
+    } else if (lowerQuery.includes('apply') || lowerQuery.includes('start') || lowerQuery.includes('application')) {
+      response = "Perfect! I'll guide you through our application process. It takes about 5 minutes and covers everything we need to know.";
+    } else {
+      response = "I can answer questions about working at PropCloud, our remote culture, or help you apply. What would you like to know?";
+    }
+    
+    await addBotMessage(response);
+    
+    // Suggest starting application
+    setTimeout(async () => {
+      await addBotMessage("Ready to apply? I can walk you through the application process step by step.");
+      
+      setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: generateId(),
+          text: 'CAREER_ACTIONS',
+          isBot: true,
+          timestamp: new Date()
+        }]);
+      }, 500);
+    }, 2000);
+  };
+
+  const handleFormInput = async (input: string) => {
+    const currentField = formSteps[currentStep];
+    
+    // Skip validation for file uploads (handled separately)
+    if (currentField.type === 'file') return;
     
     // Validate input
-    if (!validateInput(inputValue, currentStepData)) {
+    if (currentField.field === 'email' && !validateEmail(input)) {
+      await addBotMessage("Please enter a valid email address.");
       return;
     }
-
-    const currentField = currentStepData.field as keyof ApplicationData;
     
-    if (currentStepData.type !== 'file') {
-      const sanitizedValue = sanitizeText(inputValue.trim());
-      await addMessage(sanitizedValue, false);
-      setApplicationData(prev => ({ ...prev, [currentField]: sanitizedValue }));
-    }
-
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-      setInputValue('');
-      setTimeout(() => {
-        addBotMessage(steps[currentStep + 1].question);
-      }, 500);
-    } else {
-      await handleSubmitApplication();
-    }
-  };
-
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        validateFile(file);
-        const sanitizedFileName = sanitizeFileName(file.name);
-        
-        // Create a new file with sanitized name
-        const sanitizedFile = new File([file], sanitizedFileName, { type: file.type });
-        
-        setApplicationData(prev => ({ ...prev, resume: sanitizedFile }));
-        await addMessage(`Resume uploaded: ${sanitizedFileName}`, false);
-        await handleSubmitApplication();
-      } catch (error: any) {
-        setValidationError(error.message);
-        setTimeout(() => setValidationError(''), 5000);
-      }
-    }
-  };
-
-  const handleSubmitApplication = async () => {
-    // Check rate limiting
-    const userKey = applicationData.email || 'anonymous';
-    if (!rateLimiter.isAllowed(userKey)) {
-      const cooldown = rateLimiter.getRemainingCooldown(userKey);
-      setIsRateLimited(true);
-      addBotMessage(`Please wait ${cooldown} seconds before submitting another application.`);
-      setTimeout(() => setIsRateLimited(false), cooldown * 1000);
+    if (currentField.field === 'linkedinUrl' && input && !validateLinkedInUrl(input)) {
+      await addBotMessage("Please enter a valid LinkedIn URL (e.g., https://linkedin.com/in/yourname)");
       return;
     }
-
-    setIsSubmitting(true);
-    addBotMessage("Submitting your application...");
-
-    try {
-      console.log('💼 Submitting job application:', applicationData);
+    
+    if (!currentField.optional && !input.trim()) {
+      await addBotMessage("This field is required. Please provide an answer.");
+      return;
+    }
+    
+    // Save form data
+    setFormData(prev => ({
+      ...prev,
+      [currentField.field]: input
+    }));
+    
+    // Move to next step or complete
+    if (currentStep < formSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+      await delay(500);
       
-      // Show loading toast
-      toast({
-        title: "Submitting Application",
-        description: "We're processing your job application...",
-      });
-      
-      // Save to Supabase with proper await
-      const jobAppData = {
-        name: sanitizeText(applicationData.fullName),
-        email: sanitizeText(applicationData.email),
-        role_applied: sanitizeText(applicationData.role),
-        motivation: sanitizeText(applicationData.motivation),
-        linkedin_url: applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : undefined,
-        source: 'careers_chatbot',
-      };
-
-      console.log('💾 Creating job application with data:', jobAppData);
-      await createJobApplication(jobAppData);
-
-      console.log('✅ Job application created successfully');
-
-      // Also send to Formspree as backup
-      const formData = new FormData();
-      formData.append('name', sanitizeText(applicationData.fullName));
-      formData.append('email', sanitizeText(applicationData.email));
-      formData.append('role', sanitizeText(applicationData.role));
-      formData.append('motivation', sanitizeText(applicationData.motivation));
-      formData.append('linkedinPortfolio', applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : '');
-      formData.append('additionalNotes', applicationData.additionalNotes ? sanitizeText(applicationData.additionalNotes) : '');
-      
-      if (applicationData.resume) {
-        formData.append('resume', applicationData.resume);
+      const nextStep = formSteps[currentStep + 1];
+      if (nextStep.type === 'file') {
+        await addBotMessage(nextStep.question);
+        // Add file upload component
+        setTimeout(() => {
+          setMessages(prev => [...prev, {
+            id: generateId(),
+            text: 'FILE_UPLOAD',
+            isBot: true,
+            timestamp: new Date()
+          }]);
+        }, 500);
+      } else {
+        await addBotMessage(nextStep.question);
       }
+    } else {
+      await completeApplication();
+    }
+  };
 
-      await fetch('https://formspree.io/f/mwpbzboq', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+  const handleFileUpload = async (file: File) => {
+    const validation = validateFileUpload(file);
+    
+    if (!validation.isValid) {
+      await addBotMessage(`File upload error: ${validation.errors.join(', ')}`);
+      return;
+    }
+    
+    setFormData(prev => ({ ...prev, resume: file }));
+    await addMessage(`Resume uploaded: ${file.name}`, false);
+    await delay(500);
+    await addBotMessage("Great! I've received your resume. Let me process your application...");
+    await completeApplication();
+  };
 
-      // Show success toast
-      toast({
-        title: "Application Submitted!",
-        description: "Thank you for your interest. We'll be in touch soon.",
-        variant: "default",
-      });
-
-      setTimeout(() => {
-        addBotMessage("Thank you! We've received your application. Our team will be in touch if there's a fit. 🎉");
-      }, 1000);
-    } catch (error) {
-      console.error('❌ Application submission error:', error);
+  const completeApplication = async () => {
+    setIsSubmitting(true);
+    await addBotMessage("Uploading resume and submitting application...");
+    
+    try {
+      const appData = formData as JobApplicationData;
       
-      // Show error toast
+      // Primary submission to Supabase
+      let supabaseSuccess = false;
+      
+      if (isConnected) {
+        try {
+          await createEnhancedJobApplication(appData);
+          supabaseSuccess = true;
+          console.log('✅ Supabase job application submission successful');
+        } catch (supabaseError) {
+          console.error('❌ Supabase job application submission failed:', supabaseError);
+        }
+      }
+      
+      // Backup submission to Formspree
+      const formspreeSuccess = await submitJobApplicationToFormspree(appData);
+      
+      if (supabaseSuccess || formspreeSuccess) {
+        await addBotMessage(`Application submitted! Thank you, ${appData.name}. We've received your application for the ${appData.role} position.`);
+        
+        await delay(1500);
+        await addBotMessage("Our team will review your application and reach out if there's a fit. We typically respond within 3-5 business days. Thanks for your interest in PropCloud! 🎉");
+        
+        toast({
+          title: "Application Submitted!",
+          description: "Thank you for your application. We'll be in touch soon.",
+        });
+      } else {
+        throw new Error('Both Supabase and Formspree submissions failed');
+      }
+    } catch (error) {
+      console.error('❌ Application submission failed:', error);
+      await addBotMessage("I apologize, but there was an issue submitting your application. Please try again or email us directly at contact@propcloud.io");
+      
       toast({
         title: "Submission Error",
-        description: "There was an issue submitting your application. Please try again.",
+        description: "Please try again or contact us directly.",
         variant: "destructive",
       });
-
-      setTimeout(() => {
-        addBotMessage("Sorry, there was an error submitting your application. Please try again or email us directly at contact@propcloud.io");
-      }, 1000);
     } finally {
       setIsSubmitting(false);
+      setIsInForm(false);
     }
   };
 
-  const handleSkip = () => {
-    if (steps[currentStep].optional) {
-      handleInputSubmit();
-    }
-  };
-
-  const handleReset = () => {
-    setMessages([]);
+  const startApplication = async () => {
+    setIsInForm(true);
     setCurrentStep(0);
-    setApplicationData({
-      fullName: '',
-      email: '',
-      role: initialRole,
-      motivation: '',
-      linkedinPortfolio: '',
-      additionalNotes: '',
-      resume: null
-    });
-    setInputValue('');
+    setFormData(initialRole ? { role: initialRole } : {});
+    await addBotMessage("Perfect! Let's start with your application.");
+    await delay(500);
+    await addBotMessage(formSteps[0].question);
+  };
+
+  const handleSend = () => {
+    if (inputValue.trim() && !isSubmitting) {
+      handleUserMessage(inputValue);
+      setInputValue('');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const resetChat = () => {
+    setMessages([]);
+    setIsInForm(false);
+    setCurrentStep(0);
+    setFormData({});
     setIsSubmitting(false);
-    setValidationError('');
-    setIsRateLimited(false);
     onClose();
   };
 
   if (!isOpen) return null;
 
-  const currentStepData = steps[currentStep];
+  const currentStep_data = formSteps[currentStep];
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/60 w-full max-w-md h-96 flex flex-col overflow-hidden animate-scale-in">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/60 w-full max-w-md h-96 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -310,11 +331,13 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
             </div>
             <div>
               <h3 className="font-semibold">PropCloud Careers</h3>
-              <p className="text-xs opacity-90">Job Application</p>
+              <p className="text-xs opacity-90">
+                {isConnected === null ? 'Connecting...' : isConnected ? 'Connected' : 'Backup Mode'}
+              </p>
             </div>
           </div>
           <button
-            onClick={handleReset}
+            onClick={resetChat}
             className="hover:bg-white/20 p-1 rounded transition-colors"
             disabled={isSubmitting}
           >
@@ -325,112 +348,144 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-br from-slate-50/50 to-teal-50/30">
           {messages.map((message) => (
-            <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-              <div
-                className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${
-                  message.isBot
-                    ? 'bg-gray-100 text-propcloud-800'
-                    : 'bg-gradient-to-r from-propcloud-700 to-teal-600 text-white'
-                }`}
-              >
-                <p className="whitespace-pre-wrap">{message.text}</p>
-              </div>
+            <div key={message.id}>
+              {message.text === 'CAREER_ACTIONS' ? (
+                <div className="flex flex-col gap-2">
+                  <Button
+                    onClick={startApplication}
+                    className="w-full bg-gradient-to-r from-teal-500 to-teal-400 hover:brightness-110"
+                    disabled={isSubmitting}
+                  >
+                    📝 Start Application
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleUserMessage("Tell me about the interview process")}
+                    disabled={isSubmitting}
+                    className="w-full"
+                  >
+                    ❓ Ask More Questions
+                  </Button>
+                </div>
+              ) : message.text === 'FILE_UPLOAD' ? (
+                <div className="space-y-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(file);
+                    }}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
+                    disabled={isSubmitting}
+                  />
+                  <p className="text-xs text-gray-500">PDF, DOC, DOCX files only (max 10MB)</p>
+                </div>
+              ) : (
+                <div className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div
+                    className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${
+                      message.isBot
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'bg-gradient-to-r from-propcloud-700 to-teal-600 text-white'
+                    } ${message.isTyping ? 'animate-pulse' : ''}`}
+                  >
+                    <p className="whitespace-pre-wrap">{message.text}</p>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
-        {currentStep < steps.length && !isSubmitting && !isRateLimited && (
+        {/* Input */}
+        {isInForm && currentStep_data?.type !== 'file' && (
           <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
-            {validationError && (
-              <div className="mb-2 p-2 bg-red-50 border border-red-200 rounded text-red-600 text-xs">
-                {validationError}
-              </div>
-            )}
-            
-            {currentStepData.type === 'select' ? (
-              <div className="space-y-2">
+            {currentStep_data?.type === 'select' ? (
+              <div className="flex gap-2">
                 <select
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
+                  className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
                   disabled={isSubmitting}
                 >
                   <option value="">Select a role...</option>
-                  {currentStepData.options?.map((option) => (
+                  {currentStep_data.options?.map((option) => (
                     <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
                 <Button 
-                  onClick={handleInputSubmit} 
-                  disabled={!inputValue || isSubmitting} 
-                  className="w-full"
-                >
-                  {isSubmitting ? 'Submitting...' : 'Next'}
-                </Button>
-              </div>
-            ) : currentStepData.type === 'file' ? (
-              <div className="space-y-2">
-                <Label htmlFor="resume-upload" className="text-sm font-medium">
-                  Upload Resume (PDF, DOC, DOCX - Max 10MB)
-                </Label>
-                <input
-                  id="resume-upload"
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleFileUpload}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
-                  disabled={isSubmitting}
-                />
-              </div>
-            ) : currentStepData.type === 'textarea' ? (
-              <div className="space-y-2">
-                <textarea
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleInputSubmit())}
-                  placeholder="Type your response..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90 resize-none"
-                  rows={3}
-                  maxLength={2000}
-                  disabled={isSubmitting}
-                />
-                <div className="flex gap-2">
-                  <Button 
-                    onClick={handleInputSubmit} 
-                    disabled={(!inputValue && !currentStepData.optional) || isSubmitting} 
-                    className="flex-1"
-                  >
-                    <Send size={16} className="mr-2" />
-                    {isSubmitting ? 'Submitting...' : (currentStepData.optional && !inputValue ? 'Skip' : 'Next')}
-                  </Button>
-                  {currentStepData.optional && (
-                    <Button variant="outline" onClick={handleSkip} disabled={isSubmitting}>
-                      Skip
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <input
-                  type={currentStepData.type}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleInputSubmit()}
-                  placeholder="Type your response..."
-                  className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
-                  autoComplete={currentStepData.type === 'email' ? 'email' : 'off'}
-                  disabled={isSubmitting}
-                />
-                <Button 
-                  onClick={handleInputSubmit} 
-                  disabled={(!inputValue && !currentStepData.optional) || isSubmitting}
+                  onClick={handleSend} 
+                  disabled={!inputValue || isSubmitting}
+                  size="sm"
                 >
                   <Send size={16} />
                 </Button>
               </div>
+            ) : currentStep_data?.type === 'textarea' ? (
+              <div className="space-y-2">
+                <textarea
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder={currentStep_data.placeholder}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90 resize-none"
+                  rows={3}
+                  disabled={isSubmitting}
+                />
+                <Button
+                  onClick={handleSend}
+                  disabled={!inputValue.trim() || isSubmitting}
+                  className="w-full"
+                >
+                  <Send size={16} className="mr-2" />
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type={currentStep_data?.type || 'text'}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder={currentStep_data?.placeholder || "Type your answer..."}
+                  className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
+                  disabled={isSubmitting}
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={!inputValue.trim() || isSubmitting}
+                  className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-2 rounded-lg hover:brightness-110 transition-all shadow-md disabled:opacity-50"
+                >
+                  <Send size={16} />
+                </button>
+              </div>
             )}
+          </div>
+        )}
+
+        {!isInForm && (
+          <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Ask about careers or start your application..."
+                className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
+                disabled={isSubmitting}
+              />
+              <button
+                onClick={handleSend}
+                disabled={!inputValue.trim() || isSubmitting}
+                className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-2 rounded-lg hover:brightness-110 transition-all shadow-md disabled:opacity-50"
+              >
+                <Send size={16} />
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -1,25 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
-import { ChatMessage } from './ChatMessage';
-import { ConversationFlows, FlowData } from './ConversationFlows';
-import { sendFlowEmail } from './emailService';
-
-interface Message {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-}
+import { MessageCircle } from 'lucide-react';
+import GeneralChatBot from './GeneralChatBot';
 
 export default function ChatBot() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputText, setInputText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [showFlows, setShowFlows] = useState(false);
-  const [flowCompleted, setFlowCompleted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Show chatbot after 4 seconds or when user scrolls
   useEffect(() => {
@@ -45,172 +31,23 @@ export default function ChatBot() {
     };
   }, []);
 
-  // Initialize with welcome message when opened
-  useEffect(() => {
-    if (isOpen && messages.length === 0 && !showFlows) {
-      setTimeout(() => {
-        setShowFlows(true);
-      }, 500);
-    }
-  }, [isOpen, messages.length, showFlows]);
-
-  // Reset chat state when closing
-  const handleClose = () => {
-    setIsOpen(false);
-    // Reset all state after a brief delay to allow close animation
-    setTimeout(() => {
-      setMessages([]);
-      setShowFlows(false);
-      setFlowCompleted(false);
-      setInputText('');
-      setIsTyping(false);
-    }, 200);
-  };
-
-  const addMessage = (text: string, isBot: boolean) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text,
-      isBot,
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, newMessage]);
-  };
-
-  const addBotMessage = (text: string) => {
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      addMessage(text, true);
-    }, 1000);
-  };
-
-  const handleSendMessage = () => {
-    if (!inputText.trim() || showFlows) return;
-
-    addMessage(inputText, false);
-    const userMessage = inputText.toLowerCase();
-    setInputText('');
-
-    // Simple responses for general chat
-    if (userMessage.includes('help') || userMessage.includes('support')) {
-      addBotMessage("I'd be happy to help! Would you like to start a new conversation to tell me more about what you need?");
-      setTimeout(() => {
-        setShowFlows(true);
-      }, 2000);
-    } else {
-      addBotMessage("Thanks for your message! Let me help you get connected with the right information.");
-      setTimeout(() => {
-        setShowFlows(true);
-      }, 2000);
-    }
-  };
-
-  const handleFlowComplete = async (data: FlowData) => {
-    setShowFlows(false);
-    setFlowCompleted(true);
-    
-    const flowTypeNames = {
-      waitlist: 'AI Waitlist',
-      management: 'Property Management',
-      connect: 'General Connection'
-    };
-
-    addBotMessage(`Perfect! Thank you, ${data.name}. I've collected your information for our ${flowTypeNames[data.flowType]} program.`);
-    
-    setTimeout(() => {
-      addBotMessage("Our team will reach out to you soon. Thanks for your interest in PropCloud! 🚀");
-    }, 2000);
-
-    // Send email notification
-    try {
-      await sendFlowEmail(data, messages);
-      console.log('Flow completion email sent successfully');
-    } catch (error) {
-      console.error('Failed to send flow completion email:', error);
-    }
-  };
-
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <>
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group"
-        >
-          <MessageCircle size={24} />
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-teal-400 rounded-full animate-pulse"></div>
-        </button>
-      )}
-
-      {isOpen && (
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/60 w-80 h-96 flex flex-col overflow-hidden animate-scale-in">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <MessageCircle size={18} />
-              </div>
-              <div>
-                <h3 className="font-semibold">PropBot</h3>
-                <p className="text-xs opacity-90">AI Assistant</p>
-              </div>
-            </div>
-            <button
-              onClick={handleClose}
-              className="hover:bg-white/20 p-1 rounded transition-colors"
-            >
-              <X size={18} />
-            </button>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-br from-slate-50/50 to-teal-50/30">
-            {messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            
-            {isTyping && (
-              <div className="flex items-center gap-2 text-slate-500">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-                <span className="text-sm">PropBot is typing...</span>
-              </div>
-            )}
-
-            {showFlows && !flowCompleted && (
-              <ConversationFlows onFlowComplete={handleFlowComplete} />
-            )}
-          </div>
-
-          {/* Input */}
-          {!showFlows && (
-            <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-2 rounded-lg hover:brightness-110 transition-all shadow-md"
-                >
-                  <Send size={16} />
-                </button>
-              </div>
-            </div>
-          )}
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group"
+          >
+            <MessageCircle size={24} />
+            <div className="absolute -top-2 -right-2 w-4 h-4 bg-teal-400 rounded-full animate-pulse"></div>
+          </button>
         </div>
       )}
-    </div>
+
+      <GeneralChatBot isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </>
   );
 }
