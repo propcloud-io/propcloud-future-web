@@ -1,167 +1,250 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowUpRight, DollarSign, TrendingUp, Home, AlertTriangle, Calendar, Users } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import MetricCard from '@/components/Dashboard/MetricCard';
 import MiniChart from '@/components/Dashboard/MiniChart';
 import ChatAssistant from '@/components/Dashboard/ChatAssistant';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getDashboardMetrics, getPropertyReports, getLeadsCount, type DashboardMetrics, type PropertyReport } from '@/components/Dashboard/DashboardService';
+import DetailedView from '@/components/Dashboard/DetailedView';
+import AbstractAccent from '@/components/AbstractAccent';
+import ParticleBackground from '@/components/ParticleBackground';
+import FloatingActionButton from '@/components/InteractiveElements/FloatingActionButton';
+import MagneticButton from '@/components/InteractiveElements/MagneticButton';
+import ScrollProgressBar from '@/components/InteractiveElements/ScrollProgressBar';
+import AdvancedParticles from '@/components/InteractiveElements/AdvancedParticles';
+import FloatingGeometry from '@/components/InteractiveElements/FloatingGeometry';
+import AnimatedGradient from '@/components/InteractiveElements/AnimatedGradient';
+import GlassMorphCard from '@/components/InteractiveElements/GlassMorphCard';
+import { 
+  Home, 
+  DollarSign, 
+  Users, 
+  Star, 
+  Calendar, 
+  Wrench,
+  TrendingUp,
+  MessageCircle,
+  Sparkles
+} from 'lucide-react';
+
+const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
 export default function Dashboard() {
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const [propertyReports, setPropertyReports] = useState<PropertyReport[]>([]);
-  const [leadsCount, setLeadsCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedView, setSelectedView] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
-    try {
-      setIsLoading(true);
-      const [metricsData, reportsData, leads] = await Promise.all([
-        getDashboardMetrics(),
-        getPropertyReports(),
-        getLeadsCount()
-      ]);
-      
-      setMetrics(metricsData);
-      setPropertyReports(reportsData);
-      setLeadsCount(leads);
-      console.log('Dashboard data loaded:', { metricsData, reportsData, leads });
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleCardClick = (type: string) => {
+    setSelectedView(type);
   };
 
-  // Sample chart data for revenue trends
-  const chartData = [85, 89, 78, 95, 88, 92, 85, 90];
+  const handleCloseView = () => {
+    setSelectedView(null);
+  };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
+  const openChatBot = () => {
+    window.dispatchEvent(new CustomEvent('openChatBot'));
+  };
+
+  useEffect(() => {
+    // Update page-specific metadata for dashboard
+    document.title = "Your Dashboard | PropCloud";
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    if (metaRobots) {
+      metaRobots.setAttribute('content', 'noindex, nofollow');
+    }
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', 'https://propcloud.io/app');
+    }
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 to-teal-50/60"></div>
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
+      <ScrollProgressBar />
+      <Header />
       
-      {/* Main Content */}
-      <div className="relative z-10 p-6 lg:p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Property Dashboard</h1>
-          <p className="text-slate-600">Real-time insights into your property portfolio performance</p>
+      <main className="flex-1 pt-24 pb-32 relative">
+        {/* Simplified background system with consistent colors */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+          <AnimatedGradient variant="dark" intensity="medium" />
+          <AdvancedParticles density="dense" color="gradient" className="opacity-30" />
+          <FloatingGeometry variant="mixed" className="opacity-20" />
+          
+          {/* Consistent light rays - only teal and dark blue */}
+          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-teal-400/15 to-transparent" />
+          <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-slate-700/15 to-transparent" />
+          
+          {/* Simplified floating elements with consistent colors */}
+          <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-r from-teal-500/20 to-slate-900/15 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/6 w-24 h-24 bg-gradient-to-r from-slate-900/20 to-teal-400/15 rounded-full blur-2xl animate-bounce" style={{animationDuration: '4s'}} />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-r from-white/10 to-teal-500/15 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
         </div>
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <MetricCard
-            icon={<DollarSign className="w-6 h-6 text-teal-600" />}
-            label="Total Revenue"
-            value={`$${metrics?.totalRevenue.toLocaleString() || '0'}`}
-            subtext="This month"
-            delay={0.1}
-            isLive={true}
-          />
-          <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-teal-600" />}
-            label="Avg Occupancy"
-            value={`${metrics?.averageOccupancy || 0}%`}
-            subtext="Across all properties"
-            delay={0.2}
-            isLive={true}
-          />
-          <MetricCard
-            icon={<Home className="w-6 h-6 text-teal-600" />}
-            label="Total Properties"
-            value={metrics?.totalProperties.toString() || '0'}
-            subtext="Active listings"
-            delay={0.3}
-          />
-          <MetricCard
-            icon={<AlertTriangle className="w-6 h-6 text-teal-600" />}
-            label="Maintenance Issues"
-            value={metrics?.maintenanceIssues.toString() || '0'}
-            subtext="Requires attention"
-            delay={0.4}
-          />
+        {/* Simplified neural network pattern with consistent colors */}
+        <div className="absolute inset-0 opacity-5 z-0">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="neural-network" width="100" height="100" patternUnits="userSpaceOnUse">
+                <circle cx="50" cy="50" r="3" fill="#14b8a6" opacity="0.4"/>
+                <circle cx="25" cy="25" r="2" fill="#0f172a" opacity="0.3"/>
+                <circle cx="75" cy="75" r="2" fill="#ffffff" opacity="0.2"/>
+                <line x1="25" y1="25" x2="50" y2="50" stroke="#14b8a6" strokeWidth="0.5" opacity="0.2"/>
+                <line x1="50" y1="50" x2="75" y2="75" stroke="#0f172a" strokeWidth="0.5" opacity="0.2"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#neural-network)" />
+          </svg>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Revenue Trends Chart */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/80">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-slate-900">Occupancy Trends</h2>
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-                <span>Live Data</span>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Enhanced page header */}
+          <div className="mb-12 text-center relative">
+            <GlassMorphCard variant="dark" className="p-12 max-w-4xl mx-auto">
+              <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-r from-teal-500 to-slate-700 rounded-full flex items-center justify-center animate-pulse">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
-            </div>
-            <MiniChart data={chartData} />
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-teal-300 to-slate-300 bg-clip-text text-transparent mb-6 animate-fade-up">
+                Performance Overview
+              </h1>
+              <p className="text-white/80 text-xl animate-fade-up leading-relaxed" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
+                Monitor your properties and track key metrics in real-time
+              </p>
+            </GlassMorphCard>
           </div>
 
-          {/* Leads Overview */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/80">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-slate-900">Lead Generation</h2>
-              <Users className="w-5 h-5 text-teal-600" />
+          {/* Enhanced metrics grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 relative">
+            <div className="transform hover:scale-105 transition-all duration-300 relative">
+              <MetricCard
+                icon={<Home size={24} className="text-teal-400" />}
+                label="Properties Under Management"
+                value="8 Properties"
+                subtext="Active listings"
+                delay={0.1}
+                clickable={true}
+                onClick={() => handleCardClick('properties')}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-teal-50 rounded-xl">
-                <div className="text-2xl font-bold text-teal-700">{leadsCount}</div>
-                <div className="text-sm text-slate-600">Total Leads</div>
-              </div>
-              <div className="text-center p-4 bg-slate-50 rounded-xl">
-                <div className="text-2xl font-bold text-slate-700">{metrics?.recentBookings || 0}</div>
-                <div className="text-sm text-slate-600">Recent Bookings</div>
-              </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.1s'}}>
+              <MetricCard
+                icon={<DollarSign size={24} className="text-teal-400" />}
+                label="Monthly Revenue"
+                value="$14,800"
+                subtext="Revenue this month"
+                delay={0.2}
+                isLive={true}
+              />
+            </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.2s'}}>
+              <MetricCard
+                icon={<Users size={24} className="text-slate-600" />}
+                label="Occupancy Rate"
+                value="91%"
+                subtext="Across all units"
+                delay={0.3}
+                isLive={true}
+              />
+            </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.3s'}}>
+              <MetricCard
+                icon={<Star size={24} className="text-teal-400" />}
+                label="Guest Satisfaction"
+                value="4.8 / 5 ⭐"
+                subtext="Based on guest feedback"
+                delay={0.4}
+              />
+            </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.4s'}}>
+              <MetricCard
+                icon={<Calendar size={24} className="text-slate-600" />}
+                label="Upcoming Turnovers"
+                value="5 Turnovers"
+                subtext="Scheduled cleanings"
+                delay={0.5}
+                clickable={true}
+                onClick={() => handleCardClick('turnovers')}
+              />
+            </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.5s'}}>
+              <MetricCard
+                icon={<Wrench size={24} className="text-teal-400" />}
+                label="Open Maintenance Issues"
+                value="2 Issues"
+                subtext="Pending resolution"
+                delay={0.6}
+                clickable={true}
+                onClick={() => handleCardClick('maintenance')}
+              />
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Property Performance Table */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/80">
-            <h2 className="text-xl font-semibold text-slate-900 mb-6">Property Performance</h2>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Property</TableHead>
-                    <TableHead>Revenue</TableHead>
-                    <TableHead>Occupancy</TableHead>
-                    <TableHead>Rating</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {propertyReports.slice(0, 6).map((property, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium">{property.property_name}</TableCell>
-                      <TableCell>${property.revenue.toLocaleString()}</TableCell>
-                      <TableCell>{property.occupancy_rate}%</TableCell>
-                      <TableCell>{property.guest_rating}/5</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+          {/* Enhanced booking trend chart */}
+          <div className="mb-16 relative">
+            <GlassMorphCard 
+              variant="dark"
+              className="p-10 overflow-hidden"
+            >
+              <div className="flex items-center gap-6 mb-10 relative z-10">
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-teal-500/20 to-slate-900/20 shadow-xl backdrop-blur-sm border border-teal-400/20">
+                  <TrendingUp size={32} className="text-teal-300" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Booking Trend (Last 7 Days)</h3>
+                  <p className="text-white/70">Daily occupancy percentage • Live updates</p>
+                </div>
+              </div>
+              <MiniChart data={mockChartData} />
+            </GlassMorphCard>
           </div>
 
-          {/* AI Chat Assistant */}
-          <ChatAssistant />
+          {/* Enhanced AI Chat Assistant */}
+          <div className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative">
+            <ChatAssistant />
+          </div>
+
+          {/* Premium CTA Section */}
+          <GlassMorphCard 
+            variant="dark" 
+            className="p-12 text-center overflow-hidden mb-20"
+          >
+            <div className="relative z-10">
+              <h3 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white via-teal-300 to-slate-300 bg-clip-text text-transparent">
+                Want to see your data here?
+              </h3>
+              <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-2xl mx-auto leading-relaxed">
+                Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.
+              </p>
+              <MagneticButton
+                className="inline-block rounded-2xl bg-gradient-to-r from-teal-500 to-slate-700 text-white font-bold px-12 py-6 text-xl shadow-2xl hover:shadow-3xl backdrop-blur-sm"
+                onClick={openChatBot}
+                magneticStrength={0.2}
+              >
+                <span className="flex items-center gap-4">
+                  <MessageCircle size={28} />
+                  Get Started Today
+                </span>
+              </MagneticButton>
+            </div>
+          </GlassMorphCard>
         </div>
-      </div>
+      </main>
+      
+      <Footer />
+      <FloatingActionButton />
+
+      {/* Detailed View Modal */}
+      {selectedView && (
+        <div className="fixed inset-0 z-50">
+          <DetailedView 
+            type={selectedView} 
+            onClose={handleCloseView} 
+          />
+        </div>
+      )}
     </div>
   );
 }

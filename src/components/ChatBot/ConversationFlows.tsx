@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { createLead, createConversation, createProperty, type LeadData, type PropertyData } from './supabaseService';
 
 export interface FlowData {
   flowType: 'waitlist' | 'management' | 'connect';
@@ -30,39 +29,16 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   const [selectedFlow, setSelectedFlow] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<Partial<FlowData>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFlowSelection = async (flowType: 'waitlist' | 'management' | 'connect') => {
+  const handleFlowSelection = (flowType: 'waitlist' | 'management' | 'connect') => {
     setSelectedFlow(flowType);
     setFormData({ flowType });
     setStep(1);
-
-    // Store initial conversation
-    try {
-      await createConversation({
-        message: `User selected: ${flowType}`,
-        is_from_user: true,
-        page_context: window.location.pathname
-      });
-    } catch (error) {
-      console.error('Error storing conversation:', error);
-    }
   };
 
-  const handleInputSubmit = async (key: string, value: string) => {
+  const handleInputSubmit = (key: string, value: string) => {
     const newData = { ...formData, [key]: value };
     setFormData(newData);
-
-    // Store conversation
-    try {
-      await createConversation({
-        message: `${key}: ${value}`,
-        is_from_user: true,
-        page_context: window.location.pathname
-      });
-    } catch (error) {
-      console.error('Error storing conversation:', error);
-    }
 
     const flows = {
       waitlist: ['name', 'email', 'city', 'currentlyManaging', 'aiExcitement'],
@@ -75,58 +51,7 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
     if (step < currentFlow.length) {
       setStep(step + 1);
     } else {
-      await handleFormComplete(newData as FlowData);
-    }
-  };
-
-  const handleFormComplete = async (data: FlowData) => {
-    setIsSubmitting(true);
-    
-    try {
-      // Create lead in Supabase
-      const leadData: LeadData = {
-        name: data.name || '',
-        email: data.email || '',
-        location: data.city || data.location,
-        message: data.helpMessage || data.aiExcitement,
-        number_of_properties: data.propertyCount ? parseInt(data.propertyCount) : undefined,
-        platform_usage: data.managementType ? [data.managementType] : undefined,
-        source: 'website_chatbot'
-      };
-
-      const lead = await createLead(leadData);
-      console.log('Lead created:', lead);
-
-      // If management flow and they have properties, create property records
-      if (data.flowType === 'management' && data.propertyCount && lead.id) {
-        const propertyCount = parseInt(data.propertyCount);
-        if (propertyCount > 0) {
-          // Create a general property entry
-          const propertyData: PropertyData = {
-            lead_id: lead.id,
-            name: `Properties in ${data.location || 'Various Locations'}`,
-            city: data.location?.split(',')[0]?.trim(),
-            country: data.location?.split(',')[1]?.trim(),
-            property_type: 'Mixed'
-          };
-
-          await createProperty(propertyData);
-        }
-      }
-
-      // Store final conversation
-      await createConversation({
-        lead_id: lead.id,
-        message: `Flow completed: ${JSON.stringify(data)}`,
-        is_from_user: false,
-        page_context: window.location.pathname
-      });
-
-      onFlowComplete(data);
-    } catch (error) {
-      console.error('Error completing flow:', error);
-    } finally {
-      setIsSubmitting(false);
+      onFlowComplete(newData as FlowData);
     }
   };
 
@@ -139,13 +64,13 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
         <div className="space-y-2">
           <Button
             onClick={() => handleFlowSelection('waitlist')}
-            className="w-full bg-gradient-to-r from-slate-700 via-slate-600 to-teal-500 hover:brightness-110 shadow-md"
+            className="w-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 hover:brightness-110 shadow-md"
           >
             🚀 Join the AI Waitlist
           </Button>
           <Button
             onClick={() => handleFlowSelection('management')}
-            className="w-full bg-gradient-to-r from-teal-600 via-teal-500 to-slate-600 hover:brightness-110 shadow-md"
+            className="w-full bg-gradient-to-r from-teal-600 via-accent-500 to-propcloud-600 hover:brightness-110 shadow-md"
           >
             🏠 Start Property Management
           </Button>
@@ -166,7 +91,6 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
       step={step}
       formData={formData}
       onSubmit={handleInputSubmit}
-      isSubmitting={isSubmitting}
     />
   );
 }
@@ -176,10 +100,9 @@ interface FlowStepProps {
   step: number;
   formData: Partial<FlowData>;
   onSubmit: (key: string, value: string) => void;
-  isSubmitting: boolean;
 }
 
-function FlowStep({ flowType, step, formData, onSubmit, isSubmitting }: FlowStepProps) {
+function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
   const [inputValue, setInputValue] = useState('');
 
   const flowConfigs: Record<string, FlowConfig[]> = {
@@ -209,7 +132,7 @@ function FlowStep({ flowType, step, formData, onSubmit, isSubmitting }: FlowStep
   if (!currentConfig) return null;
 
   const handleSubmit = () => {
-    if (inputValue.trim() && !isSubmitting) {
+    if (inputValue.trim()) {
       onSubmit(currentConfig.key, inputValue.trim());
       setInputValue('');
     }
@@ -235,14 +158,13 @@ function FlowStep({ flowType, step, formData, onSubmit, isSubmitting }: FlowStep
           placeholder={currentConfig.placeholder}
           className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
           autoFocus
-          disabled={isSubmitting}
         />
         <Button
           onClick={handleSubmit}
-          disabled={!inputValue.trim() || isSubmitting}
-          className="w-full bg-gradient-to-r from-slate-700 via-slate-600 to-teal-500 hover:brightness-110 disabled:opacity-50 shadow-md"
+          disabled={!inputValue.trim()}
+          className="w-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 hover:brightness-110 disabled:opacity-50 shadow-md"
         >
-          {isSubmitting ? 'Saving...' : 'Next'}
+          Next
         </Button>
       </div>
     </div>
