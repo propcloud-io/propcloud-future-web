@@ -5,8 +5,6 @@ import MetricCard from '@/components/Dashboard/MetricCard';
 import MiniChart from '@/components/Dashboard/MiniChart';
 import ChatAssistant from '@/components/Dashboard/ChatAssistant';
 import DetailedView from '@/components/Dashboard/DetailedView';
-import AbstractAccent from '@/components/AbstractAccent';
-import ParticleBackground from '@/components/ParticleBackground';
 import FloatingActionButton from '@/components/InteractiveElements/FloatingActionButton';
 import MagneticButton from '@/components/InteractiveElements/MagneticButton';
 import ScrollProgressBar from '@/components/InteractiveElements/ScrollProgressBar';
@@ -14,7 +12,8 @@ import AdvancedParticles from '@/components/InteractiveElements/AdvancedParticle
 import FloatingGeometry from '@/components/InteractiveElements/FloatingGeometry';
 import AnimatedGradient from '@/components/InteractiveElements/AnimatedGradient';
 import GlassMorphCard from '@/components/InteractiveElements/GlassMorphCard';
-import { getDashboardProperties, getDashboardReports, testSupabaseConnection } from '@/services/supabaseService';
+import { getDashboardProperties, getDashboardReports, testSupabaseConnection, addSampleData } from '@/services/supabaseService';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Home, 
   DollarSign, 
@@ -24,7 +23,8 @@ import {
   Wrench,
   TrendingUp,
   MessageCircle,
-  Sparkles
+  Sparkles,
+  RefreshCw
 } from 'lucide-react';
 
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
@@ -35,73 +35,152 @@ export default function Dashboard() {
   const [reports, setReports] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [connectionStatus, setConnectionStatus] = useState<boolean | null>(null);
+  const [dataLoadError, setDataLoadError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { toast } = useToast();
 
-  // Load real data from Supabase
-  useEffect(() => {
-    const loadDashboardData = async () => {
-      try {
-        console.log('Testing Supabase connection...');
-        const isConnected = await testSupabaseConnection();
-        setConnectionStatus(isConnected);
+  // Load real data from Supabase with enhanced error handling
+  const loadDashboardData = async (showToast = false) => {
+    try {
+      setDataLoadError(null);
+      if (showToast) {
+        setIsRefreshing(true);
+        toast({
+          title: "Refreshing data...",
+          description: "Loading latest property data",
+        });
+      }
+      
+      console.log('🔗 Testing Supabase connection...');
+      const isConnected = await testSupabaseConnection();
+      setConnectionStatus(isConnected);
+      
+      if (isConnected) {
+        console.log('📊 Loading dashboard data...');
+        const [propertiesData, reportsData] = await Promise.all([
+          getDashboardProperties(),
+          getDashboardReports()
+        ]);
         
-        if (isConnected) {
-          console.log('Loading dashboard data...');
-          const [propertiesData, reportsData] = await Promise.all([
-            getDashboardProperties(),
-            getDashboardReports()
-          ]);
+        console.log('📈 Data loaded:', { 
+          properties: propertiesData.length, 
+          reports: reportsData.length 
+        });
+        
+        // If no data exists, add sample data
+        if (propertiesData.length === 0 && reportsData.length === 0) {
+          console.log('🧪 No existing data found, adding sample data...');
+          const sampleAdded = await addSampleData();
+          if (sampleAdded) {
+            // Reload data after adding samples
+            const [newPropertiesData, newReportsData] = await Promise.all([
+              getDashboardProperties(),
+              getDashboardReports()
+            ]);
+            setProperties(newPropertiesData);
+            setReports(newReportsData);
+            console.log('✅ Sample data loaded successfully');
+          }
+        } else {
           setProperties(propertiesData);
           setReports(reportsData);
-          console.log('Dashboard data loaded:', { properties: propertiesData.length, reports: reportsData.length });
-        } else {
-          console.warn('Supabase connection failed, using fallback data');
-          // Set minimal fallback data for demo
-          setProperties([
-            { id: '1', name: 'Demo Property 1', city: 'Miami', active: true },
-            { id: '2', name: 'Demo Property 2', city: 'Dubai', active: true },
-          ]);
-          setReports([
-            { id: '1', revenue: 15000, occupancy_rate: 85, maintenance_issues: 2, guest_rating: 4.5 },
-            { id: '2', revenue: 12000, occupancy_rate: 92, maintenance_issues: 0, guest_rating: 4.8 },
-          ]);
         }
-      } catch (error) {
-        console.error('Error loading dashboard data:', error);
-        // Use fallback data on error
-        setProperties([]);
-        setReports([]);
-      } finally {
-        setIsLoading(false);
+        
+        if (showToast) {
+          toast({
+            title: "Data refreshed!",
+            description: `Loaded ${propertiesData.length} properties and ${reportsData.length} reports`,
+            variant: "default",
+          });
+        }
+      } else {
+        console.warn('⚠️ Supabase connection failed, using fallback data');
+        setDataLoadError('Unable to connect to database');
+        
+        // Set minimal fallback data for demo
+        setProperties([
+          { id: '1', name: 'Demo Property 1', city: 'Miami', active: true },
+          { id: '2', name: 'Demo Property 2', city: 'Dubai', active: true },
+        ]);
+        setReports([
+          { id: '1', revenue: 15000, occupancy_rate: 85, maintenance_issues: 2, guest_rating: 4.5 },
+          { id: '2', revenue: 12000, occupancy_rate: 92, maintenance_issues: 0, guest_rating: 4.8 },
+        ]);
+        
+        if (showToast) {
+          toast({
+            title: "Connection Issue",
+            description: "Using demo data. Please check connection.",
+            variant: "destructive",
+          });
+        }
       }
-    };
+    } catch (error) {
+      console.error('❌ Error loading dashboard data:', error);
+      setDataLoadError(`Failed to load data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      
+      // Use fallback data on error
+      setProperties([
+        { id: 'fallback1', name: 'Fallback Property 1', city: 'Miami', active: true },
+        { id: 'fallback2', name: 'Fallback Property 2', city: 'Dubai', active: true },
+      ]);
+      setReports([
+        { id: 'fallback1', revenue: 10000, occupancy_rate: 75, maintenance_issues: 1, guest_rating: 4.0 },
+        { id: 'fallback2', revenue: 8000, occupancy_rate: 80, maintenance_issues: 0, guest_rating: 4.3 },
+      ]);
+      
+      if (showToast) {
+        toast({
+          title: "Error loading data",
+          description: "Using fallback data. Please try refreshing.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
+  useEffect(() => {
     loadDashboardData();
   }, []);
 
-  // Calculate metrics from real data
+  // Calculate metrics from real data with enhanced error handling
   const calculateMetrics = () => {
-    if (reports.length === 0) {
+    try {
+      if (reports.length === 0) {
+        return {
+          totalRevenue: 0,
+          averageOccupancy: 0,
+          totalMaintenanceIssues: 0,
+          totalProperties: properties.length,
+          averageRating: 0
+        };
+      }
+
+      const totalRevenue = reports.reduce((sum, report) => sum + (Number(report.revenue) || 0), 0);
+      const averageOccupancy = reports.reduce((sum, report) => sum + (Number(report.occupancy_rate) || 0), 0) / reports.length;
+      const totalMaintenanceIssues = reports.reduce((sum, report) => sum + (Number(report.maintenance_issues) || 0), 0);
+      const averageRating = reports.reduce((sum, report) => sum + (Number(report.guest_rating) || 0), 0) / reports.length;
+
+      return {
+        totalRevenue,
+        averageOccupancy,
+        totalMaintenanceIssues,
+        totalProperties: properties.length,
+        averageRating
+      };
+    } catch (error) {
+      console.error('❌ Error calculating metrics:', error);
       return {
         totalRevenue: 0,
         averageOccupancy: 0,
         totalMaintenanceIssues: 0,
-        totalProperties: properties.length,
+        totalProperties: 0,
         averageRating: 0
       };
     }
-
-    const totalRevenue = reports.reduce((sum, report) => sum + (report.revenue || 0), 0);
-    const averageOccupancy = reports.reduce((sum, report) => sum + (report.occupancy_rate || 0), 0) / reports.length;
-    const totalMaintenanceIssues = reports.reduce((sum, report) => sum + (report.maintenance_issues || 0), 0);
-    const averageRating = reports.reduce((sum, report) => sum + (report.guest_rating || 0), 0) / reports.length;
-
-    return {
-      totalRevenue,
-      averageOccupancy,
-      totalMaintenanceIssues,
-      totalProperties: properties.length,
-      averageRating
-    };
   };
 
   const metrics = calculateMetrics();
@@ -116,6 +195,10 @@ export default function Dashboard() {
 
   const openChatBot = () => {
     window.dispatchEvent(new CustomEvent('openChatBot'));
+  };
+
+  const handleRefreshData = () => {
+    loadDashboardData(true);
   };
 
   useEffect(() => {
@@ -167,7 +250,7 @@ export default function Dashboard() {
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Enhanced page header */}
+          {/* Enhanced page header with status indicators */}
           <div className="mb-12 text-center relative">
             <GlassMorphCard variant="dark" className="p-12 max-w-4xl mx-auto">
               <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-r from-teal-500 to-slate-700 rounded-full flex items-center justify-center animate-pulse">
@@ -176,20 +259,56 @@ export default function Dashboard() {
               <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-teal-300 to-slate-300 bg-clip-text text-transparent mb-6 animate-fade-up">
                 Performance Overview
               </h1>
-              <p className="text-white/80 text-xl animate-fade-up leading-relaxed" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
+              <p className="text-white/80 text-xl animate-fade-up leading-relaxed mb-4" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
                 Monitor your properties and track key metrics in real-time
               </p>
-              {connectionStatus === false && (
+              
+              {/* Status indicators */}
+              <div className="flex justify-center gap-4 mb-4">
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs ${
+                  connectionStatus === true ? 'bg-green-500/20 text-green-300' : 
+                  connectionStatus === false ? 'bg-red-500/20 text-red-300' : 
+                  'bg-yellow-500/20 text-yellow-300'
+                }`}>
+                  <div className={`w-2 h-2 rounded-full ${
+                    connectionStatus === true ? 'bg-green-400' : 
+                    connectionStatus === false ? 'bg-red-400' : 
+                    'bg-yellow-400'
+                  }`} />
+                  {connectionStatus === true ? 'Connected' : 
+                   connectionStatus === false ? 'Disconnected' : 
+                   'Checking...'}
+                </div>
+                
+                <button
+                  onClick={handleRefreshData}
+                  disabled={isRefreshing}
+                  className="flex items-center gap-2 px-3 py-1 rounded-full text-xs bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors disabled:opacity-50"
+                >
+                  <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} />
+                  {isRefreshing ? 'Refreshing...' : 'Refresh Data'}
+                </button>
+              </div>
+              
+              {dataLoadError && (
+                <div className="mt-4 p-3 bg-red-500/20 border border-red-400/30 rounded-lg">
+                  <p className="text-red-200 text-sm">
+                    ⚠️ {dataLoadError}
+                  </p>
+                </div>
+              )}
+              
+              {connectionStatus === false && !dataLoadError && (
                 <div className="mt-4 p-3 bg-yellow-500/20 border border-yellow-400/30 rounded-lg">
                   <p className="text-yellow-200 text-sm">
-                    ⚠️ Demo Mode: Using sample data. Supabase connection not available.
+                    ⚠️ Demo Mode: Using sample data. Database connection not available.
                   </p>
                 </div>
               )}
             </GlassMorphCard>
           </div>
 
-          {/* Enhanced metrics grid with real data */}
+          {/* Enhanced metrics grid with loading states */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 relative">
             <div className="transform hover:scale-105 transition-all duration-300 relative">
               <MetricCard

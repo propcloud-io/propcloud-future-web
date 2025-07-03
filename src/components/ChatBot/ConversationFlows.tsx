@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { createLead, createProperty, saveConversation } from '@/services/supabaseService';
+import { useToast } from '@/hooks/use-toast';
 
 export interface FlowData {
   flowType: 'waitlist' | 'management' | 'connect';
@@ -30,9 +32,11 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<Partial<FlowData>>({});
   const [leadId, setLeadId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleFlowSelection = async (flowType: 'waitlist' | 'management' | 'connect') => {
-    console.log('Flow selected:', flowType);
+    console.log('🎯 Flow selected:', flowType);
     setSelectedFlow(flowType);
     setFormData({ flowType });
     setStep(1);
@@ -45,12 +49,13 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
         page_context: 'general_website',
       });
     } catch (error) {
-      console.error('Error saving flow selection:', error);
+      console.error('⚠️ Error saving flow selection:', error);
+      // Don't block flow for conversation save errors
     }
   };
 
   const handleInputSubmit = async (key: string, value: string) => {
-    console.log('Input submitted:', { key, value });
+    console.log('📝 Input submitted:', { key, value });
     const newData = { ...formData, [key]: value };
     setFormData(newData);
 
@@ -63,7 +68,8 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
         lead_id: leadId || undefined,
       });
     } catch (error) {
-      console.error('Error saving conversation:', error);
+      console.error('⚠️ Error saving conversation:', error);
+      // Don't block flow for conversation save errors
     }
 
     const flows = {
@@ -82,10 +88,17 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   };
 
   const handleFlowCompletion = async (data: FlowData) => {
-    console.log('Completing flow with data:', data);
+    console.log('🎉 Starting flow completion with data:', data);
+    setIsSubmitting(true);
     
     try {
-      // Create lead in Supabase
+      // Show loading toast
+      toast({
+        title: "Submitting...",
+        description: "We're processing your information.",
+      });
+
+      // Create lead in Supabase with proper error handling
       const leadData = {
         name: data.name!,
         email: data.email!,
@@ -108,37 +121,67 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
         leadData.message = data.helpMessage || '';
       }
 
-      console.log('Creating lead with processed data:', leadData);
+      console.log('💾 Creating lead with processed data:', leadData);
       const createdLead = await createLead(leadData);
       setLeadId(createdLead.id);
+
+      console.log('✅ Lead created with ID:', createdLead.id);
 
       // If management flow and has property details, create property record
       if (data.flowType === 'management' && data.location && data.propertyCount) {
         const propertyCount = parseInt(data.propertyCount) || 1;
+        console.log(`🏠 Creating ${propertyCount} properties for lead ${createdLead.id}`);
+        
         for (let i = 0; i < Math.min(propertyCount, 5); i++) {
-          await createProperty({
-            name: `Property ${i + 1}`,
-            lead_id: createdLead.id,
-            city: data.location,
-            property_type: 'rental',
-          });
+          try {
+            await createProperty({
+              name: `Property ${i + 1}`,
+              lead_id: createdLead.id,
+              city: data.location,
+              property_type: 'rental',
+            });
+            console.log(`✅ Created property ${i + 1}`);
+          } catch (propertyError) {
+            console.error(`❌ Failed to create property ${i + 1}:`, propertyError);
+          }
         }
       }
 
       // Save completion conversation
-      await saveConversation({
-        message: `Flow completed: ${data.flowType}`,
-        is_from_user: false,
-        page_context: 'general_website',
-        lead_id: createdLead.id,
+      try {
+        await saveConversation({
+          message: `Flow completed: ${data.flowType}`,
+          is_from_user: false,
+          page_context: 'general_website',
+          lead_id: createdLead.id,
+        });
+      } catch (convError) {
+        console.error('⚠️ Error saving completion conversation:', convError);
+      }
+
+      // Show success toast
+      toast({
+        title: "Success!",
+        description: "Your information has been submitted successfully.",
+        variant: "default",
       });
 
-      console.log('Flow completed successfully');
+      console.log('🎊 Flow completed successfully');
       onFlowComplete(data);
     } catch (error) {
-      console.error('Error completing flow:', error);
-      // Still complete the flow for user experience
+      console.error('❌ Error completing flow:', error);
+      
+      // Show error toast
+      toast({
+        title: "Submission Error",
+        description: "There was an issue submitting your information. Please try again.",
+        variant: "destructive",
+      });
+
+      // Still complete the flow for user experience, but log the error
       onFlowComplete(data);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -152,18 +195,21 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
           <Button
             onClick={() => handleFlowSelection('waitlist')}
             className="w-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 hover:brightness-110 shadow-md"
+            disabled={isSubmitting}
           >
             🚀 Join the AI Waitlist
           </Button>
           <Button
             onClick={() => handleFlowSelection('management')}
             className="w-full bg-gradient-to-r from-teal-600 via-accent-500 to-propcloud-600 hover:brightness-110 shadow-md"
+            disabled={isSubmitting}
           >
             🏠 Start Property Management
           </Button>
           <Button
             onClick={() => handleFlowSelection('connect')}
             className="w-full bg-slate-600 hover:bg-slate-700 shadow-md"
+            disabled={isSubmitting}
           >
             💬 Just Looking to Connect
           </Button>
@@ -178,6 +224,7 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
       step={step}
       formData={formData}
       onSubmit={handleInputSubmit}
+      isSubmitting={isSubmitting}
     />
   );
 }
@@ -187,9 +234,10 @@ interface FlowStepProps {
   step: number;
   formData: Partial<FlowData>;
   onSubmit: (key: string, value: string) => void;
+  isSubmitting?: boolean;
 }
 
-function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
+function FlowStep({ flowType, step, formData, onSubmit, isSubmitting = false }: FlowStepProps) {
   const [inputValue, setInputValue] = useState('');
 
   const flowConfigs: Record<string, FlowConfig[]> = {
@@ -219,7 +267,7 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
   if (!currentConfig) return null;
 
   const handleSubmit = () => {
-    if (inputValue.trim()) {
+    if (inputValue.trim() && !isSubmitting) {
       onSubmit(currentConfig.key, inputValue.trim());
       setInputValue('');
     }
@@ -245,13 +293,14 @@ function FlowStep({ flowType, step, formData, onSubmit }: FlowStepProps) {
           placeholder={currentConfig.placeholder}
           className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
           autoFocus
+          disabled={isSubmitting}
         />
         <Button
           onClick={handleSubmit}
-          disabled={!inputValue.trim()}
+          disabled={!inputValue.trim() || isSubmitting}
           className="w-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 hover:brightness-110 disabled:opacity-50 shadow-md"
         >
-          Next
+          {isSubmitting ? 'Submitting...' : 'Next'}
         </Button>
       </div>
     </div>

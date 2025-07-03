@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X, Send, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { createJobApplication, saveConversation } from '@/services/supabaseService';
+import { useToast } from '@/hooks/use-toast';
 import { 
   sanitizeText, 
   validateFile, 
@@ -56,6 +58,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState<string>('');
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const { toast } = useToast();
 
   const steps = [
     { field: 'fullName', question: 'What\'s your full name?', type: 'text', validation: nameSchema },
@@ -102,7 +105,8 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         page_context: 'careers_page',
       });
     } catch (error) {
-      console.error('Error saving conversation:', error);
+      console.error('⚠️ Error saving conversation:', error);
+      // Don't block UI for conversation save errors
     }
   };
 
@@ -130,7 +134,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     return true;
   };
 
-  const handleInputSubmit = () => {
+  const handleInputSubmit = async () => {
     if (!inputValue.trim() && steps[currentStep].type !== 'file') return;
 
     const currentStepData = steps[currentStep];
@@ -144,7 +148,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     
     if (currentStepData.type !== 'file') {
       const sanitizedValue = sanitizeText(inputValue.trim());
-      addMessage(sanitizedValue, false);
+      await addMessage(sanitizedValue, false);
       setApplicationData(prev => ({ ...prev, [currentField]: sanitizedValue }));
     }
 
@@ -155,11 +159,11 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         addBotMessage(steps[currentStep + 1].question);
       }, 500);
     } else {
-      handleSubmitApplication();
+      await handleSubmitApplication();
     }
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       try {
@@ -170,8 +174,8 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         const sanitizedFile = new File([file], sanitizedFileName, { type: file.type });
         
         setApplicationData(prev => ({ ...prev, resume: sanitizedFile }));
-        addMessage(`Resume uploaded: ${sanitizedFileName}`, false);
-        handleSubmitApplication();
+        await addMessage(`Resume uploaded: ${sanitizedFileName}`, false);
+        await handleSubmitApplication();
       } catch (error: any) {
         setValidationError(error.message);
         setTimeout(() => setValidationError(''), 5000);
@@ -194,17 +198,28 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     addBotMessage("Submitting your application...");
 
     try {
-      console.log('Submitting job application:', applicationData);
+      console.log('💼 Submitting job application:', applicationData);
       
-      // Save to Supabase
-      await createJobApplication({
+      // Show loading toast
+      toast({
+        title: "Submitting Application",
+        description: "We're processing your job application...",
+      });
+      
+      // Save to Supabase with proper await
+      const jobAppData = {
         name: sanitizeText(applicationData.fullName),
         email: sanitizeText(applicationData.email),
         role_applied: sanitizeText(applicationData.role),
         motivation: sanitizeText(applicationData.motivation),
         linkedin_url: applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : undefined,
         source: 'careers_chatbot',
-      });
+      };
+
+      console.log('💾 Creating job application with data:', jobAppData);
+      await createJobApplication(jobAppData);
+
+      console.log('✅ Job application created successfully');
 
       // Also send to Formspree as backup
       const formData = new FormData();
@@ -227,11 +242,26 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         }
       });
 
+      // Show success toast
+      toast({
+        title: "Application Submitted!",
+        description: "Thank you for your interest. We'll be in touch soon.",
+        variant: "default",
+      });
+
       setTimeout(() => {
         addBotMessage("Thank you! We've received your application. Our team will be in touch if there's a fit. 🎉");
       }, 1000);
     } catch (error) {
-      console.error('Application submission error:', error);
+      console.error('❌ Application submission error:', error);
+      
+      // Show error toast
+      toast({
+        title: "Submission Error",
+        description: "There was an issue submitting your application. Please try again.",
+        variant: "destructive",
+      });
+
       setTimeout(() => {
         addBotMessage("Sorry, there was an error submitting your application. Please try again or email us directly at contact@propcloud.io");
       }, 1000);
@@ -286,6 +316,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
           <button
             onClick={handleReset}
             className="hover:bg-white/20 p-1 rounded transition-colors"
+            disabled={isSubmitting}
           >
             <X size={18} />
           </button>
@@ -323,14 +354,19 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
+                  disabled={isSubmitting}
                 >
                   <option value="">Select a role...</option>
                   {currentStepData.options?.map((option) => (
                     <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
-                <Button onClick={handleInputSubmit} disabled={!inputValue} className="w-full">
-                  Next
+                <Button 
+                  onClick={handleInputSubmit} 
+                  disabled={!inputValue || isSubmitting} 
+                  className="w-full"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Next'}
                 </Button>
               </div>
             ) : currentStepData.type === 'file' ? (
@@ -344,6 +380,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
                   accept=".pdf,.doc,.docx"
                   onChange={handleFileUpload}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
+                  disabled={isSubmitting}
                 />
               </div>
             ) : currentStepData.type === 'textarea' ? (
@@ -356,14 +393,19 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90 resize-none"
                   rows={3}
                   maxLength={2000}
+                  disabled={isSubmitting}
                 />
                 <div className="flex gap-2">
-                  <Button onClick={handleInputSubmit} disabled={!inputValue && !currentStepData.optional} className="flex-1">
+                  <Button 
+                    onClick={handleInputSubmit} 
+                    disabled={(!inputValue && !currentStepData.optional) || isSubmitting} 
+                    className="flex-1"
+                  >
                     <Send size={16} className="mr-2" />
-                    {currentStepData.optional && !inputValue ? 'Skip' : 'Next'}
+                    {isSubmitting ? 'Submitting...' : (currentStepData.optional && !inputValue ? 'Skip' : 'Next')}
                   </Button>
                   {currentStepData.optional && (
-                    <Button variant="outline" onClick={handleSkip}>
+                    <Button variant="outline" onClick={handleSkip} disabled={isSubmitting}>
                       Skip
                     </Button>
                   )}
@@ -379,8 +421,12 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
                   placeholder="Type your response..."
                   className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm bg-white/90"
                   autoComplete={currentStepData.type === 'email' ? 'email' : 'off'}
+                  disabled={isSubmitting}
                 />
-                <Button onClick={handleInputSubmit} disabled={!inputValue && !currentStepData.optional}>
+                <Button 
+                  onClick={handleInputSubmit} 
+                  disabled={(!inputValue && !currentStepData.optional) || isSubmitting}
+                >
                   <Send size={16} />
                 </Button>
               </div>
