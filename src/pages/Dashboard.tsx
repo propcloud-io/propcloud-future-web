@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -49,21 +48,43 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-teal-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-teal-50/60 flex flex-col relative overflow-hidden">
       <Header />
       
       <main className="flex-1 pt-24 pb-16 relative">
-        <AbstractAccent position="top" color="blue" className="opacity-30" />
-        <div className="absolute inset-0 pointer-events-none opacity-10">
-          <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-br from-teal-200/40 to-transparent rounded-full blur-2xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/6 w-40 h-40 bg-gradient-to-br from-slate-200/40 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        <AbstractAccent position="top" color="blue" className="opacity-40" />
+        
+        {/* Enhanced background visuals */}
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+          <div className="absolute top-1/4 left-1/6 w-40 h-40 bg-gradient-to-br from-teal-300/60 to-transparent rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/6 w-56 h-56 bg-gradient-to-br from-slate-300/50 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-teal-200/40 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        </div>
+
+        {/* Decorative pattern overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="dashboard-dots" width="40" height="40" patternUnits="userSpaceOnUse">
+                <circle cx="20" cy="20" r="1" fill="#14b8a6" opacity="0.4"/>
+                <circle cx="10" cy="10" r="0.5" fill="#1e293b" opacity="0.3"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#dashboard-dots)" />
+          </svg>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Page Header */}
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent mb-2">Performance Overview</h1>
-            <p className="text-gray-600">Monitor your properties and track key metrics in real-time</p>
+          {/* Enhanced Page Header */}
+          <div className="mb-8 text-center relative">
+            <div className="relative bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/60 max-w-2xl mx-auto">
+              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent mb-3 animate-fade-up">
+                Performance Overview
+              </h1>
+              <p className="text-gray-600 text-lg animate-fade-up" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
+                Monitor your properties and track key metrics in real-time
+              </p>
+            </div>
           </div>
 
           {/* Performance Dashboard Grid */}
@@ -125,26 +146,26 @@ export default function Dashboard() {
             />
           </div>
 
-          {/* Booking Trend Chart */}
+          {/* Enhanced Booking Trend Chart */}
           <div className="mb-12">
             <div 
-              className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/80 animate-fade-up hover:shadow-2xl transition-all duration-300"
+              className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/60 animate-fade-up hover:shadow-3xl transition-all duration-500"
               style={{ animationDelay: "0.7s", animationFillMode: "both" }}
             >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-teal-50 to-teal-100 shadow-lg">
-                  <TrendingUp size={24} className="text-teal-600" />
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-teal-100 to-teal-200 shadow-lg">
+                  <TrendingUp size={28} className="text-teal-700" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Booking Trend (Last 7 Days)</h3>
-                  <p className="text-sm text-gray-500">Daily occupancy percentage • Live updates</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-1">Booking Trend (Last 7 Days)</h3>
+                  <p className="text-sm text-gray-600">Daily occupancy percentage • Live updates</p>
                 </div>
               </div>
               <MiniChart data={mockChartData} />
             </div>
           </div>
 
-          {/* AI Chat Assistant */}
+          {/* Enhanced AI Chat Assistant */}
           <div 
             className="animate-fade-up mb-12"
             style={{ animationDelay: "0.8s", animationFillMode: "both" }}
@@ -152,22 +173,27 @@ export default function Dashboard() {
             <ChatAssistant />
           </div>
 
-          {/* CTA Section */}
+          {/* Enhanced CTA Section */}
           <div 
-            className="bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 rounded-2xl p-8 text-center text-white animate-fade-up shadow-2xl"
+            className="relative bg-gradient-to-br from-slate-800 via-propcloud-700 to-teal-600 rounded-3xl p-10 text-center text-white animate-fade-up shadow-2xl overflow-hidden"
             style={{ animationDelay: "0.9s", animationFillMode: "both" }}
           >
-            <h3 className="text-2xl font-bold mb-4">Want to see your data here?</h3>
-            <p className="text-lg mb-6 opacity-90">Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.</p>
-            <button
-              onClick={openChatBot}
-              className="inline-block rounded-xl bg-white text-slate-800 font-bold px-8 py-4 text-base lg:text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              <span className="flex items-center gap-2">
-                <MessageCircle size={20} />
-                Get Started Today
-              </span>
-            </button>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-20"></div>
+            <div className="relative z-10">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">Want to see your data here?</h3>
+              <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+                Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.
+              </p>
+              <button
+                onClick={openChatBot}
+                className="inline-block rounded-2xl bg-white text-slate-800 font-bold px-10 py-5 text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+              >
+                <span className="flex items-center gap-3">
+                  <MessageCircle size={24} />
+                  Get Started Today
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </main>
