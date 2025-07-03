@@ -49,7 +49,7 @@ export async function createLead(leadData: LeadData): Promise<any> {
     
     if (Array.isArray(platforms)) {
       platformUsage = platforms;
-    } else if (platforms && typeof platforms === 'string') {
+    } else if (typeof platforms === 'string' && platforms.trim().length > 0) {
       platformUsage = platforms.split(',').map(p => p.trim());
     }
 
