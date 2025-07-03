@@ -10,6 +10,7 @@ export interface LeadData {
   number_of_properties?: number;
   message?: string;
   platform_usage?: string[];
+  source?: string;
 }
 
 export interface ConversationData {
@@ -125,7 +126,7 @@ export const getRecentConversations = async (leadId?: string) => {
     query = query.eq('lead_id', leadId);
   }
 
-  const { data, error } = query;
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching conversations:', error);
