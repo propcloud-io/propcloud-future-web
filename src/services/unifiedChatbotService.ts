@@ -53,11 +53,19 @@ export async function createLead(leadData: LeadData): Promise<any> {
       platformUsage = platforms.split(',').map(p => p.trim());
     }
 
+    // Handle locations field with proper type checking
+    let locationString = '';
+    const locationsData = leadData.locations;
+    
+    if (locationsData && typeof locationsData === 'string') {
+      locationString = locationsData;
+    }
+
     // Correct field mapping to match database schema
     const leadRecord = {
       name: leadData.name,
       email: leadData.email,
-      location: leadData.locations || '', // Fixed: locations -> location, with fallback
+      location: locationString,
       message: leadData.additionalNotes || '',
       number_of_properties: parseInt(leadData.numberOfProperties) || 1,
       platform_usage: platformUsage,
