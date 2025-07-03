@@ -38,6 +38,14 @@ export default function GlowingOrb({
     return () => cancelAnimationFrame(animationId);
   }, [animate]);
 
+  // Convert hex to rgba for better control
+  const hexToRgba = (hex: string, alpha: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
   return (
     <div
       ref={orbRef}
@@ -45,9 +53,9 @@ export default function GlowingOrb({
       style={{
         width: size,
         height: size,
-        background: `radial-gradient(circle, ${color}${Math.floor(intensity * 255).toString(16)} 0%, transparent 70%)`,
-        boxShadow: `0 0 ${size * 0.5}px ${color}${Math.floor(intensity * 127).toString(16)}`,
-        filter: 'blur(1px)',
+        background: `radial-gradient(circle, ${hexToRgba(color, intensity)} 0%, ${hexToRgba(color, intensity * 0.3)} 40%, transparent 70%)`,
+        boxShadow: `0 0 ${size * 0.8}px ${hexToRgba(color, intensity * 0.6)}, 0 0 ${size * 1.2}px ${hexToRgba(color, intensity * 0.3)}`,
+        filter: 'blur(0.5px)',
       }}
     />
   );

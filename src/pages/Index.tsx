@@ -16,24 +16,24 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col font-sans overflow-x-hidden relative">
       <ScrollProgressBar />
       
-      {/* Interactive background orbs - Fixed visibility with contrasting colors */}
+      {/* Interactive background orbs - Enhanced visibility with teal colors on white background */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <GlowingOrb 
           size={300} 
-          color="#0f766e" 
-          intensity={0.3}
+          color="#14b8a6" 
+          intensity={0.5}
           className="top-20 -left-20"
         />
         <GlowingOrb 
           size={200} 
-          color="#1e293b" 
-          intensity={0.25}
+          color="#0f766e" 
+          intensity={0.4}
           className="top-1/2 -right-20"
         />
         <GlowingOrb 
           size={150} 
-          color="#14b8a6" 
-          intensity={0.2}
+          color="#134e4a" 
+          intensity={0.3}
           className="bottom-1/4 left-1/4"
           animate={false}
         />

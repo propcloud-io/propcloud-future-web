@@ -9,7 +9,6 @@ import DetailedView from '@/components/Dashboard/DetailedView';
 import AbstractAccent from '@/components/AbstractAccent';
 import ParticleBackground from '@/components/ParticleBackground';
 import FloatingActionButton from '@/components/InteractiveElements/FloatingActionButton';
-import ParallaxSection from '@/components/InteractiveElements/ParallaxSection';
 import MagneticButton from '@/components/InteractiveElements/MagneticButton';
 import GlowingOrb from '@/components/InteractiveElements/GlowingOrb';
 import ScrollProgressBar from '@/components/InteractiveElements/ScrollProgressBar';
@@ -60,34 +59,34 @@ export default function Dashboard() {
       <ScrollProgressBar />
       <Header />
       
-      <main className="flex-1 pt-24 pb-32 relative z-10">
+      <main className="flex-1 pt-24 pb-32 relative">
         <AbstractAccent position="top" color="blue" className="opacity-60" />
         <ParticleBackground density="medium" className="opacity-30" />
         
-        {/* Enhanced background visuals with interactive orbs - Fixed z-index */}
-        <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Enhanced background visuals with darker orbs for better contrast */}
+        <div className="fixed inset-0 pointer-events-none z-0">
           <GlowingOrb 
             size={200} 
-            color="#14b8a6" 
-            intensity={0.4}
+            color="#0f766e" 
+            intensity={0.6}
             className="top-1/4 left-1/6"
           />
           <GlowingOrb 
             size={150} 
             color="#1e293b" 
-            intensity={0.3}
+            intensity={0.5}
             className="bottom-1/4 right-1/6"
             animate={false}
           />
           <GlowingOrb 
             size={120} 
-            color="#0f766e" 
-            intensity={0.5}
+            color="#134e4a" 
+            intensity={0.7}
             className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           />
         </div>
 
-        {/* Decorative pattern overlay - Fixed z-index */}
+        {/* Decorative pattern overlay */}
         <div className="absolute inset-0 opacity-15 z-0">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -101,27 +100,25 @@ export default function Dashboard() {
           </svg>
         </div>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-          {/* Enhanced Page Header with parallax - Fixed z-index */}
-          <ParallaxSection speed={0.3}>
-            <div className="mb-12 text-center relative z-30">
-              <div className="relative bg-white/90 backdrop-blur-md rounded-3xl p-12 shadow-2xl border border-white/60 max-w-3xl mx-auto hover:shadow-3xl transition-all duration-500 group">
-                <div className="absolute -top-4 -right-4">
-                  <Sparkles className="w-8 h-8 text-teal-500 animate-pulse" />
-                </div>
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent mb-4 animate-fade-up group-hover:scale-105 transition-transform duration-300">
-                  Performance Overview
-                </h1>
-                <p className="text-gray-600 text-xl animate-fade-up leading-relaxed group-hover:text-gray-700 transition-colors duration-300" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
-                  Monitor your properties and track key metrics in real-time
-                </p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Page Header - Removed parallax */}
+          <div className="mb-12 text-center relative">
+            <div className="relative bg-white/90 backdrop-blur-md rounded-3xl p-12 shadow-2xl border border-white/60 max-w-3xl mx-auto hover:shadow-3xl transition-all duration-500 group">
+              <div className="absolute -top-4 -right-4">
+                <Sparkles className="w-8 h-8 text-teal-500 animate-pulse" />
               </div>
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent mb-4 animate-fade-up group-hover:scale-105 transition-transform duration-300">
+                Performance Overview
+              </h1>
+              <p className="text-gray-600 text-xl animate-fade-up leading-relaxed group-hover:text-gray-700 transition-colors duration-300" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
+                Monitor your properties and track key metrics in real-time
+              </p>
             </div>
-          </ParallaxSection>
+          </div>
 
-          {/* Performance Dashboard Grid with staggered hover effects - Fixed z-index */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 relative z-30">
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative">
+          {/* Performance Dashboard Grid - Fixed z-index without overlapping issues */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 relative">
+            <div className="transform hover:scale-105 transition-all duration-300 relative">
               <MetricCard
                 icon={<Home size={24} className="text-teal-600" />}
                 label="Properties Under Management"
@@ -133,7 +130,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.1s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.1s'}}>
               <MetricCard
                 icon={<DollarSign size={24} className="text-teal-600" />}
                 label="Monthly Revenue"
@@ -144,7 +141,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.2s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.2s'}}>
               <MetricCard
                 icon={<Users size={24} className="text-teal-600" />}
                 label="Occupancy Rate"
@@ -155,7 +152,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.3s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.3s'}}>
               <MetricCard
                 icon={<Star size={24} className="text-teal-600" />}
                 label="Guest Satisfaction"
@@ -165,7 +162,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.4s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.4s'}}>
               <MetricCard
                 icon={<Calendar size={24} className="text-teal-600" />}
                 label="Upcoming Turnovers"
@@ -177,7 +174,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="transform hover:scale-105 transition-all duration-300 hover:z-40 relative" style={{animationDelay: '0.5s'}}>
+            <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.5s'}}>
               <MetricCard
                 icon={<Wrench size={24} className="text-teal-600" />}
                 label="Open Maintenance Issues"
@@ -190,70 +187,66 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Enhanced Booking Trend Chart with parallax - Fixed z-index */}
-          <ParallaxSection speed={0.2}>
-            <div className="mb-16 relative z-30">
-              <div 
-                className="bg-white/90 backdrop-blur-md rounded-3xl p-10 shadow-2xl border border-white/60 animate-fade-up hover:shadow-3xl transition-all duration-500 group overflow-hidden relative"
-                style={{ animationDelay: "0.7s", animationFillMode: "both" }}
-              >
-                {/* Animated background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-teal-50/0 via-teal-50/30 to-teal-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="flex items-center gap-6 mb-10 relative z-10">
-                  <div className="p-5 rounded-2xl bg-gradient-to-br from-teal-100 to-teal-200 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
-                    <TrendingUp size={32} className="text-teal-700 group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors duration-300">Booking Trend (Last 7 Days)</h3>
-                    <p className="text-gray-600">Daily occupancy percentage • Live updates</p>
-                  </div>
+          {/* Booking Trend Chart - Removed parallax */}
+          <div className="mb-16 relative">
+            <div 
+              className="bg-white/90 backdrop-blur-md rounded-3xl p-10 shadow-2xl border border-white/60 animate-fade-up hover:shadow-3xl transition-all duration-500 group overflow-hidden relative"
+              style={{ animationDelay: "0.7s", animationFillMode: "both" }}
+            >
+              {/* Animated background gradient */}
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-50/0 via-teal-50/30 to-teal-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="flex items-center gap-6 mb-10 relative z-10">
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-teal-100 to-teal-200 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
+                  <TrendingUp size={32} className="text-teal-700 group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <MiniChart data={mockChartData} />
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors duration-300">Booking Trend (Last 7 Days)</h3>
+                  <p className="text-gray-600">Daily occupancy percentage • Live updates</p>
+                </div>
               </div>
+              <MiniChart data={mockChartData} />
             </div>
-          </ParallaxSection>
+          </div>
 
-          {/* Enhanced AI Chat Assistant - Fixed z-index */}
+          {/* AI Chat Assistant */}
           <div 
-            className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative z-30"
+            className="animate-fade-up mb-16 transform hover:scale-[1.02] transition-all duration-300 relative"
             style={{ animationDelay: "0.8s", animationFillMode: "both" }}
           >
             <ChatAssistant />
           </div>
 
-          {/* Enhanced CTA Section with magnetic button - Fixed z-index */}
-          <ParallaxSection speed={0.1}>
-            <div 
-              className="relative bg-gradient-to-br from-white/95 via-teal-50/90 to-slate-50/95 backdrop-blur-md rounded-3xl p-12 text-center shadow-2xl border border-white/60 animate-fade-up overflow-hidden group mb-20 z-30"
-              style={{ animationDelay: "0.9s", animationFillMode: "both" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-100/30 to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
-              <div className="relative z-10">
-                <h3 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-teal-700 bg-clip-text text-transparent">Want to see your data here?</h3>
-                <p className="text-xl md:text-2xl mb-10 text-gray-700 max-w-2xl mx-auto leading-relaxed">
-                  Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.
-                </p>
-                <MagneticButton
-                  className="inline-block rounded-2xl bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 text-white font-bold px-12 py-6 text-xl shadow-2xl hover:shadow-3xl"
-                  onClick={openChatBot}
-                  magneticStrength={0.2}
-                >
-                  <span className="flex items-center gap-4">
-                    <MessageCircle size={28} />
-                    Get Started Today
-                  </span>
-                </MagneticButton>
-              </div>
+          {/* CTA Section - Removed parallax */}
+          <div 
+            className="relative bg-gradient-to-br from-white/95 via-teal-50/90 to-slate-50/95 backdrop-blur-md rounded-3xl p-12 text-center shadow-2xl border border-white/60 animate-fade-up overflow-hidden group mb-20"
+            style={{ animationDelay: "0.9s", animationFillMode: "both" }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-100/30 to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <h3 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-teal-700 bg-clip-text text-transparent">Want to see your data here?</h3>
+              <p className="text-xl md:text-2xl mb-10 text-gray-700 max-w-2xl mx-auto leading-relaxed">
+                Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.
+              </p>
+              <MagneticButton
+                className="inline-block rounded-2xl bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 text-white font-bold px-12 py-6 text-xl shadow-2xl hover:shadow-3xl"
+                onClick={openChatBot}
+                magneticStrength={0.2}
+              >
+                <span className="flex items-center gap-4">
+                  <MessageCircle size={28} />
+                  Get Started Today
+                </span>
+              </MagneticButton>
             </div>
-          </ParallaxSection>
+          </div>
         </div>
       </main>
       
       <Footer />
       <FloatingActionButton />
 
-      {/* Detailed View Modal - Fixed z-index */}
+      {/* Detailed View Modal */}
       {selectedView && (
         <div className="fixed inset-0 z-50">
           <DetailedView 
