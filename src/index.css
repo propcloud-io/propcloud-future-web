@@ -225,6 +225,18 @@
   }
 }
 
+/* Floating Action Button Animation */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Ripple effect for buttons */
 .ripple {
   position: relative;

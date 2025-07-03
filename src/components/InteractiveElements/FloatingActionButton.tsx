@@ -45,7 +45,7 @@ export default function FloatingActionButton() {
         {actions.map((action, index) => (
           <div
             key={action.label}
-            className={`${action.color} p-3 rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 group`}
+            className={`${action.color} p-3 rounded-full shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 group slide-in-fab`}
             style={{
               animationDelay: `${index * 100}ms`,
               animation: isOpen ? 'slideInRight 0.3s ease-out forwards' : ''
@@ -72,19 +72,6 @@ export default function FloatingActionButton() {
           {isOpen ? <X className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
         </div>
       </button>
-
-      <style jsx>{`
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }
