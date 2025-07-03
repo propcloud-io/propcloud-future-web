@@ -39,7 +39,7 @@ export default function FloatingGeometry({
   }, []);
 
   const createShape = (type: string, size: number, x: number, y: number) => {
-    const baseClasses = "absolute opacity-20 animate-pulse";
+    const baseClasses = "absolute opacity-10 animate-pulse";
     const style = { 
       left: `${x}%`, 
       top: `${y}%`, 
@@ -53,7 +53,7 @@ export default function FloatingGeometry({
         return (
           <div
             key={`triangle-${x}-${y}`}
-            className={`${baseClasses} border-l-[${size/2}px] border-r-[${size/2}px] border-b-[${size}px] border-l-transparent border-r-transparent border-b-teal-400/40`}
+            className={`${baseClasses} border-l-[${size/2}px] border-r-[${size/2}px] border-b-[${size}px] border-l-transparent border-r-transparent border-b-slate-400/30`}
             style={style}
           />
         );
@@ -61,7 +61,7 @@ export default function FloatingGeometry({
         return (
           <div
             key={`hexagon-${x}-${y}`}
-            className={`${baseClasses} bg-gradient-to-br from-blue-400/30 to-teal-400/30`}
+            className={`${baseClasses} bg-gradient-to-br from-slate-400/20 to-teal-500/20`}
             style={{
               ...style,
               clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)'
@@ -72,7 +72,7 @@ export default function FloatingGeometry({
         return (
           <div
             key={`diamond-${x}-${y}`}
-            className={`${baseClasses} bg-gradient-to-br from-purple-400/30 to-pink-400/30 rotate-45`}
+            className={`${baseClasses} bg-gradient-to-br from-teal-400/20 to-slate-400/20 rotate-45`}
             style={style}
           />
         );

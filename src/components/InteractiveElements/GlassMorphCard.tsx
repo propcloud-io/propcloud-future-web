@@ -15,33 +15,33 @@ export default function GlassMorphCard({
   hover = true
 }: GlassMorphCardProps) {
   const variants = {
-    light: 'bg-white/80 backdrop-blur-xl border-white/60',
-    medium: 'bg-white/60 backdrop-blur-lg border-white/40',
-    dark: 'bg-black/20 backdrop-blur-md border-white/20'
+    light: 'bg-white/90 backdrop-blur-xl border-slate-200/60 shadow-lg',
+    medium: 'bg-white/80 backdrop-blur-lg border-slate-300/50 shadow-xl',
+    dark: 'bg-slate-900/80 backdrop-blur-md border-slate-700/40 shadow-2xl'
   };
 
-  const hoverEffect = hover ? 'hover:bg-white/90 hover:shadow-2xl hover:scale-105' : '';
+  const hoverEffect = hover ? 'hover:bg-white/95 hover:shadow-xl hover:scale-[1.02]' : '';
 
   return (
     <div 
       className={`
         ${variants[variant]} 
         ${hoverEffect}
-        rounded-3xl border shadow-xl transition-all duration-500 
+        rounded-2xl border transition-all duration-300 
         relative overflow-hidden group
         ${className}
       `}
     >
-      {/* Animated overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      {/* Subtle animated overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
       
       {/* Content */}
       <div className="relative z-10">
         {children}
       </div>
       
-      {/* Subtle glow effect */}
-      <div className="absolute -inset-px bg-gradient-to-r from-teal-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-sm" />
+      {/* Professional glow effect */}
+      <div className="absolute -inset-px bg-gradient-to-r from-teal-500/10 via-slate-400/10 to-teal-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-sm" />
     </div>
   );
 }
