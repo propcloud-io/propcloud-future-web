@@ -13,7 +13,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex flex-col items-center justify-center text-center pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-800 via-propcloud-800 to-teal-800 text-white overflow-hidden"
+      className="relative flex flex-col items-center justify-center text-center pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-800 via-slate-900 to-teal-800 text-white overflow-hidden"
     >
       <AbstractAccent position="top" color="green" />
       <AIFlowVisual className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-20 z-0 scale-150" />

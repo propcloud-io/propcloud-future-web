@@ -7,7 +7,7 @@ export default function AISection() {
   return (
     <section
       id="ai"
-      className="py-16 lg:py-24 bg-gradient-to-br from-propcloud-800 via-slate-800 to-teal-800 relative overflow-hidden text-white"
+      className="py-16 lg:py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-800 relative overflow-hidden text-white"
     >
       <AbstractAccent position="top" color="green" className="opacity-30" />
       <div className="absolute inset-0 pointer-events-none opacity-15">

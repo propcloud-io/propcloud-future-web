@@ -23,8 +23,8 @@ export default function ServicesSection() {
           <defs>
             <pattern id="service-grid" width="60" height="60" patternUnits="userSpaceOnUse">
               <circle cx="30" cy="30" r="1.5" fill="#14b8a6" opacity="0.6"/>
-              <circle cx="15" cy="15" r="0.8" fill="#1e293b" opacity="0.4"/>
-              <circle cx="45" cy="45" r="0.8" fill="#0f766e" opacity="0.4"/>
+              <circle cx="15" cy="15" r="0.8" fill="#0f172a" opacity="0.4"/>
+              <circle cx="45" cy="45" r="0.8" fill="#14b8a6" opacity="0.4"/>
             </pattern>
             <radialGradient id="service-glow" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.1"/>
@@ -37,7 +37,7 @@ export default function ServicesSection() {
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent animate-fade-up">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-slate-800 via-slate-700 to-teal-600 bg-clip-text text-transparent animate-fade-up">
             You Own. We Operate.
           </h2>
           <p className="text-lg text-slate-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{animationDelay: ".1s", animationFillMode: "both"}}>
@@ -60,7 +60,7 @@ export default function ServicesSection() {
                     <div className="absolute inset-0 bg-gradient-to-br from-teal-50/50 to-slate-50/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="flex items-start gap-4 mb-4 relative z-10">
                       <div className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-white to-slate-50 group-hover:from-teal-50 group-hover:to-teal-100 transition-colors duration-300 shadow-lg border border-white/80">
-                        <IconComponent size={28} className={idx % 2 === 0 ? "text-accent-500" : "text-propcloud-500"} />
+                        <IconComponent size={28} className={idx % 2 === 0 ? "text-teal-500" : "text-slate-900"} />
                       </div>
                       <div className="flex-grow min-w-0">
                         <h3 className="text-lg lg:text-xl text-slate-800 font-semibold leading-tight mb-3">

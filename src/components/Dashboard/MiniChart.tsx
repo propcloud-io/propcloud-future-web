@@ -70,7 +70,7 @@ export default function MiniChart({ data: initialData }: MiniChartProps) {
           />
         </LineChart>
       </ResponsiveContainer>
-      <div className="absolute bottom-2 left-2 text-xs text-gray-500">
+      <div className="absolute bottom-2 left-2 text-xs text-slate-500">
         Live Data • Updates every 3s
       </div>
     </div>

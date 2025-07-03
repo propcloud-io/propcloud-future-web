@@ -75,17 +75,17 @@ export default function MetricCard({
           </div>
         )}
         {clickable && !isLive && (
-          <div className="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
             Click for details
           </div>
         )}
       </div>
       <div>
-        <h3 className="text-sm font-medium text-gray-600 mb-1">{label}</h3>
-        <p className={`text-2xl font-bold text-gray-900 mb-2 transition-all duration-300 ${isUpdating ? 'text-teal-600' : ''}`}>
+        <h3 className="text-sm font-medium text-slate-600 mb-1">{label}</h3>
+        <p className={`text-2xl font-bold text-slate-900 mb-2 transition-all duration-300 ${isUpdating ? 'text-teal-600' : ''}`}>
           {value}
         </p>
-        <p className="text-sm text-gray-500">{subtext}</p>
+        <p className="text-sm text-slate-500">{subtext}</p>
       </div>
     </div>
   );

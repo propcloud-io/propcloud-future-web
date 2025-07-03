@@ -37,7 +37,7 @@ export default function HowItWorksSection() {
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-bold text-3xl sm:text-4xl lg:text-5xl mb-4 bg-gradient-to-r from-slate-800 via-propcloud-700 to-teal-600 bg-clip-text text-transparent text-center animate-fade-up">
+          <h2 className="font-bold text-3xl sm:text-4xl lg:text-5xl mb-4 bg-gradient-to-r from-slate-800 via-slate-700 to-teal-600 bg-clip-text text-transparent text-center animate-fade-up">
             How It Works
           </h2>
           <p className="text-lg text-slate-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{animationDelay: ".1s", animationFillMode: "both"}}>
@@ -51,10 +51,10 @@ export default function HowItWorksSection() {
                 style={{animationDelay: `${0.06 + idx * 0.08}s`, animationFillMode: "both"}}
               >
                 <div className="relative">
-                  <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white font-bold shadow-2xl text-3xl relative z-10">
+                  <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-slate-700 via-slate-900 to-teal-500 text-white font-bold shadow-2xl text-3xl relative z-10">
                     {idx + 1}
                   </div>
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 blur-xl opacity-40 animate-pulse"></div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-700 via-slate-900 to-teal-500 blur-xl opacity-40 animate-pulse"></div>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg lg:text-xl text-slate-800 leading-relaxed mb-3">

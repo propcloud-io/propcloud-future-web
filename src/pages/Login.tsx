@@ -27,19 +27,19 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-teal-50/30 flex flex-col">
       <Header />
       
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-r from-propcloud-700 to-accent-600 mb-6">
+            <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-r from-slate-900 to-teal-600 mb-6">
               <Lock size={32} className="text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
               Access Your Dashboard
             </h2>
-            <p className="text-gray-600">
+            <p className="text-slate-600">
               Sign in to view your property performance
             </p>
           </div>
@@ -47,11 +47,11 @@ export default function Login() {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-white/70">
             <form className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <User size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <User size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <Input
                     id="email"
                     type="email"
@@ -62,11 +62,11 @@ export default function Login() {
               </div>
               
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Lock size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <Input
                     id="password"
                     type="password"
@@ -81,14 +81,14 @@ export default function Login() {
                   Click the demo button below to explore the dashboard with sample data
                 </p>
                 <Link to="/app">
-                  <Button className="w-full bg-gradient-to-r from-propcloud-700 to-accent-600 hover:brightness-110 text-white font-semibold py-3 h-12">
+                  <Button className="w-full bg-gradient-to-r from-slate-900 to-teal-600 hover:brightness-110 text-white font-semibold py-3 h-12">
                     View Demo Dashboard
                   </Button>
                 </Link>
               </div>
               
               <div className="text-center">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-slate-500">
                   Don't have an account?{' '}
                   <button 
                     onClick={handleContactUs}

@@ -18,16 +18,16 @@ export default function Index() {
     <div className="min-h-screen flex flex-col font-sans overflow-x-hidden relative">
       <ScrollProgressBar />
       
-      {/* Advanced background system */}
+      {/* Consistent background system with only white, teal, and dark blue */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <AnimatedGradient variant="primary" intensity="medium" />
-        <AdvancedParticles density="medium" color="gradient" className="opacity-60" />
+        <AdvancedParticles density="medium" color="teal" className="opacity-60" />
         <FloatingGeometry variant="mixed" className="opacity-40" />
         
-        {/* Dynamic flowing elements */}
-        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-teal-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-40 right-20 w-48 h-48 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-2xl animate-bounce" style={{animationDuration: '3s'}} />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}} />
+        {/* Consistent flowing elements with only allowed colors */}
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-teal-400/20 to-slate-900/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-40 right-20 w-48 h-48 bg-gradient-to-r from-slate-900/20 to-teal-400/15 rounded-full blur-2xl animate-bounce" style={{animationDuration: '3s'}} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-white/20 to-teal-500/15 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}} />
       </div>
 
       <Header />
@@ -48,7 +48,7 @@ export default function Index() {
           <AISection />
         </ParallaxSection>
 
-        {/* TESTIMONIALS with enhanced styling */}
+        {/* TESTIMONIALS with consistent styling */}
         <section id="testimonials" className="py-16 lg:py-24 relative overflow-hidden">
           <AnimatedGradient variant="secondary" intensity="medium" />
           <ParallaxSection speed={0.05}>

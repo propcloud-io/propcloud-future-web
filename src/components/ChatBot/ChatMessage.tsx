@@ -18,8 +18,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
       <div
         className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${
           message.isBot
-            ? 'bg-gray-100 text-propcloud-800'
-            : 'bg-gradient-to-r from-propcloud-700 to-accent-600 text-white'
+            ? 'bg-white/90 text-slate-900 border border-slate-200'
+            : 'bg-gradient-to-r from-slate-900 to-teal-600 text-white'
         }`}
       >
         <p className="whitespace-pre-wrap">{message.text}</p>
