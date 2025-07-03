@@ -4,7 +4,7 @@ import { MessageCircle, X, Send, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatMessage, JobApplicationData } from '@/types/chatbot';
 import { validateEmail, sanitizeInput, generateId, delay } from '@/utils/chatbotUtils';
-import { testSupabaseConnection, submitWithFallback, saveConversation } from '@/services/unifiedChatbotService';
+import { submitJobApplication } from '@/services/simplifiedChatbotService';
 import { useToast } from '@/hooks/use-toast';
 
 interface CareersChatBotProps {
@@ -35,7 +35,6 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<JobApplicationData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -68,9 +67,6 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
   };
 
   const initializeBot = async () => {
-    const connected = await testSupabaseConnection();
-    setIsConnected(connected);
-    
     await delay(500);
     const welcomeMessage = initialRole 
       ? `Hi! I'm here to help you apply for the ${initialRole} position at PropCloud. Ready to get started?`
@@ -89,10 +85,6 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
     };
     
     setMessages(prev => [...prev, message]);
-    
-    if (!isTyping) {
-      await saveConversation(text, !isBot, 'careers');
-    }
   };
 
   const addBotMessage = async (text: string) => {
@@ -171,7 +163,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
       const applicationData = formData as JobApplicationData;
       console.log('🚀 Submitting application data:', applicationData);
       
-      const result = await submitWithFallback(applicationData, 'job_application');
+      const result = await submitJobApplication(applicationData);
       
       if (result.success) {
         await addBotMessage(`Thank you, ${applicationData.name}! Your application for ${applicationData.role} has been submitted successfully.`);
@@ -184,7 +176,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
           description: `Your application has been submitted successfully via ${result.method}.`,
         });
       } else {
-        throw new Error('Both Supabase and Formspree submissions failed');
+        throw new Error('Application submission failed');
       }
     } catch (error) {
       console.error('❌ Application submission failed:', error);
@@ -246,9 +238,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
             </div>
             <div>
               <h3 className="font-semibold">PropCloud Careers</h3>
-              <p className="text-xs opacity-90">
-                {isConnected === null ? 'Connecting...' : isConnected ? 'Connected' : 'Backup Mode'}
-              </p>
+              <p className="text-xs opacity-90">Ready to help</p>
             </div>
           </div>
           <button

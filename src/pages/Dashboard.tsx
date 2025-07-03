@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,7 +13,7 @@ import AdvancedParticles from '@/components/InteractiveElements/AdvancedParticle
 import FloatingGeometry from '@/components/InteractiveElements/FloatingGeometry';
 import AnimatedGradient from '@/components/InteractiveElements/AnimatedGradient';
 import GlassMorphCard from '@/components/InteractiveElements/GlassMorphCard';
-import { testSupabaseConnection, getDashboardData } from '@/services/unifiedChatbotService';
+import { getDashboardData } from '@/services/mockDashboardService';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Home, 
@@ -30,111 +31,11 @@ import EnhancedChatAssistant from '@/components/Dashboard/EnhancedChatAssistant'
 
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
-// Comprehensive mock data for fallback
-const mockProperties = [
-  {
-    id: '1',
-    name: 'Ocean View Condo',
-    city: 'Miami Beach',
-    country: 'USA',
-    property_type: 'condo',
-    number_of_rooms: 2,
-    has_pool: true,
-    active: true,
-    created_at: '2024-01-15T10:00:00Z'
-  },
-  {
-    id: '2',
-    name: 'Downtown Loft',
-    city: 'New York',
-    country: 'USA',
-    property_type: 'loft',
-    number_of_rooms: 1,
-    has_pool: false,
-    active: true,
-    created_at: '2024-02-01T14:30:00Z'
-  },
-  {
-    id: '3',
-    name: 'Marina Apartment',
-    city: 'Dubai',
-    country: 'UAE',
-    property_type: 'apartment',
-    number_of_rooms: 3,
-    has_pool: true,
-    active: true,
-    created_at: '2024-01-20T09:15:00Z'
-  },
-  {
-    id: '4',
-    name: 'Mountain Cabin',
-    city: 'Aspen',
-    country: 'USA',
-    property_type: 'cabin',
-    number_of_rooms: 4,
-    has_pool: false,
-    active: true,
-    created_at: '2024-03-10T16:45:00Z'
-  }
-];
-
-const mockReports = [
-  {
-    id: '1',
-    property_id: '1',
-    month: '2024-03-01',
-    revenue: 15750,
-    occupancy_rate: 87,
-    maintenance_issues: 1,
-    guest_rating: 4.8,
-    number_of_bookings: 14,
-    notes: 'Strong performance, minor AC maintenance',
-    created_at: '2024-03-31T23:59:00Z'
-  },
-  {
-    id: '2',
-    property_id: '2',
-    month: '2024-03-01',
-    revenue: 22300,
-    occupancy_rate: 92,
-    maintenance_issues: 0,
-    guest_rating: 4.9,
-    number_of_bookings: 18,
-    notes: 'Excellent month, high demand',
-    created_at: '2024-03-31T23:59:00Z'
-  },
-  {
-    id: '3',
-    property_id: '3',
-    month: '2024-03-01',
-    revenue: 18900,
-    occupancy_rate: 85,
-    maintenance_issues: 2,
-    guest_rating: 4.6,
-    number_of_bookings: 16,
-    notes: 'Good performance, pool maintenance scheduled',
-    created_at: '2024-03-31T23:59:00Z'
-  },
-  {
-    id: '4',
-    property_id: '4',
-    month: '2024-03-01',
-    revenue: 12400,
-    occupancy_rate: 76,
-    maintenance_issues: 0,
-    guest_rating: 4.7,
-    number_of_bookings: 11,
-    notes: 'Seasonal property, expected performance',
-    created_at: '2024-03-31T23:59:00Z'
-  }
-];
-
 export default function Dashboard() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
   const [properties, setProperties] = useState<any[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [connectionStatus, setConnectionStatus] = useState<boolean | null>(null);
   const [dataLoadError, setDataLoadError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { toast } = useToast();
@@ -150,46 +51,32 @@ export default function Dashboard() {
         });
       }
       
-      console.log('🔗 Testing Supabase connection...');
-      const isConnected = await testSupabaseConnection();
-      setConnectionStatus(isConnected);
+      console.log('📊 Loading dashboard data from mock service...');
+      const { properties: propertiesData, reports: reportsData } = await getDashboardData();
       
-      if (isConnected) {
-        console.log('📊 Loading dashboard data from Supabase...');
-        const { properties: propertiesData, reports: reportsData } = await getDashboardData();
-        
-        console.log('📈 Data loaded from Supabase:', { 
-          properties: propertiesData.length, 
-          reports: reportsData.length 
-        });
-        
-        setProperties(propertiesData);
-        setReports(reportsData);
-        
-        if (showToast) {
-          toast({
-            title: "Data refreshed!",
-            description: `Loaded ${propertiesData.length} properties and ${reportsData.length} reports`,
-            variant: "default",
-          });
-        }
-      } else {
-        throw new Error('Supabase connection failed');
-      }
-    } catch (error) {
-      console.error('❌ Error loading dashboard data:', error);
-      setDataLoadError(`Connection failed - using demo data`);
-      setConnectionStatus(false);
+      console.log('📈 Data loaded successfully:', { 
+        properties: propertiesData.length, 
+        reports: reportsData.length 
+      });
       
-      // Use comprehensive mock data
-      console.log('📋 Using mock data due to error');
-      setProperties(mockProperties);
-      setReports(mockReports);
+      setProperties(propertiesData);
+      setReports(reportsData);
       
       if (showToast) {
         toast({
-          title: "Using Demo Data",
-          description: "Database connection failed, showing sample data",
+          title: "Data refreshed!",
+          description: `Loaded ${propertiesData.length} properties and ${reportsData.length} reports`,
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('❌ Error loading dashboard data:', error);
+      setDataLoadError(`Failed to load data`);
+      
+      if (showToast) {
+        toast({
+          title: "Load Failed",
+          description: "Could not refresh dashboard data",
           variant: "destructive",
         });
       }
@@ -306,7 +193,7 @@ export default function Dashboard() {
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Enhanced page header with status indicators */}
+          {/* Enhanced page header */}
           <div className="mb-12 text-center relative">
             <GlassMorphCard variant="dark" className="p-12 max-w-4xl mx-auto">
               <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-r from-teal-500 to-slate-700 rounded-full flex items-center justify-center animate-pulse">
@@ -319,23 +206,8 @@ export default function Dashboard() {
                 Monitor your properties and track key metrics in real-time
               </p>
               
-              {/* Status indicators */}
+              {/* Simple refresh button */}
               <div className="flex justify-center gap-4 mb-4">
-                <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs ${
-                  connectionStatus === true ? 'bg-green-500/20 text-green-300' : 
-                  connectionStatus === false ? 'bg-red-500/20 text-red-300' : 
-                  'bg-yellow-500/20 text-yellow-300'
-                }`}>
-                  <div className={`w-2 h-2 rounded-full ${
-                    connectionStatus === true ? 'bg-green-400' : 
-                    connectionStatus === false ? 'bg-red-400' : 
-                    'bg-yellow-400'
-                  }`} />
-                  {connectionStatus === true ? 'Connected' : 
-                   connectionStatus === false ? 'Demo Mode' : 
-                   'Checking...'}
-                </div>
-                
                 <button
                   onClick={handleRefreshData}
                   disabled={isRefreshing}
@@ -439,7 +311,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-2">Booking Trend (Last 7 Days)</h3>
-                  <p className="text-white/70">Daily occupancy percentage • Live updates</p>
+                  <p className="text-white/70">Daily occupancy percentage • Demo data</p>
                 </div>
               </div>
               <MiniChart data={mockChartData} />

@@ -3,7 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, Bot, User } from 'lucide-react';
 import { ChatMessage } from '@/types/chatbot';
 import { generateId, delay, sanitizeInput } from '@/utils/chatbotUtils';
-import { getDashboardData, saveConversation, testSupabaseConnection, submitWithFallback } from '@/services/unifiedChatbotService';
+import { getDashboardData } from '@/services/mockDashboardService';
+import { submitLead } from '@/services/simplifiedChatbotService';
 import { useToast } from '@/hooks/use-toast';
 
 export default function EnhancedChatAssistant() {
@@ -13,7 +14,6 @@ export default function EnhancedChatAssistant() {
   const [properties, setProperties] = useState<any[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -31,9 +31,6 @@ export default function EnhancedChatAssistant() {
   };
 
   const initializeAssistant = async () => {
-    const connected = await testSupabaseConnection();
-    setIsConnected(connected);
-    
     try {
       const { properties: propertiesData, reports: reportsData } = await getDashboardData();
       setProperties(propertiesData);
@@ -59,10 +56,6 @@ export default function EnhancedChatAssistant() {
     };
     
     setMessages(prev => [...prev, message]);
-    
-    if (!isTyping) {
-      await saveConversation(text, !isBot, 'dashboard');
-    }
   };
 
   const addBotMessage = async (text: string) => {
@@ -164,13 +157,9 @@ export default function EnhancedChatAssistant() {
         additionalNotes: 'Submitted interest from dashboard demo'
       };
 
-      if (isConnected) {
-        const result = await submitWithFallback(leadData, 'lead');
-        if (result.success) {
-          await addBotMessage("Perfect! I've recorded your interest. Our team will reach out to show you how to get this dashboard set up for your properties. Thanks for your interest in PropCloud!");
-        } else {
-          await addBotMessage("I'd love to help you get started! Please visit our main website to submit your information, or contact us directly at contact@propcloud.io");
-        }
+      const result = await submitLead(leadData);
+      if (result.success) {
+        await addBotMessage("Perfect! I've recorded your interest. Our team will reach out to show you how to get this dashboard set up for your properties. Thanks for your interest in PropCloud!");
       } else {
         await addBotMessage("I'd love to help you get started! Please visit our main website to submit your information, or contact us directly at contact@propcloud.io");
       }
@@ -234,7 +223,7 @@ export default function EnhancedChatAssistant() {
           AI Performance Analyst
         </h3>
         <p className="text-xs text-gray-500 mt-1">
-          {isConnected === null ? 'Connecting...' : isConnected ? 'Connected' : 'Demo Mode'} • {properties.length} properties, {reports.length} reports
+          Demo Mode • {properties.length} properties, {reports.length} reports
         </p>
       </div>
       
