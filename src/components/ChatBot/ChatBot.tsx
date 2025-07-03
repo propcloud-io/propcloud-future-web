@@ -20,8 +20,6 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const [showFlows, setShowFlows] = useState(false);
   const [flowCompleted, setFlowCompleted] = useState(false);
-  const [lastActivityTime, setLastActivityTime] = useState(Date.now());
-  const [showIdlePrompt, setShowIdlePrompt] = useState(false);
 
   // Show chatbot after 4 seconds or when user scrolls
   useEffect(() => {
@@ -31,15 +29,6 @@ export default function ChatBot() {
       if (window.scrollY > 300) {
         setIsVisible(true);
       }
-      setLastActivityTime(Date.now());
-    };
-
-    const handleMouseMove = () => {
-      setLastActivityTime(Date.now());
-    };
-
-    const handleClick = () => {
-      setLastActivityTime(Date.now());
     };
 
     const handleOpenChatBot = () => {
@@ -47,35 +36,16 @@ export default function ChatBot() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('click', handleClick);
     window.addEventListener('openChatBot', handleOpenChatBot);
     
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('click', handleClick);
       window.removeEventListener('openChatBot', handleOpenChatBot);
     };
   }, []);
 
-  // Idle detection - only show prompt after user has engaged
-  useEffect(() => {
-    if (!isVisible || isOpen || showIdlePrompt || messages.length === 0) return;
-
-    const checkIdle = () => {
-      const timeSinceActivity = Date.now() - lastActivityTime;
-      if (timeSinceActivity > 60000) { // 1 minute
-        setShowIdlePrompt(true);
-      }
-    };
-
-    const interval = setInterval(checkIdle, 10000);
-    return () => clearInterval(interval);
-  }, [isVisible, isOpen, lastActivityTime, showIdlePrompt, messages.length]);
-
-  // Initialize with conversation flows when opened
+  // Initialize with welcome message when opened
   useEffect(() => {
     if (isOpen && messages.length === 0 && !showFlows) {
       setTimeout(() => {
@@ -87,7 +57,6 @@ export default function ChatBot() {
   // Reset chat state when closing
   const handleClose = () => {
     setIsOpen(false);
-    setShowIdlePrompt(false);
     // Reset all state after a brief delay to allow close animation
     setTimeout(() => {
       setMessages([]);
@@ -116,62 +85,25 @@ export default function ChatBot() {
     }, 1000);
   };
 
-  const getCurrentPage = () => {
-    const path = window.location.pathname;
-    if (path === '/') return 'homepage';
-    if (path === '/app') return 'dashboard';
-    if (path === '/about') return 'about';
-    return 'website';
-  };
-
-  const getContextualResponse = (userMessage: string) => {
-    const currentPage = getCurrentPage();
-    const input = userMessage.toLowerCase();
-    
-    // Handle unrelated questions
-    if (input.includes('weather') || input.includes('news') || input.includes('recipe') || 
-        input.includes('movie') || input.includes('sports') || input.includes('politics') ||
-        input.includes('who owns') || input.includes('founder') || input.includes('ceo')) {
-      return "I'm designed to help with your property management needs. Would you like to see how PropCloud can optimize your rentals?";
-    }
-
-    // Context-aware responses based on current page
-    if (currentPage === 'dashboard') {
-      if (input.includes('cool') || input.includes('nice') || input.includes('impressive') || input.includes('wow')) {
-        return "Thanks! This is a demo dashboard showing simulated metrics: 92% occupancy, $14,800 monthly revenue, and 4.8-star satisfaction. Want us to set this up for your actual listings?";
-      }
-      if (input.includes('how') && (input.includes('work') || input.includes('does'))) {
-        return "This dashboard connects to your property listings and provides real-time AI insights. Want a walkthrough of how we'd customize this for your portfolio?";
-      }
-      if (input.includes('get this') || input.includes('want this') || input.includes('can i') || input.includes('sign up')) {
-        return "Absolutely! Just drop your info and we'll reach out with a custom setup for your properties.";
-      }
-    }
-
-    // General property management responses
-    if (input.includes('properties') || input.includes('rental') || input.includes('airbnb') || input.includes('manage')) {
-      return "Great! PropCloud provides full-service AI property management. How many properties are you currently managing?";
-    }
-
-    if (input.includes('help') || input.includes('support') || input.includes('question')) {
-      return "I'd be happy to help you explore PropCloud's AI property management services. What would you like to know?";
-    }
-    
-    return "Thanks for reaching out! I'm here to help you understand how PropCloud can streamline your property management with AI.";
-  };
-
   const handleSendMessage = () => {
     if (!inputText.trim() || showFlows) return;
 
     addMessage(inputText, false);
-    const response = getContextualResponse(inputText);
+    const userMessage = inputText.toLowerCase();
     setInputText('');
 
-    addBotMessage(response);
-    
-    setTimeout(() => {
-      setShowFlows(true);
-    }, 2000);
+    // Simple responses for general chat
+    if (userMessage.includes('help') || userMessage.includes('support')) {
+      addBotMessage("I'd be happy to help! Would you like to start a new conversation to tell me more about what you need?");
+      setTimeout(() => {
+        setShowFlows(true);
+      }, 2000);
+    } else {
+      addBotMessage("Thanks for your message! Let me help you get connected with the right information.");
+      setTimeout(() => {
+        setShowFlows(true);
+      }, 2000);
+    }
   };
 
   const handleFlowComplete = async (data: FlowData) => {
@@ -199,43 +131,14 @@ export default function ChatBot() {
     }
   };
 
-  const handleIdlePromptClick = () => {
-    setShowIdlePrompt(false);
-    setIsOpen(true);
-    setTimeout(() => {
-      addMessage("Would you like to see how PropCloud can manage your Airbnb with AI?", true);
-    }, 500);
-  };
-
   if (!isVisible) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Idle Prompt - only shows after user engagement */}
-      {showIdlePrompt && !isOpen && (
-        <div className="mb-4 bg-white rounded-xl shadow-lg border border-gray-200 p-3 max-w-xs animate-fade-in">
-          <p className="text-sm text-gray-700 mb-2">Would you like to see how PropCloud can manage your Airbnb with AI?</p>
-          <div className="flex gap-2">
-            <button
-              onClick={handleIdlePromptClick}
-              className="text-xs bg-teal-600 text-white px-3 py-1 rounded-lg hover:bg-teal-700 transition-colors"
-            >
-              Yes, tell me more
-            </button>
-            <button
-              onClick={() => setShowIdlePrompt(false)}
-              className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              Not now
-            </button>
-          </div>
-        </div>
-      )}
-
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 animate-fade-in"
+          className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group"
         >
           <MessageCircle size={24} />
           <div className="absolute -top-2 -right-2 w-4 h-4 bg-teal-400 rounded-full animate-pulse"></div>
@@ -285,9 +188,9 @@ export default function ChatBot() {
             )}
           </div>
 
-          {/* Input - sticky on mobile */}
+          {/* Input */}
           {!showFlows && (
-            <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm sticky bottom-0">
+            <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
               <div className="flex gap-2">
                 <input
                   type="text"

@@ -40,11 +40,11 @@ export default function HeroSection() {
             </span>
           </button>
           <Link
-            to="/app"
+            to="/about"
             className="inline-block rounded-xl border-2 border-slate-300 bg-white/80 backdrop-blur-sm text-slate-700 font-bold px-8 py-4 text-base lg:text-lg hover:bg-white hover:border-teal-300 hover:scale-105 transition-all duration-300 animate-fade-up shadow-lg"
             style={{animationDelay: ".35s", animationFillMode: "both"}}
           >
-            See Sample Dashboard
+            Learn Our Story
           </Link>
         </div>
         

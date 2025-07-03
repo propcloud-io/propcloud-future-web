@@ -20,10 +20,10 @@ export default function MetricCard({
   onClick, 
   clickable = false 
 }: MetricCardProps) {
-  const baseClasses = "bg-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl border border-gray-100 animate-fade-up transition-all duration-300";
+  const baseClasses = "bg-white rounded-2xl p-6 shadow-lg border border-gray-100 animate-fade-up transition-all duration-300";
   const interactiveClasses = clickable 
-    ? "hover:scale-105 cursor-pointer transform active:scale-100" 
-    : "";
+    ? "hover:shadow-xl hover:scale-105 cursor-pointer transform" 
+    : "hover:shadow-xl";
 
   return (
     <div 
@@ -31,20 +31,20 @@ export default function MetricCard({
       style={{ animationDelay: `${delay}s`, animationFillMode: "both" }}
       onClick={clickable ? onClick : undefined}
     >
-      <div className="flex items-start justify-between mb-3 md:mb-4">
-        <div className="p-2 md:p-3 rounded-xl bg-gradient-to-br from-teal-50 to-teal-100 flex-shrink-0">
+      <div className="flex items-start justify-between mb-4">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-teal-50 to-teal-100">
           {icon}
         </div>
         {clickable && (
-          <div className="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
+          <div className="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
             Click for details
           </div>
         )}
       </div>
       <div>
-        <h3 className="text-xs md:text-sm font-medium text-gray-600 mb-1 leading-tight">{label}</h3>
-        <p className="text-xl md:text-2xl font-bold text-gray-900 mb-1 md:mb-2 leading-tight">{value}</p>
-        <p className="text-xs md:text-sm text-gray-500 leading-relaxed">{subtext}</p>
+        <h3 className="text-sm font-medium text-gray-600 mb-1">{label}</h3>
+        <p className="text-2xl font-bold text-gray-900 mb-2">{value}</p>
+        <p className="text-sm text-gray-500">{subtext}</p>
       </div>
     </div>
   );

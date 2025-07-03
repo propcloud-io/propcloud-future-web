@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Send, Bot, User } from 'lucide-react';
 
 interface Message {
@@ -10,14 +10,12 @@ interface Message {
 }
 
 const mockResponses: Record<string, string> = {
-  'occupancy': "Based on the demo data, you're seeing 91% occupancy across 8 properties - that's excellent performance! Our AI analyzes booking patterns to optimize pricing and availability.",
-  'turnovers': "The dashboard shows 5 upcoming turnovers scheduled for cleaning and inspections. PropCloud automates turnover coordination with smart scheduling.",
-  'maintenance': "There are 2 maintenance issues in the demo - our AI prioritizes these by urgency and guest impact, coordinating with your maintenance team automatically.",
-  'revenue': "In this demo, Villa Nova generated $3,420 this month, followed by Ocean View at $2,890. Our AI optimizes pricing across all your properties for maximum revenue.",
-  'performance': "The demo shows you're up 12% compared to last week. PropCloud's AI provides real-time insights to help you understand what's driving performance changes.",
-  'demo': "This is a demo dashboard showing simulated metrics: 92% occupancy, $14,800 monthly revenue across 8 properties, and 4.8-star guest satisfaction. All powered by PropCloud's AI property management system.",
-  'services': "PropCloud provides full-service AI property management - from dynamic pricing and guest communication to maintenance coordination and performance analytics. We handle everything so you can focus on growing your portfolio.",
-  'default': "I'm your PropCloud AI assistant! I can explain the demo metrics, our AI property management services, or help you understand how this dashboard would work with your actual properties."
+  'occupancy': "Your occupancy rate is currently 91% across 8 properties. This is excellent performance!",
+  'turnovers': "There are 5 turnovers scheduled for cleaning and inspections in the coming days.",
+  'maintenance': "There are 2 maintenance issues still being resolved - both are minor and won't affect guest experience.",
+  'revenue': "Villa Nova generated the highest revenue this month with $3,420, followed by Ocean View at $2,890.",
+  'performance': "This week you're up 12% compared to last week, with particularly strong performance from your beachfront properties.",
+  'default': "I can help you understand your property performance. Try asking about occupancy rates, turnovers, maintenance issues, or revenue by property."
 };
 
 export default function ChatAssistant() {
@@ -35,37 +33,11 @@ export default function ChatAssistant() {
   const getResponse = (userInput: string): string => {
     const input = userInput.toLowerCase();
     
-    // Handle contextual responses about the demo
-    if (input.includes('cool') || input.includes('nice') || input.includes('impressive') || input.includes('wow')) {
-      return "Thanks! This demo shows PropCloud's AI in action - 91% occupancy, $14,800 monthly revenue, and 4.8-star satisfaction across 8 properties. Want us to set this up for your actual listings?";
-    }
-    
-    if (input.includes('how') && (input.includes('work') || input.includes('does'))) {
-      return "PropCloud's AI connects to your property listings and provides real-time insights. We handle pricing optimization, guest communication, maintenance coordination, and performance analytics. Want a walkthrough of how we'd customize this for you?";
-    }
-    
-    if (input.includes('get this') || input.includes('want this') || input.includes('can i') || input.includes('sign up')) {
-      return "Absolutely! PropCloud can set this up for your properties. Just submit your interest via our main chatbot and we'll reach out with a custom demo tailored to your portfolio.";
-    }
-
-    if (input.includes('demo') || input.includes('real') || input.includes('fake')) {
-      return mockResponses.demo;
-    }
-
-    if (input.includes('what') && (input.includes('do') || input.includes('service'))) {
-      return mockResponses.services;
-    }
-
-    if (input.includes('summary') || input.includes('explain') || input.includes('overview')) {
-      return "This demo showcases PropCloud's AI property management platform. The metrics simulate real performance: 91% occupancy, $14,800 monthly revenue, 4.8-star guest satisfaction across 8 properties. Our AI handles everything from pricing to guest communication.";
-    }
-    
-    // Specific metric queries
-    if (input.includes('occupancy') || input.includes('booking')) return mockResponses.occupancy;
-    if (input.includes('turnover') || input.includes('cleaning')) return mockResponses.turnovers;
-    if (input.includes('maintenance') || input.includes('issues') || input.includes('repair')) return mockResponses.maintenance;
-    if (input.includes('revenue') || input.includes('money') || input.includes('profit') || input.includes('income')) return mockResponses.revenue;
-    if (input.includes('performance') || input.includes('trend') || input.includes('growth')) return mockResponses.performance;
+    if (input.includes('occupancy')) return mockResponses.occupancy;
+    if (input.includes('turnover')) return mockResponses.turnovers;
+    if (input.includes('maintenance') || input.includes('issues')) return mockResponses.maintenance;
+    if (input.includes('revenue') || input.includes('property') || input.includes('most')) return mockResponses.revenue;
+    if (input.includes('performance') || input.includes('week') || input.includes('compared')) return mockResponses.performance;
     
     return mockResponses.default;
   };
@@ -106,7 +78,7 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col h-80 md:h-96">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col h-96">
       <div className="p-4 border-b border-gray-100">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
           <Bot size={20} className="text-teal-600" />
