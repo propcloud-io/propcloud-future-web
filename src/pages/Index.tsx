@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Testimonials from "@/components/Testimonials";
@@ -6,23 +7,66 @@ import ServicesSection from "@/components/sections/ServicesSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import AISection from "@/components/sections/AISection";
 import ContactSection from "@/components/sections/ContactSection";
+import ScrollProgressBar from "@/components/InteractiveElements/ScrollProgressBar";
+import ParallaxSection from "@/components/InteractiveElements/ParallaxSection";
+import GlowingOrb from "@/components/InteractiveElements/GlowingOrb";
 
 export default function Index() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 flex flex-col font-sans overflow-x-hidden relative">
+      <ScrollProgressBar />
+      
+      {/* Interactive background orbs */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <GlowingOrb 
+          size={300} 
+          color="#14b8a6" 
+          intensity={0.2}
+          className="top-20 -left-20"
+        />
+        <GlowingOrb 
+          size={200} 
+          color="#0f766e" 
+          intensity={0.15}
+          className="top-1/2 -right-20"
+        />
+        <GlowingOrb 
+          size={150} 
+          color="#1e293b" 
+          intensity={0.1}
+          className="bottom-1/4 left-1/4"
+          animate={false}
+        />
+      </div>
+
       <Header />
-      <main>
-        <HeroSection />
-        <ServicesSection />
-        <HowItWorksSection />
-        <AISection />
+      <main className="relative z-10">
+        <ParallaxSection speed={0.2}>
+          <HeroSection />
+        </ParallaxSection>
+        
+        <ParallaxSection speed={0.1}>
+          <ServicesSection />
+        </ParallaxSection>
+        
+        <ParallaxSection speed={0.15}>
+          <HowItWorksSection />
+        </ParallaxSection>
+        
+        <ParallaxSection speed={0.1}>
+          <AISection />
+        </ParallaxSection>
 
         {/* TESTIMONIALS */}
         <section id="testimonials" className="py-16 lg:py-24">
-          <Testimonials />
+          <ParallaxSection speed={0.05}>
+            <Testimonials />
+          </ParallaxSection>
         </section>
 
-        <ContactSection />
+        <ParallaxSection speed={0.1}>
+          <ContactSection />
+        </ParallaxSection>
       </main>
       <Footer />
     </div>
