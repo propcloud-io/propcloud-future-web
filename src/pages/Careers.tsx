@@ -7,6 +7,7 @@ import ParticleBackground from '@/components/ParticleBackground';
 import ScrollProgressBar from '@/components/InteractiveElements/ScrollProgressBar';
 import MagneticButton from '@/components/InteractiveElements/MagneticButton';
 import GlowingOrb from '@/components/InteractiveElements/GlowingOrb';
+import CareersChatBot from '@/components/ChatBot/CareersChatBot';
 import { 
   MapPin,
   Clock,
@@ -36,6 +37,8 @@ interface JobPosition {
 
 export default function Careers() {
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
+  const [isChatBotOpen, setIsChatBotOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<string>('');
 
   useEffect(() => {
     document.title = "Careers | PropCloud - Join Our Mission-Driven Team";
@@ -98,8 +101,14 @@ export default function Careers() {
     document.getElementById('open-positions')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const openChatBot = () => {
-    window.dispatchEvent(new CustomEvent('openChatBot'));
+  const openChatBotForRole = (roleTitle: string) => {
+    setSelectedRole(roleTitle);
+    setIsChatBotOpen(true);
+  };
+
+  const openChatBotGeneral = () => {
+    setSelectedRole('');
+    setIsChatBotOpen(true);
   };
 
   return (
@@ -265,13 +274,13 @@ export default function Careers() {
                             </li>
                           ))}
                         </ul>
-                        <a
-                          href="mailto:contact@propcloud.io?subject=Application for PropCloud Position"
+                        <button
+                          onClick={() => openChatBotForRole(job.title)}
                           className="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500 to-teal-400 text-slate-900 font-bold px-8 py-4 rounded-xl hover:from-teal-400 hover:to-teal-300 transition-all duration-300 hover:scale-105 shadow-lg"
                         >
-                          <Mail size={20} />
+                          <MessageCircle size={20} />
                           Apply Now
-                        </a>
+                        </button>
                       </div>
                     </div>
                   )}
@@ -332,35 +341,30 @@ export default function Careers() {
             <div className="max-w-4xl mx-auto text-center">
               <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 animate-fade-up">
                 <h2 className="text-3xl sm:text-4xl font-bold mb-8">
-                  Don't See the Right Role?
+                  Help us shape the future of intelligent hospitality.
                 </h2>
-                <p className="text-xl text-slate-200 leading-relaxed mb-10">
+                <p className="text-xl text-slate-200 leading-relaxed mb-4">
+                  Excited to apply? Let's get started!
+                </p>
+                <p className="text-lg text-slate-300 leading-relaxed mb-10">
                   We're always open to brilliant people. If you resonate with our mission, 
-                  send us a message at{' '}
-                  <a 
-                    href="mailto:contact@propcloud.io" 
-                    className="text-teal-300 hover:text-teal-200 underline transition-colors duration-300"
-                  >
-                    contact@propcloud.io
-                  </a>
-                  {' '}and tell us how you'd like to help shape the future of PropCloud.
+                  let's connect and discuss how you'd like to help shape the future of PropCloud.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a
-                    href="mailto:contact@propcloud.io?subject=Interest in PropCloud Opportunities"
+                  <button
+                    onClick={openChatBotGeneral}
                     className="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500 to-teal-400 text-slate-900 font-bold px-8 py-4 rounded-xl hover:from-teal-400 hover:to-teal-300 transition-all duration-300 hover:scale-105 shadow-lg"
                   >
-                    <Mail size={20} />
-                    Get in Touch
-                  </a>
-                  <MagneticButton
-                    onClick={openChatBot}
-                    className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300"
-                    magneticStrength={0.1}
-                  >
                     <MessageCircle size={20} />
-                    Chat with Us
-                  </MagneticButton>
+                    Send Application
+                  </button>
+                  <a
+                    href="mailto:contact@propcloud.io?subject=Interest in PropCloud Opportunities"
+                    className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300"
+                  >
+                    <Mail size={20} />
+                    Email Us
+                  </a>
                 </div>
               </div>
             </div>
@@ -369,6 +373,12 @@ export default function Careers() {
       </main>
 
       <Footer />
+      
+      <CareersChatBot 
+        isOpen={isChatBotOpen} 
+        onClose={() => setIsChatBotOpen(false)}
+        initialRole={selectedRole}
+      />
     </div>
   );
 }
