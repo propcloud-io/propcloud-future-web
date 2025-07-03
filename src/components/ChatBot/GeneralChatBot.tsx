@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatMessage, LeadData } from '@/types/chatbot';
 import { validateEmail, sanitizeInput, generateId, delay } from '@/utils/chatbotUtils';
-import { createEnhancedLead, saveEnhancedConversation, testSupabaseConnection, getMockKnowledgeBase } from '@/services/enhancedSupabaseService';
-import { submitLeadToFormspree } from '@/services/formspreeService';
+import { testSupabaseConnection, submitWithFallback, saveConversation, getMockKnowledgeBase } from '@/services/unifiedChatbotService';
 import { useToast } from '@/hooks/use-toast';
 
 interface GeneralChatBotProps {
@@ -56,15 +54,12 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
   };
 
   const initializeBot = async () => {
-    // Test connection
     const connected = await testSupabaseConnection();
     setIsConnected(connected);
     
-    // Load knowledge base
     const kb = await getMockKnowledgeBase();
     setKnowledgeBase(kb);
     
-    // Add welcome message
     await delay(500);
     addBotMessage("Hi! I'm your PropCloud assistant. I can help with property management. How can I assist you today?");
   };
@@ -80,14 +75,12 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     
     setMessages(prev => [...prev, message]);
     
-    // Save to conversations
     if (!isTyping) {
-      await saveEnhancedConversation(text, !isBot, 'website');
+      await saveConversation(text, !isBot, 'website');
     }
   };
 
   const addBotMessage = async (text: string) => {
-    // Add typing indicator
     const typingId = generateId();
     setMessages(prev => [...prev, {
       id: typingId,
@@ -99,7 +92,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     
     await delay(1000 + Math.random() * 1000); // Realistic typing delay
     
-    // Remove typing indicator and add real message
     setMessages(prev => prev.filter(msg => msg.id !== typingId));
     await addMessage(text, true);
   };
@@ -119,7 +111,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     const lowerQuery = query.toLowerCase();
     let response = '';
     
-    // Intelligent responses based on query
     if (lowerQuery.includes('how') && lowerQuery.includes('work')) {
       response = knowledgeBase.process || "Our AI handles guest communication, pricing optimization, and maintenance coordination automatically.";
     } else if (lowerQuery.includes('pricing') || lowerQuery.includes('cost') || lowerQuery.includes('price')) {
@@ -138,11 +129,9 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     
     await addBotMessage(response);
     
-    // Suggest starting form after any query
     setTimeout(async () => {
       await addBotMessage("Would you like to start a quick property assessment? It only takes 2 minutes and I can show you exactly how PropCloud would work for your portfolio.");
       
-      // Add quick action buttons
       setTimeout(() => {
         setMessages(prev => [...prev, {
           id: generateId(),
@@ -157,7 +146,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
   const handleFormInput = async (input: string) => {
     const currentField = formSteps[currentStep];
     
-    // Validate input
     if (currentField.field === 'email' && !validateEmail(input)) {
       await addBotMessage("Please enter a valid email address.");
       return;
@@ -168,13 +156,11 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
       return;
     }
     
-    // Save form data
     setFormData(prev => ({
       ...prev,
       [currentField.field]: currentField.field === 'platforms' ? input.split(',').map(p => p.trim()) : input
     }));
     
-    // Move to next step or complete
     if (currentStep < formSteps.length - 1) {
       setCurrentStep(currentStep + 1);
       await delay(500);
@@ -190,26 +176,11 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     
     try {
       const leadData = formData as LeadData;
+      console.log('🚀 Submitting lead data:', leadData);
       
-      // Primary submission to Supabase
-      let supabaseSuccess = false;
-      let leadId = null;
+      const result = await submitWithFallback(leadData, 'lead');
       
-      if (isConnected) {
-        try {
-          const lead = await createEnhancedLead(leadData);
-          leadId = lead.id;
-          supabaseSuccess = true;
-          console.log('✅ Supabase submission successful');
-        } catch (supabaseError) {
-          console.error('❌ Supabase submission failed:', supabaseError);
-        }
-      }
-      
-      // Backup submission to Formspree
-      const formspreeSuccess = await submitLeadToFormspree(leadData);
-      
-      if (supabaseSuccess || formspreeSuccess) {
+      if (result.success) {
         await addBotMessage(`Perfect! Thank you, ${leadData.name}. I've recorded your information about your ${leadData.numberOfProperties} properties in ${leadData.locations}.`);
         
         await delay(1500);
@@ -217,7 +188,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
         
         toast({
           title: "Success!",
-          description: "Your information has been submitted successfully.",
+          description: `Your information has been submitted successfully via ${result.method}.`,
         });
       } else {
         throw new Error('Both Supabase and Formspree submissions failed');
@@ -274,7 +245,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/60 w-full max-w-md h-96 flex flex-col overflow-hidden">
-        {/* Header */}
         <div className="bg-gradient-to-r from-slate-700 via-propcloud-600 to-teal-500 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -296,7 +266,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
           </button>
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-br from-slate-50/50 to-teal-50/30">
           {messages.map((message) => (
             <div key={message.id}>
@@ -336,7 +305,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
         <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
           <div className="flex gap-2">
             <input
