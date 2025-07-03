@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { createLead, createProperty, saveConversation } from '@/services/supabaseService';
 
 export interface FlowData {
   flowType: 'waitlist' | 'management' | 'connect';
@@ -29,16 +29,40 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
   const [selectedFlow, setSelectedFlow] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<Partial<FlowData>>({});
+  const [leadId, setLeadId] = useState<string | null>(null);
 
-  const handleFlowSelection = (flowType: 'waitlist' | 'management' | 'connect') => {
+  const handleFlowSelection = async (flowType: 'waitlist' | 'management' | 'connect') => {
     setSelectedFlow(flowType);
     setFormData({ flowType });
     setStep(1);
+
+    // Save initial conversation
+    try {
+      await saveConversation({
+        message: `User selected flow: ${flowType}`,
+        is_from_user: true,
+        page_context: 'general_website',
+      });
+    } catch (error) {
+      console.error('Error saving flow selection:', error);
+    }
   };
 
-  const handleInputSubmit = (key: string, value: string) => {
+  const handleInputSubmit = async (key: string, value: string) => {
     const newData = { ...formData, [key]: value };
     setFormData(newData);
+
+    // Save conversation message
+    try {
+      await saveConversation({
+        message: `${key}: ${value}`,
+        is_from_user: true,
+        page_context: 'general_website',
+        lead_id: leadId || undefined,
+      });
+    } catch (error) {
+      console.error('Error saving conversation:', error);
+    }
 
     const flows = {
       waitlist: ['name', 'email', 'city', 'currentlyManaging', 'aiExcitement'],
@@ -51,7 +75,59 @@ export function ConversationFlows({ onFlowComplete }: ConversationFlowsProps) {
     if (step < currentFlow.length) {
       setStep(step + 1);
     } else {
-      onFlowComplete(newData as FlowData);
+      await handleFlowCompletion(newData as FlowData);
+    }
+  };
+
+  const handleFlowCompletion = async (data: FlowData) => {
+    try {
+      // Create lead in Supabase
+      const leadData: any = {
+        name: data.name!,
+        email: data.email!,
+        source: 'website_chatbot',
+      };
+
+      if (data.flowType === 'waitlist') {
+        leadData.location = data.city;
+        leadData.message = `AI Waitlist: Currently managing: ${data.currentlyManaging}, Excitement: ${data.aiExcitement}`;
+      } else if (data.flowType === 'management') {
+        leadData.location = data.location;
+        leadData.number_of_properties = data.propertyCount ? parseInt(data.propertyCount) : null;
+        leadData.message = `Property Management: ${data.managementType}`;
+        leadData.property_type = 'rental'; // Default assumption
+      } else if (data.flowType === 'connect') {
+        leadData.message = data.helpMessage;
+      }
+
+      const createdLead = await createLead(leadData);
+      setLeadId(createdLead.id);
+
+      // If management flow and has property details, create property record
+      if (data.flowType === 'management' && data.location && data.propertyCount) {
+        const propertyCount = parseInt(data.propertyCount) || 1;
+        for (let i = 0; i < Math.min(propertyCount, 5); i++) { // Limit to 5 properties
+          await createProperty({
+            name: `Property ${i + 1}`,
+            lead_id: createdLead.id,
+            city: data.location,
+            property_type: 'rental',
+          });
+        }
+      }
+
+      // Save completion conversation
+      await saveConversation({
+        message: `Flow completed: ${data.flowType}`,
+        is_from_user: false,
+        page_context: 'general_website',
+        lead_id: createdLead.id,
+      });
+
+      onFlowComplete(data);
+    } catch (error) {
+      console.error('Error completing flow:', error);
+      onFlowComplete(data); // Still complete the flow for user experience
     }
   };
 

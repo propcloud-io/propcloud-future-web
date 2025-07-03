@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Send, Bot, User } from 'lucide-react';
+import { getDashboardProperties, getDashboardReports, saveConversation } from '@/services/supabaseService';
 
 interface Message {
   id: string;
@@ -8,24 +9,6 @@ interface Message {
   sender: 'user' | 'assistant';
   timestamp: Date;
 }
-
-// Mock property data (simulating real dashboard data)
-const mockPropertyData = {
-  properties: [
-    { name: 'Villa Nova', revenue: 3420, occupancy: 95, maintenanceIssues: 0, nextCheckIn: '2025-01-08', status: 'excellent' },
-    { name: 'Ocean View', revenue: 2890, occupancy: 88, maintenanceIssues: 1, nextCheckIn: '2025-01-09', status: 'good' },
-    { name: 'Sunset Cottage', revenue: 1850, occupancy: 78, maintenanceIssues: 0, nextCheckIn: '2025-01-10', status: 'underperforming' },
-    { name: 'Mountain Retreat', revenue: 2340, occupancy: 85, maintenanceIssues: 0, nextCheckIn: '2025-01-11', status: 'good' },
-    { name: 'Beach House', revenue: 2100, occupancy: 82, maintenanceIssues: 1, nextCheckIn: '2025-01-12', status: 'good' },
-    { name: 'City Loft', revenue: 1950, occupancy: 80, maintenanceIssues: 0, nextCheckIn: '2025-01-13', status: 'fair' },
-    { name: 'Garden Suite', revenue: 1740, occupancy: 75, maintenanceIssues: 0, nextCheckIn: '2025-01-14', status: 'fair' },
-    { name: 'Lakeside Cabin', revenue: 1620, occupancy: 72, maintenanceIssues: 0, nextCheckIn: '2025-01-15', status: 'underperforming' }
-  ],
-  totalRevenue: 17910,
-  averageOccupancy: 81.9,
-  totalMaintenanceIssues: 2,
-  upcomingTurnovers: 5
-};
 
 export default function ChatAssistant() {
   const [messages, setMessages] = useState<Message[]>([
@@ -38,87 +21,93 @@ export default function ChatAssistant() {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [properties, setProperties] = useState<any[]>([]);
+  const [reports, setReports] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Load real data from Supabase
+    const loadDashboardData = async () => {
+      try {
+        const [propertiesData, reportsData] = await Promise.all([
+          getDashboardProperties(),
+          getDashboardReports()
+        ]);
+        setProperties(propertiesData);
+        setReports(reportsData);
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
 
   const analyzeUserIntent = (input: string): string => {
     const lowerInput = input.toLowerCase();
     
+    // If no real data, use fallback responses
+    if (properties.length === 0 || reports.length === 0) {
+      if (lowerInput.includes('submit interest') || lowerInput.includes('get started')) {
+        return "Great! I'll connect you with our team to set up your property management dashboard. This will give you real-time insights for your properties.";
+      }
+      return "I don't have any property data loaded yet. This dashboard shows performance metrics when connected to real properties. Would you like to submit interest to get this set up for your properties?";
+    }
+
     // Property comparison queries
     if (lowerInput.includes('which') && (lowerInput.includes('better') || lowerInput.includes('best') || lowerInput.includes('top'))) {
-      const topProperty = mockPropertyData.properties.reduce((prev, current) => 
-        prev.revenue > current.revenue ? prev : current
-      );
-      return `Your top performing property is ${topProperty.name} with $${topProperty.revenue.toLocaleString()} in revenue this month and ${topProperty.occupancy}% occupancy rate. It's significantly outperforming your portfolio average.`;
+      if (reports.length > 0) {
+        const topProperty = reports.reduce((prev, current) => 
+          (prev.revenue || 0) > (current.revenue || 0) ? prev : current
+        );
+        return `Based on the latest reports, the top performing property has generated $${(topProperty.revenue || 0).toLocaleString()} in revenue with ${(topProperty.occupancy_rate || 0).toFixed(1)}% occupancy rate.`;
+      }
     }
 
     // Revenue-focused queries
     if (lowerInput.includes('most money') || lowerInput.includes('highest revenue') || lowerInput.includes('who made')) {
-      const topEarner = mockPropertyData.properties.reduce((prev, current) => 
-        prev.revenue > current.revenue ? prev : current
-      );
-      return `${topEarner.name} generated the most revenue this month at $${topEarner.revenue.toLocaleString()}, followed by ${mockPropertyData.properties.sort((a, b) => b.revenue - a.revenue)[1].name} at $${mockPropertyData.properties.sort((a, b) => b.revenue - a.revenue)[1].revenue.toLocaleString()}.`;
-    }
-
-    // Specific property queries
-    const mentionedProperty = mockPropertyData.properties.find(prop => 
-      lowerInput.includes(prop.name.toLowerCase())
-    );
-    if (mentionedProperty) {
-      return `${mentionedProperty.name} has generated $${mentionedProperty.revenue.toLocaleString()} this month with ${mentionedProperty.occupancy}% occupancy. ${mentionedProperty.maintenanceIssues > 0 ? `There's ${mentionedProperty.maintenanceIssues} maintenance issue to address.` : 'No maintenance issues currently.'} Next check-in is ${mentionedProperty.nextCheckIn}.`;
+      if (reports.length > 0) {
+        const sortedReports = reports.sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
+        const topEarner = sortedReports[0];
+        const secondEarner = sortedReports[1];
+        return `The highest revenue this month was $${(topEarner.revenue || 0).toLocaleString()}${secondEarner ? `, followed by $${(secondEarner.revenue || 0).toLocaleString()}` : ''}.`;
+      }
     }
 
     // Average occupancy queries
     if (lowerInput.includes('average occupancy') || lowerInput.includes('overall occupancy')) {
-      const avgOccupancy = Math.round(mockPropertyData.properties.reduce((sum, prop) => sum + prop.occupancy, 0) / mockPropertyData.properties.length);
-      return `Your portfolio average occupancy is ${avgOccupancy}%. Villa Nova leads at 95%, while Lakeside Cabin needs attention at 72%. The industry benchmark is typically 75-85%.`;
+      if (reports.length > 0) {
+        const avgOccupancy = reports.reduce((sum, report) => sum + (report.occupancy_rate || 0), 0) / reports.length;
+        return `Your portfolio average occupancy is ${avgOccupancy.toFixed(1)}%. The industry benchmark is typically 75-85%.`;
+      }
     }
 
     // Maintenance queries
     if (lowerInput.includes('maintenance') || lowerInput.includes('issues') || lowerInput.includes('repairs')) {
-      const propertiesWithIssues = mockPropertyData.properties.filter(prop => prop.maintenanceIssues > 0);
-      if (propertiesWithIssues.length === 0) {
-        return "Great news! No maintenance issues currently reported across your portfolio. All properties are in good condition.";
+      if (reports.length > 0) {
+        const totalIssues = reports.reduce((sum, report) => sum + (report.maintenance_issues || 0), 0);
+        if (totalIssues === 0) {
+          return "Great news! No maintenance issues currently reported across your portfolio. All properties are in good condition.";
+        }
+        return `You have ${totalIssues} maintenance issues reported across your properties. These should be prioritized for resolution.`;
       }
-      return `You have ${mockPropertyData.totalMaintenanceIssues} maintenance issues: ${propertiesWithIssues.map(prop => prop.name).join(' and ')} each have minor issues that need attention. These are flagged as non-urgent.`;
-    }
-
-    // Check-in/booking queries
-    if (lowerInput.includes('next check') || lowerInput.includes('upcoming') || lowerInput.includes('booking')) {
-      const nextProperty = mockPropertyData.properties.sort((a, b) => new Date(a.nextCheckIn).getTime() - new Date(b.nextCheckIn).getTime())[0];
-      return `Your next check-in is at ${nextProperty.name} on ${nextProperty.nextCheckIn}. You have ${mockPropertyData.upcomingTurnovers} turnovers scheduled for cleaning and preparation this week.`;
-    }
-
-    // Underperforming queries
-    if (lowerInput.includes('underperform') || lowerInput.includes('worst') || lowerInput.includes('lowest') || lowerInput.includes('struggling')) {
-      const underPerforming = mockPropertyData.properties.filter(prop => prop.occupancy < 80).sort((a, b) => a.occupancy - b.occupancy);
-      if (underPerforming.length === 0) {
-        return "All your properties are performing well! No properties are currently underperforming based on occupancy metrics.";
-      }
-      return `${underPerforming[0].name} needs attention with only ${underPerforming[0].occupancy}% occupancy and $${underPerforming[0].revenue.toLocaleString()} revenue. Consider reviewing pricing strategy or listing optimization.`;
-    }
-
-    // Total/summary queries
-    if (lowerInput.includes('total') && lowerInput.includes('revenue')) {
-      return `Your total portfolio revenue this month is $${mockPropertyData.totalRevenue.toLocaleString()}. That's ${mockPropertyData.totalRevenue > 15000 ? 'excellent performance' : 'solid performance'} across ${mockPropertyData.properties.length} properties.`;
-    }
-
-    // Compliments and positive feedback
-    if (lowerInput.includes('great') || lowerInput.includes('thanks') || lowerInput.includes('good') || lowerInput.includes('awesome')) {
-      return "Thank you! I'm glad the insights are helpful. Your portfolio is performing well overall. Let me know if you need any specific analysis.";
-    }
-
-    // How it works queries
-    if (lowerInput.includes('how') && (lowerInput.includes('work') || lowerInput.includes('dashboard'))) {
-      return "This dashboard is powered by PropCloud's AI management system, showing live performance data from your properties. I analyze booking patterns, revenue trends, and operational metrics to give you actionable insights in real-time.";
     }
 
     // Portfolio overview
     if (lowerInput.includes('overview') || lowerInput.includes('summary') || lowerInput.includes('status')) {
-      const topPerformer = mockPropertyData.properties.reduce((prev, current) => prev.revenue > current.revenue ? prev : current);
-      return `Portfolio Overview: Managing ${mockPropertyData.properties.length} properties with $${mockPropertyData.totalRevenue.toLocaleString()} total revenue and ${Math.round(mockPropertyData.averageOccupancy)}% average occupancy. ${topPerformer.name} is your star performer. ${mockPropertyData.totalMaintenanceIssues} minor maintenance items to address.`;
+      const totalRevenue = reports.reduce((sum, report) => sum + (report.revenue || 0), 0);
+      const avgOccupancy = reports.length > 0 ? reports.reduce((sum, report) => sum + (report.occupancy_rate || 0), 0) / reports.length : 0;
+      const totalMaintenance = reports.reduce((sum, report) => sum + (report.maintenance_issues || 0), 0);
+      
+      return `Portfolio Overview: Managing ${properties.length} properties with $${totalRevenue.toLocaleString()} total revenue and ${avgOccupancy.toFixed(1)}% average occupancy. ${totalMaintenance} maintenance items to address.`;
+    }
+
+    // Submit interest
+    if (lowerInput.includes('submit interest') || lowerInput.includes('get started') || lowerInput.includes('sign up')) {
+      return "Excellent! I'll help you get started with PropCloud's property management system. This dashboard shows the kind of insights you'll get for your properties. Would you like me to connect you with our team?";
     }
 
     // Default intelligent response
-    return "I can help you analyze your property performance data. Try asking about revenue comparisons, occupancy rates, maintenance issues, or specific properties by name. What would you like to explore?";
+    return `I can help you analyze your property performance data. You have ${properties.length} properties and ${reports.length} performance reports to review. Try asking about revenue comparisons, occupancy rates, maintenance issues, or say "submit interest" to get this set up for your properties.`;
   };
 
   const sendMessage = async () => {
@@ -136,17 +125,41 @@ export default function ChatAssistant() {
     setInputValue('');
     setIsTyping(true);
 
+    // Save conversation to Supabase
+    try {
+      await saveConversation({
+        message: currentInput,
+        is_from_user: true,
+        page_context: 'dashboard',
+      });
+    } catch (error) {
+      console.error('Error saving user message:', error);
+    }
+
     // Simulate thinking time
-    setTimeout(() => {
+    setTimeout(async () => {
+      const responseText = analyzeUserIntent(currentInput);
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: analyzeUserIntent(currentInput),
+        text: responseText,
         sender: 'assistant',
         timestamp: new Date()
       };
       
       setMessages(prev => [...prev, assistantMessage]);
       setIsTyping(false);
+
+      // Save assistant response
+      try {
+        await saveConversation({
+          message: responseText,
+          is_from_user: false,
+          page_context: 'dashboard',
+        });
+      } catch (error) {
+        console.error('Error saving assistant message:', error);
+      }
     }, 1200);
   };
 

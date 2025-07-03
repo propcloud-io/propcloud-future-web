@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X, Send, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { createJobApplication, saveConversation } from '@/services/supabaseService';
 import { 
   sanitizeText, 
   validateFile, 
@@ -82,7 +82,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     }
   }, [initialRole]);
 
-  const addMessage = (text: string, isBot: boolean) => {
+  const addMessage = async (text: string, isBot: boolean) => {
     // Sanitize message text to prevent XSS
     const sanitizedText = sanitizeText(text);
     
@@ -93,6 +93,17 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
       timestamp: new Date()
     };
     setMessages(prev => [...prev, newMessage]);
+
+    // Save conversation to Supabase
+    try {
+      await saveConversation({
+        message: sanitizedText,
+        is_from_user: !isBot,
+        page_context: 'careers_page',
+      });
+    } catch (error) {
+      console.error('Error saving conversation:', error);
+    }
   };
 
   const addBotMessage = (text: string) => {
@@ -183,6 +194,17 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
     addBotMessage("Submitting your application...");
 
     try {
+      // Save to Supabase first
+      await createJobApplication({
+        name: sanitizeText(applicationData.fullName),
+        email: sanitizeText(applicationData.email),
+        role_applied: sanitizeText(applicationData.role),
+        motivation: sanitizeText(applicationData.motivation),
+        linkedin_url: applicationData.linkedinPortfolio ? sanitizeText(applicationData.linkedinPortfolio) : null,
+        source: 'careers_chatbot',
+      });
+
+      // Also send to Formspree as backup
       const formData = new FormData();
       formData.append('name', sanitizeText(applicationData.fullName));
       formData.append('email', sanitizeText(applicationData.email));
@@ -195,7 +217,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         formData.append('resume', applicationData.resume);
       }
 
-      const response = await fetch('https://formspree.io/f/mwpbzboq', {
+      await fetch('https://formspree.io/f/mwpbzboq', {
         method: 'POST',
         body: formData,
         headers: {
@@ -203,13 +225,9 @@ export default function CareersChatBot({ isOpen, onClose, initialRole = '' }: Ca
         }
       });
 
-      if (response.ok) {
-        setTimeout(() => {
-          addBotMessage("Thank you! We've received your application. Our team will be in touch if there's a fit. 🎉");
-        }, 1000);
-      } else {
-        throw new Error('Submission failed');
-      }
+      setTimeout(() => {
+        addBotMessage("Thank you! We've received your application. Our team will be in touch if there's a fit. 🎉");
+      }, 1000);
     } catch (error) {
       console.error('Application submission error:', error);
       setTimeout(() => {
