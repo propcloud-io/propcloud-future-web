@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 interface AdvancedParticlesProps {
@@ -77,11 +76,12 @@ export default function AdvancedParticles({
   };
 
   const getParticleColor = (particle: Particle, colorScheme: string) => {
+    // Only white, teal, and dark blue colors
     const colors = {
-      blue: ['rgba(59, 130, 246, 0.3)', 'rgba(37, 99, 235, 0.2)', 'rgba(29, 78, 216, 0.15)'],
-      teal: ['rgba(20, 184, 166, 0.3)', 'rgba(13, 148, 136, 0.2)', 'rgba(15, 118, 110, 0.15)'],
-      gradient: ['rgba(71, 85, 105, 0.2)', 'rgba(100, 116, 139, 0.15)', 'rgba(148, 163, 184, 0.1)'],
-      purple: ['rgba(147, 51, 234, 0.3)', 'rgba(126, 34, 206, 0.2)', 'rgba(107, 33, 168, 0.15)']
+      blue: ['rgba(15, 23, 42, 0.3)', 'rgba(30, 41, 59, 0.2)', 'rgba(51, 65, 85, 0.15)'], // Dark blue variants
+      teal: ['rgba(20, 184, 166, 0.3)', 'rgba(13, 148, 136, 0.2)', 'rgba(15, 118, 110, 0.15)'], // Teal variants
+      gradient: ['rgba(255, 255, 255, 0.2)', 'rgba(20, 184, 166, 0.15)', 'rgba(15, 23, 42, 0.1)'], // White to teal to dark blue
+      purple: ['rgba(20, 184, 166, 0.3)', 'rgba(255, 255, 255, 0.2)', 'rgba(15, 23, 42, 0.15)'] // Using teal instead of purple
     };
     
     const colorArray = colors[colorScheme as keyof typeof colors] || colors.gradient;

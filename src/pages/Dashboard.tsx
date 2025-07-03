@@ -63,32 +63,32 @@ export default function Dashboard() {
       <Header />
       
       <main className="flex-1 pt-24 pb-32 relative">
-        {/* Premium background system */}
+        {/* Simplified background system with consistent colors */}
         <div className="fixed inset-0 pointer-events-none z-0">
           <AnimatedGradient variant="dark" intensity="medium" />
-          <AdvancedParticles density="dense" color="gradient" className="opacity-40" />
-          <FloatingGeometry variant="mixed" className="opacity-30" />
+          <AdvancedParticles density="dense" color="gradient" className="opacity-30" />
+          <FloatingGeometry variant="mixed" className="opacity-20" />
           
-          {/* Dynamic light rays */}
-          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-teal-400/20 to-transparent" />
-          <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-blue-400/20 to-transparent" />
+          {/* Consistent light rays - only teal and dark blue */}
+          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-teal-400/15 to-transparent" />
+          <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-slate-700/15 to-transparent" />
           
-          {/* Floating orbs with enhanced design */}
-          <div className="absolute top-1/4 left-1/6 w-40 h-40 bg-gradient-to-r from-teal-400/30 to-blue-400/30 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/6 w-32 h-32 bg-gradient-to-r from-purple-400/30 to-pink-400/30 rounded-full blur-2xl animate-bounce" style={{animationDuration: '4s'}} />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-r from-orange-400/30 to-yellow-400/30 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
+          {/* Simplified floating elements with consistent colors */}
+          <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-r from-teal-500/20 to-slate-900/15 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/6 w-24 h-24 bg-gradient-to-r from-slate-900/20 to-teal-400/15 rounded-full blur-2xl animate-bounce" style={{animationDuration: '4s'}} />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-r from-white/10 to-teal-500/15 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
         </div>
 
-        {/* Neural network pattern overlay */}
-        <div className="absolute inset-0 opacity-10 z-0">
+        {/* Simplified neural network pattern with consistent colors */}
+        <div className="absolute inset-0 opacity-5 z-0">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="neural-network" width="100" height="100" patternUnits="userSpaceOnUse">
-                <circle cx="50" cy="50" r="3" fill="#14b8a6" opacity="0.6"/>
-                <circle cx="25" cy="25" r="2" fill="#3b82f6" opacity="0.5"/>
-                <circle cx="75" cy="75" r="2" fill="#8b5cf6" opacity="0.5"/>
-                <line x1="25" y1="25" x2="50" y2="50" stroke="#14b8a6" strokeWidth="0.5" opacity="0.3"/>
-                <line x1="50" y1="50" x2="75" y2="75" stroke="#3b82f6" strokeWidth="0.5" opacity="0.3"/>
+                <circle cx="50" cy="50" r="3" fill="#14b8a6" opacity="0.4"/>
+                <circle cx="25" cy="25" r="2" fill="#0f172a" opacity="0.3"/>
+                <circle cx="75" cy="75" r="2" fill="#ffffff" opacity="0.2"/>
+                <line x1="25" y1="25" x2="50" y2="50" stroke="#14b8a6" strokeWidth="0.5" opacity="0.2"/>
+                <line x1="50" y1="50" x2="75" y2="75" stroke="#0f172a" strokeWidth="0.5" opacity="0.2"/>
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#neural-network)" />
@@ -99,10 +99,10 @@ export default function Dashboard() {
           {/* Enhanced page header */}
           <div className="mb-12 text-center relative">
             <GlassMorphCard variant="dark" className="p-12 max-w-4xl mx-auto">
-              <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-r from-teal-400 to-blue-400 rounded-full flex items-center justify-center animate-pulse">
+              <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-r from-teal-500 to-slate-700 rounded-full flex items-center justify-center animate-pulse">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-teal-300 to-blue-300 bg-clip-text text-transparent mb-6 animate-fade-up">
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-teal-300 to-slate-300 bg-clip-text text-transparent mb-6 animate-fade-up">
                 Performance Overview
               </h1>
               <p className="text-white/80 text-xl animate-fade-up leading-relaxed" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
@@ -127,7 +127,7 @@ export default function Dashboard() {
             
             <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.1s'}}>
               <MetricCard
-                icon={<DollarSign size={24} className="text-emerald-400" />}
+                icon={<DollarSign size={24} className="text-teal-400" />}
                 label="Monthly Revenue"
                 value="$14,800"
                 subtext="Revenue this month"
@@ -138,7 +138,7 @@ export default function Dashboard() {
             
             <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.2s'}}>
               <MetricCard
-                icon={<Users size={24} className="text-blue-400" />}
+                icon={<Users size={24} className="text-slate-600" />}
                 label="Occupancy Rate"
                 value="91%"
                 subtext="Across all units"
@@ -149,7 +149,7 @@ export default function Dashboard() {
             
             <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.3s'}}>
               <MetricCard
-                icon={<Star size={24} className="text-yellow-400" />}
+                icon={<Star size={24} className="text-teal-400" />}
                 label="Guest Satisfaction"
                 value="4.8 / 5 ⭐"
                 subtext="Based on guest feedback"
@@ -159,7 +159,7 @@ export default function Dashboard() {
             
             <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.4s'}}>
               <MetricCard
-                icon={<Calendar size={24} className="text-purple-400" />}
+                icon={<Calendar size={24} className="text-slate-600" />}
                 label="Upcoming Turnovers"
                 value="5 Turnovers"
                 subtext="Scheduled cleanings"
@@ -171,7 +171,7 @@ export default function Dashboard() {
             
             <div className="transform hover:scale-105 transition-all duration-300 relative" style={{animationDelay: '0.5s'}}>
               <MetricCard
-                icon={<Wrench size={24} className="text-orange-400" />}
+                icon={<Wrench size={24} className="text-teal-400" />}
                 label="Open Maintenance Issues"
                 value="2 Issues"
                 subtext="Pending resolution"
@@ -189,7 +189,7 @@ export default function Dashboard() {
               className="p-10 overflow-hidden"
             >
               <div className="flex items-center gap-6 mb-10 relative z-10">
-                <div className="p-5 rounded-2xl bg-gradient-to-br from-teal-500/20 to-blue-500/20 shadow-xl backdrop-blur-sm border border-white/10">
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-teal-500/20 to-slate-900/20 shadow-xl backdrop-blur-sm border border-teal-400/20">
                   <TrendingUp size={32} className="text-teal-300" />
                 </div>
                 <div>
@@ -212,14 +212,14 @@ export default function Dashboard() {
             className="p-12 text-center overflow-hidden mb-20"
           >
             <div className="relative z-10">
-              <h3 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white via-teal-300 to-blue-300 bg-clip-text text-transparent">
+              <h3 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white via-teal-300 to-slate-300 bg-clip-text text-transparent">
                 Want to see your data here?
               </h3>
               <p className="text-xl md:text-2xl mb-10 text-white/80 max-w-2xl mx-auto leading-relaxed">
                 Get this dashboard for your properties and start maximizing your revenue with AI-powered insights.
               </p>
               <MagneticButton
-                className="inline-block rounded-2xl bg-gradient-to-r from-teal-500 via-blue-500 to-purple-500 text-white font-bold px-12 py-6 text-xl shadow-2xl hover:shadow-3xl backdrop-blur-sm"
+                className="inline-block rounded-2xl bg-gradient-to-r from-teal-500 to-slate-700 text-white font-bold px-12 py-6 text-xl shadow-2xl hover:shadow-3xl backdrop-blur-sm"
                 onClick={openChatBot}
                 magneticStrength={0.2}
               >
