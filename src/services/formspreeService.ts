@@ -52,7 +52,7 @@ export const submitLeadToFormspree = async (leadData: LeadData): Promise<boolean
     timestamp: new Date().toISOString()
   };
 
-  return submitToFormspree('https://formspree.io/f/xnqepwqz', formspreeData);
+  return submitToFormspree('https://formspree.io/f/mblyajdg', formspreeData);
 };
 
 export const submitJobApplicationToFormspree = async (appData: JobApplicationData): Promise<boolean> => {
