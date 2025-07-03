@@ -37,6 +37,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -54,6 +55,13 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
       setFormData(prev => ({ ...prev, role: initialRole }));
     }
   }, [initialRole, isInForm]);
+
+  // Focus input when component mounts or becomes visible
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen, messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -101,6 +109,13 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
     
     setMessages(prev => prev.filter(msg => msg.id !== typingId));
     await addMessage(text, true);
+    
+    // Refocus input after bot message
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
   };
 
   const handleUserMessage = async (message: string) => {
@@ -265,6 +280,7 @@ export default function CareersChatBot({ isOpen, onClose, initialRole }: Careers
         <div className="p-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
           <div className="flex gap-2">
             <input
+              ref={inputRef}
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}

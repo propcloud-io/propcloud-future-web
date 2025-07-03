@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { LeadData, JobApplicationData } from '@/types/chatbot';
 import { submitToFormspree } from '@/services/formspreeService';
@@ -37,19 +38,21 @@ export async function testSupabaseConnection(): Promise<boolean> {
   }
 }
 
-// Create lead with proper field mapping and improved error handling
+// Create lead with corrected field mapping
 export async function createLead(leadData: LeadData): Promise<any> {
   console.log('💾 Creating lead with data:', leadData);
   
   try {
-    // Map the interface fields to database fields correctly
+    // Correct field mapping to match database schema
     const leadRecord = {
       name: leadData.name,
       email: leadData.email,
-      location: leadData.locations, // Map locations to location field
+      location: leadData.locations, // Fixed: locations -> location
       message: leadData.additionalNotes || '',
       number_of_properties: parseInt(leadData.numberOfProperties) || 1,
-      platform_usage: leadData.platforms || [],
+      platform_usage: Array.isArray(leadData.platforms) ? leadData.platforms : 
+                     typeof leadData.platforms === 'string' ? leadData.platforms.split(',').map(p => p.trim()) : 
+                     [],
       source: 'website_chatbot'
     };
 
@@ -173,7 +176,7 @@ export async function saveConversation(message: string, isFromUser: boolean, sou
   }
 }
 
-// Get dashboard data
+// Get dashboard data with correct service calls
 export async function getDashboardData(): Promise<{ properties: any[], reports: any[] }> {
   try {
     console.log('📊 Fetching dashboard data...');
@@ -185,10 +188,12 @@ export async function getDashboardData(): Promise<{ properties: any[], reports: 
     
     if (propertiesResult.error) {
       console.error('❌ Properties fetch error:', propertiesResult.error);
+      throw propertiesResult.error;
     }
     
     if (reportsResult.error) {
       console.error('❌ Reports fetch error:', reportsResult.error);
+      throw reportsResult.error;
     }
     
     const properties = propertiesResult.data || [];
@@ -199,11 +204,11 @@ export async function getDashboardData(): Promise<{ properties: any[], reports: 
     return { properties, reports };
   } catch (error) {
     console.error('❌ Dashboard data fetch failed:', error);
-    return { properties: [], reports: [] };
+    throw error;
   }
 }
 
-// Unified submission function with retry logic and better error handling
+// Unified submission function with simplified error handling
 export async function submitWithFallback(
   data: LeadData | JobApplicationData, 
   type: 'lead' | 'job_application'

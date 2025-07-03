@@ -12,7 +12,7 @@ import AdvancedParticles from '@/components/InteractiveElements/AdvancedParticle
 import FloatingGeometry from '@/components/InteractiveElements/FloatingGeometry';
 import AnimatedGradient from '@/components/InteractiveElements/AnimatedGradient';
 import GlassMorphCard from '@/components/InteractiveElements/GlassMorphCard';
-import { getDashboardProperties, getDashboardReports, testSupabaseConnection, addSampleData } from '@/services/supabaseService';
+import { testSupabaseConnection, getDashboardData } from '@/services/unifiedChatbotService';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Home, 
@@ -30,6 +30,7 @@ import EnhancedChatAssistant from '@/components/Dashboard/EnhancedChatAssistant'
 
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
+// Comprehensive mock data for fallback
 const mockProperties = [
   {
     id: '1',
@@ -125,30 +126,6 @@ const mockReports = [
     number_of_bookings: 11,
     notes: 'Seasonal property, expected performance',
     created_at: '2024-03-31T23:59:00Z'
-  },
-  {
-    id: '5',
-    property_id: '1',
-    month: '2024-02-01',
-    revenue: 14200,
-    occupancy_rate: 82,
-    maintenance_issues: 0,
-    guest_rating: 4.7,
-    number_of_bookings: 12,
-    notes: 'Steady performance',
-    created_at: '2024-02-29T23:59:00Z'
-  },
-  {
-    id: '6',
-    property_id: '2',
-    month: '2024-02-01',
-    revenue: 20800,
-    occupancy_rate: 89,
-    maintenance_issues: 1,
-    guest_rating: 4.8,
-    number_of_bookings: 16,
-    notes: 'Strong February performance',
-    created_at: '2024-02-29T23:59:00Z'
   }
 ];
 
@@ -179,68 +156,32 @@ export default function Dashboard() {
       
       if (isConnected) {
         console.log('📊 Loading dashboard data from Supabase...');
-        const [propertiesData, reportsData] = await Promise.all([
-          getDashboardProperties(),
-          getDashboardReports()
-        ]);
+        const { properties: propertiesData, reports: reportsData } = await getDashboardData();
         
         console.log('📈 Data loaded from Supabase:', { 
           properties: propertiesData.length, 
           reports: reportsData.length 
         });
         
-        // If no data exists, add sample data
-        if (propertiesData.length === 0 && reportsData.length === 0) {
-          console.log('🧪 No existing data found, adding sample data...');
-          const sampleAdded = await addSampleData();
-          if (sampleAdded) {
-            // Reload data after adding samples
-            const [newPropertiesData, newReportsData] = await Promise.all([
-              getDashboardProperties(),
-              getDashboardReports()
-            ]);
-            setProperties(newPropertiesData);
-            setReports(newReportsData);
-            console.log('✅ Sample data loaded successfully');
-          } else {
-            // If sample data addition fails, use mock data
-            console.log('📋 Using mock data as fallback');
-            setProperties(mockProperties);
-            setReports(mockReports);
-          }
-        } else {
-          setProperties(propertiesData);
-          setReports(reportsData);
-        }
+        setProperties(propertiesData);
+        setReports(reportsData);
         
         if (showToast) {
           toast({
             title: "Data refreshed!",
-            description: `Loaded ${propertiesData.length || mockProperties.length} properties and ${reportsData.length || mockReports.length} reports`,
+            description: `Loaded ${propertiesData.length} properties and ${reportsData.length} reports`,
             variant: "default",
           });
         }
       } else {
-        console.warn('⚠️ Supabase connection failed, using mock data');
-        setDataLoadError('Connection failed - showing demo data');
-        
-        // Use comprehensive mock data
-        setProperties(mockProperties);
-        setReports(mockReports);
-        
-        if (showToast) {
-          toast({
-            title: "Using Demo Data",
-            description: "Supabase connection failed, showing sample data",
-            variant: "destructive",
-          });
-        }
+        throw new Error('Supabase connection failed');
       }
     } catch (error) {
       console.error('❌ Error loading dashboard data:', error);
-      setDataLoadError(`Failed to load data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setDataLoadError(`Connection failed - using demo data`);
+      setConnectionStatus(false);
       
-      // Use mock data on any error
+      // Use comprehensive mock data
       console.log('📋 Using mock data due to error');
       setProperties(mockProperties);
       setReports(mockReports);
@@ -248,7 +189,7 @@ export default function Dashboard() {
       if (showToast) {
         toast({
           title: "Using Demo Data",
-          description: "Error loading data, showing sample data instead",
+          description: "Database connection failed, showing sample data",
           variant: "destructive",
         });
       }
@@ -391,7 +332,7 @@ export default function Dashboard() {
                     'bg-yellow-400'
                   }`} />
                   {connectionStatus === true ? 'Connected' : 
-                   connectionStatus === false ? 'Disconnected' : 
+                   connectionStatus === false ? 'Demo Mode' : 
                    'Checking...'}
                 </div>
                 
@@ -406,17 +347,9 @@ export default function Dashboard() {
               </div>
               
               {dataLoadError && (
-                <div className="mt-4 p-3 bg-red-500/20 border border-red-400/30 rounded-lg">
-                  <p className="text-red-200 text-sm">
-                    ⚠️ {dataLoadError}
-                  </p>
-                </div>
-              )}
-              
-              {connectionStatus === false && !dataLoadError && (
                 <div className="mt-4 p-3 bg-yellow-500/20 border border-yellow-400/30 rounded-lg">
                   <p className="text-yellow-200 text-sm">
-                    ⚠️ Demo Mode: Using sample data. Database connection not available.
+                    ⚠️ {dataLoadError}
                   </p>
                 </div>
               )}
