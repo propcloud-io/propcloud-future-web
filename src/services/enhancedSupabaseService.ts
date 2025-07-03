@@ -1,7 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { LeadData, JobApplicationData } from '@/types/chatbot';
-import { useToast } from '@/hooks/use-toast';
 
 // Enhanced error handling with detailed logging
 const handleSupabaseError = (operation: string, error: any) => {
@@ -50,9 +49,10 @@ export async function createEnhancedLead(leadData: LeadData): Promise<any> {
       location: leadData.locations,
       message: leadData.additionalNotes || '',
       number_of_properties: parseInt(leadData.numberOfProperties) || 1,
-      platform_usage: leadData.platforms || [],
-      created_at: new Date().toISOString()
+      platform_usage: leadData.platforms || []
     };
+
+    console.log('📝 Lead record to insert:', leadRecord);
 
     const { data: lead, error: leadError } = await supabase
       .from('leads')
@@ -64,7 +64,7 @@ export async function createEnhancedLead(leadData: LeadData): Promise<any> {
       handleSupabaseError('createLead', leadError);
     }
     
-    console.log('✅ Lead created:', lead.id);
+    console.log('✅ Lead created:', lead);
 
     // Create properties if specified
     if (leadData.numberOfProperties && parseInt(leadData.numberOfProperties) > 0) {
@@ -75,18 +75,25 @@ export async function createEnhancedLead(leadData: LeadData): Promise<any> {
         try {
           const propertyLocation = locations[i % locations.length] || locations[0] || leadData.locations;
           
-          await supabase
+          const propertyRecord = {
+            name: `Property ${i + 1}`,
+            lead_id: lead.id,
+            city: propertyLocation,
+            property_type: 'rental',
+            active: true
+          };
+
+          console.log(`📝 Creating property ${i + 1}:`, propertyRecord);
+
+          const { error: propError } = await supabase
             .from('properties')
-            .insert({
-              name: `Property ${i + 1}`,
-              lead_id: lead.id,
-              city: propertyLocation,
-              property_type: 'rental',
-              active: true,
-              created_at: new Date().toISOString()
-            });
+            .insert(propertyRecord);
           
-          console.log(`✅ Created property ${i + 1} for lead ${lead.id}`);
+          if (propError) {
+            console.error(`⚠️ Failed to create property ${i + 1}:`, propError);
+          } else {
+            console.log(`✅ Created property ${i + 1} for lead ${lead.id}`);
+          }
         } catch (propError) {
           console.error(`⚠️ Failed to create property ${i + 1}:`, propError);
         }
@@ -111,9 +118,10 @@ export async function createEnhancedJobApplication(appData: JobApplicationData):
       role_applied: appData.role,
       motivation: appData.motivation,
       linkedin_url: appData.linkedinUrl,
-      source: 'careers_chatbot',
-      created_at: new Date().toISOString()
+      source: 'careers_chatbot'
     };
+
+    console.log('📝 Application record to insert:', applicationRecord);
 
     const { data: application, error } = await supabase
       .from('job_applications')
@@ -125,7 +133,7 @@ export async function createEnhancedJobApplication(appData: JobApplicationData):
       handleSupabaseError('createJobApplication', error);
     }
     
-    console.log('✅ Job application created:', application.id);
+    console.log('✅ Job application created:', application);
     return application;
   } catch (error) {
     console.error('❌ Enhanced job application creation failed:', error);
@@ -140,9 +148,10 @@ export async function saveEnhancedConversation(message: string, isFromUser: bool
       message,
       is_from_user: isFromUser,
       page_context: source,
-      lead_id: leadId,
-      created_at: new Date().toISOString()
+      lead_id: leadId
     };
+
+    console.log('💬 Saving conversation:', conversationRecord);
 
     const { error } = await supabase
       .from('conversations')
@@ -152,7 +161,7 @@ export async function saveEnhancedConversation(message: string, isFromUser: bool
       console.error('⚠️ Conversation save error:', error);
       // Don't throw for conversation saves
     } else {
-      console.log('💬 Conversation saved');
+      console.log('✅ Conversation saved');
     }
   } catch (error) {
     console.error('⚠️ Conversation save failed:', error);

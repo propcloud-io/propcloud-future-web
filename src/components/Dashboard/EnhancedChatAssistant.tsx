@@ -239,7 +239,7 @@ export default function EnhancedChatAssistant() {
         </p>
       </div>
       
-      <div className="flex-1 p-4 overflow-y-auto space-y-4">
+      <div className="flex-1 p-4 overflow-y-auto space-y-4" style={{scrollBehavior: 'smooth'}}>
         {messages.map((message) => (
           <div key={message.id}>
             {message.text === 'DEMO_ACTIONS' ? (
