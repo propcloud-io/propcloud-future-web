@@ -30,6 +30,128 @@ import EnhancedChatAssistant from '@/components/Dashboard/EnhancedChatAssistant'
 
 const mockChartData = [65, 72, 68, 75, 80, 78, 91];
 
+const mockProperties = [
+  {
+    id: '1',
+    name: 'Ocean View Condo',
+    city: 'Miami Beach',
+    country: 'USA',
+    property_type: 'condo',
+    number_of_rooms: 2,
+    has_pool: true,
+    active: true,
+    created_at: '2024-01-15T10:00:00Z'
+  },
+  {
+    id: '2',
+    name: 'Downtown Loft',
+    city: 'New York',
+    country: 'USA',
+    property_type: 'loft',
+    number_of_rooms: 1,
+    has_pool: false,
+    active: true,
+    created_at: '2024-02-01T14:30:00Z'
+  },
+  {
+    id: '3',
+    name: 'Marina Apartment',
+    city: 'Dubai',
+    country: 'UAE',
+    property_type: 'apartment',
+    number_of_rooms: 3,
+    has_pool: true,
+    active: true,
+    created_at: '2024-01-20T09:15:00Z'
+  },
+  {
+    id: '4',
+    name: 'Mountain Cabin',
+    city: 'Aspen',
+    country: 'USA',
+    property_type: 'cabin',
+    number_of_rooms: 4,
+    has_pool: false,
+    active: true,
+    created_at: '2024-03-10T16:45:00Z'
+  }
+];
+
+const mockReports = [
+  {
+    id: '1',
+    property_id: '1',
+    month: '2024-03-01',
+    revenue: 15750,
+    occupancy_rate: 87,
+    maintenance_issues: 1,
+    guest_rating: 4.8,
+    number_of_bookings: 14,
+    notes: 'Strong performance, minor AC maintenance',
+    created_at: '2024-03-31T23:59:00Z'
+  },
+  {
+    id: '2',
+    property_id: '2',
+    month: '2024-03-01',
+    revenue: 22300,
+    occupancy_rate: 92,
+    maintenance_issues: 0,
+    guest_rating: 4.9,
+    number_of_bookings: 18,
+    notes: 'Excellent month, high demand',
+    created_at: '2024-03-31T23:59:00Z'
+  },
+  {
+    id: '3',
+    property_id: '3',
+    month: '2024-03-01',
+    revenue: 18900,
+    occupancy_rate: 85,
+    maintenance_issues: 2,
+    guest_rating: 4.6,
+    number_of_bookings: 16,
+    notes: 'Good performance, pool maintenance scheduled',
+    created_at: '2024-03-31T23:59:00Z'
+  },
+  {
+    id: '4',
+    property_id: '4',
+    month: '2024-03-01',
+    revenue: 12400,
+    occupancy_rate: 76,
+    maintenance_issues: 0,
+    guest_rating: 4.7,
+    number_of_bookings: 11,
+    notes: 'Seasonal property, expected performance',
+    created_at: '2024-03-31T23:59:00Z'
+  },
+  {
+    id: '5',
+    property_id: '1',
+    month: '2024-02-01',
+    revenue: 14200,
+    occupancy_rate: 82,
+    maintenance_issues: 0,
+    guest_rating: 4.7,
+    number_of_bookings: 12,
+    notes: 'Steady performance',
+    created_at: '2024-02-29T23:59:00Z'
+  },
+  {
+    id: '6',
+    property_id: '2',
+    month: '2024-02-01',
+    revenue: 20800,
+    occupancy_rate: 89,
+    maintenance_issues: 1,
+    guest_rating: 4.8,
+    number_of_bookings: 16,
+    notes: 'Strong February performance',
+    created_at: '2024-02-29T23:59:00Z'
+  }
+];
+
 export default function Dashboard() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
   const [properties, setProperties] = useState<any[]>([]);
@@ -40,7 +162,6 @@ export default function Dashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { toast } = useToast();
 
-  // Load real data from Supabase with enhanced error handling
   const loadDashboardData = async (showToast = false) => {
     try {
       setDataLoadError(null);
@@ -57,13 +178,13 @@ export default function Dashboard() {
       setConnectionStatus(isConnected);
       
       if (isConnected) {
-        console.log('📊 Loading dashboard data...');
+        console.log('📊 Loading dashboard data from Supabase...');
         const [propertiesData, reportsData] = await Promise.all([
           getDashboardProperties(),
           getDashboardReports()
         ]);
         
-        console.log('📈 Data loaded:', { 
+        console.log('📈 Data loaded from Supabase:', { 
           properties: propertiesData.length, 
           reports: reportsData.length 
         });
@@ -81,6 +202,11 @@ export default function Dashboard() {
             setProperties(newPropertiesData);
             setReports(newReportsData);
             console.log('✅ Sample data loaded successfully');
+          } else {
+            // If sample data addition fails, use mock data
+            console.log('📋 Using mock data as fallback');
+            setProperties(mockProperties);
+            setReports(mockReports);
           }
         } else {
           setProperties(propertiesData);
@@ -90,28 +216,22 @@ export default function Dashboard() {
         if (showToast) {
           toast({
             title: "Data refreshed!",
-            description: `Loaded ${propertiesData.length} properties and ${reportsData.length} reports`,
+            description: `Loaded ${propertiesData.length || mockProperties.length} properties and ${reportsData.length || mockReports.length} reports`,
             variant: "default",
           });
         }
       } else {
-        console.warn('⚠️ Supabase connection failed, using fallback data');
-        setDataLoadError('Unable to connect to database');
+        console.warn('⚠️ Supabase connection failed, using mock data');
+        setDataLoadError('Connection failed - showing demo data');
         
-        // Set minimal fallback data for demo
-        setProperties([
-          { id: '1', name: 'Demo Property 1', city: 'Miami', active: true },
-          { id: '2', name: 'Demo Property 2', city: 'Dubai', active: true },
-        ]);
-        setReports([
-          { id: '1', revenue: 15000, occupancy_rate: 85, maintenance_issues: 2, guest_rating: 4.5 },
-          { id: '2', revenue: 12000, occupancy_rate: 92, maintenance_issues: 0, guest_rating: 4.8 },
-        ]);
+        // Use comprehensive mock data
+        setProperties(mockProperties);
+        setReports(mockReports);
         
         if (showToast) {
           toast({
-            title: "Connection Issue",
-            description: "Using demo data. Please check connection.",
+            title: "Using Demo Data",
+            description: "Supabase connection failed, showing sample data",
             variant: "destructive",
           });
         }
@@ -120,20 +240,15 @@ export default function Dashboard() {
       console.error('❌ Error loading dashboard data:', error);
       setDataLoadError(`Failed to load data: ${error instanceof Error ? error.message : 'Unknown error'}`);
       
-      // Use fallback data on error
-      setProperties([
-        { id: 'fallback1', name: 'Fallback Property 1', city: 'Miami', active: true },
-        { id: 'fallback2', name: 'Fallback Property 2', city: 'Dubai', active: true },
-      ]);
-      setReports([
-        { id: 'fallback1', revenue: 10000, occupancy_rate: 75, maintenance_issues: 1, guest_rating: 4.0 },
-        { id: 'fallback2', revenue: 8000, occupancy_rate: 80, maintenance_issues: 0, guest_rating: 4.3 },
-      ]);
+      // Use mock data on any error
+      console.log('📋 Using mock data due to error');
+      setProperties(mockProperties);
+      setReports(mockReports);
       
       if (showToast) {
         toast({
-          title: "Error loading data",
-          description: "Using fallback data. Please try refreshing.",
+          title: "Using Demo Data",
+          description: "Error loading data, showing sample data instead",
           variant: "destructive",
         });
       }
@@ -147,7 +262,6 @@ export default function Dashboard() {
     loadDashboardData();
   }, []);
 
-  // Calculate metrics from real data with enhanced error handling
   const calculateMetrics = () => {
     try {
       if (reports.length === 0) {

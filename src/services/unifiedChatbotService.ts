@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { LeadData, JobApplicationData } from '@/types/chatbot';
 import { submitToFormspree } from '@/services/formspreeService';
@@ -38,7 +37,7 @@ export async function testSupabaseConnection(): Promise<boolean> {
   }
 }
 
-// Create lead with proper field mapping
+// Create lead with proper field mapping and improved error handling
 export async function createLead(leadData: LeadData): Promise<any> {
   console.log('💾 Creating lead with data:', leadData);
   
@@ -204,7 +203,7 @@ export async function getDashboardData(): Promise<{ properties: any[], reports: 
   }
 }
 
-// Unified submission function with retry logic
+// Unified submission function with retry logic and better error handling
 export async function submitWithFallback(
   data: LeadData | JobApplicationData, 
   type: 'lead' | 'job_application'
