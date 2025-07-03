@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatMessage, LeadData } from '@/types/chatbot';
 import { validateEmail, sanitizeInput, generateId, delay } from '@/utils/chatbotUtils';
-import { testSupabaseConnection, submitWithFallback, saveConversation, getMockKnowledgeBase } from '@/services/unifiedChatbotService';
+import { submitLead, getKnowledgeBase } from '@/services/simplifiedChatbotService';
 import { useToast } from '@/hooks/use-toast';
 
 interface GeneralChatBotProps {
@@ -34,8 +35,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<LeadData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [knowledgeBase, setKnowledgeBase] = useState<any>({});
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const [knowledgeBase] = useState(getKnowledgeBase());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -54,14 +54,8 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
   };
 
   const initializeBot = async () => {
-    const connected = await testSupabaseConnection();
-    setIsConnected(connected);
-    
-    const kb = await getMockKnowledgeBase();
-    setKnowledgeBase(kb);
-    
     await delay(500);
-    addBotMessage("Hi! I'm your PropCloud assistant. I can help with property management. How can I assist you today?");
+    addBotMessage("Hi! I'm your PropCloud assistant. I help property managers automate their operations with AI. How can I assist you today?");
   };
 
   const addMessage = async (text: string, isBot: boolean, isTyping = false) => {
@@ -74,10 +68,6 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     };
     
     setMessages(prev => [...prev, message]);
-    
-    if (!isTyping) {
-      await saveConversation(text, !isBot, 'website');
-    }
   };
 
   const addBotMessage = async (text: string) => {
@@ -90,7 +80,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
       isTyping: true
     }]);
     
-    await delay(1000 + Math.random() * 1000); // Realistic typing delay
+    await delay(800 + Math.random() * 800);
     
     setMessages(prev => prev.filter(msg => msg.id !== typingId));
     await addMessage(text, true);
@@ -111,26 +101,28 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     const lowerQuery = query.toLowerCase();
     let response = '';
     
-    if (lowerQuery.includes('how') && lowerQuery.includes('work')) {
-      response = knowledgeBase.process || "Our AI handles guest communication, pricing optimization, and maintenance coordination automatically.";
-    } else if (lowerQuery.includes('pricing') || lowerQuery.includes('cost') || lowerQuery.includes('price')) {
-      response = knowledgeBase.pricing || "Our pricing is tailored to your property portfolio size. Would you like to start a quick assessment to get a custom quote?";
+    if (lowerQuery.includes('pricing') || lowerQuery.includes('cost') || lowerQuery.includes('price')) {
+      response = knowledgeBase.pricing;
     } else if (lowerQuery.includes('platform') || lowerQuery.includes('airbnb') || lowerQuery.includes('vrbo')) {
-      response = knowledgeBase.platforms || "We integrate with Airbnb, VRBO, Booking.com, and 50+ other platforms.";
+      response = knowledgeBase.platforms;
+    } else if (lowerQuery.includes('how') && lowerQuery.includes('work')) {
+      response = knowledgeBase.process;
     } else if (lowerQuery.includes('location') || lowerQuery.includes('where')) {
-      response = knowledgeBase.locations || "We serve property managers globally, with strong presence in Miami, Dubai, and major markets.";
+      response = knowledgeBase.locations;
     } else if (lowerQuery.includes('feature') || lowerQuery.includes('what') && lowerQuery.includes('do')) {
-      response = knowledgeBase.features || "AI guest communication, dynamic pricing, maintenance management, financial reporting, and more.";
-    } else if (lowerQuery.includes('start') || lowerQuery.includes('get started') || lowerQuery.includes('sign up')) {
-      response = "Great! I'd love to learn more about your properties to provide you with the best recommendations. Should we start with a quick assessment?";
+      response = knowledgeBase.features;
+    } else if (lowerQuery.includes('benefit') || lowerQuery.includes('save') || lowerQuery.includes('help')) {
+      response = knowledgeBase.benefits;
+    } else if (lowerQuery.includes('support') || lowerQuery.includes('help')) {
+      response = knowledgeBase.support;
     } else {
-      response = "I can help you understand how PropCloud works for your properties. Would you like to start a quick assessment so I can provide personalized recommendations?";
+      response = "I can help you understand how PropCloud's AI automation works for property managers. Would you like to learn about our features or start a quick assessment?";
     }
     
     await addBotMessage(response);
     
     setTimeout(async () => {
-      await addBotMessage("Would you like to start a quick property assessment? It only takes 2 minutes and I can show you exactly how PropCloud would work for your portfolio.");
+      await addBotMessage("Would you like to start a quick property assessment? It takes just 2 minutes and I can show you exactly how PropCloud would work for your portfolio.");
       
       setTimeout(() => {
         setMessages(prev => [...prev, {
@@ -140,7 +132,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
           timestamp: new Date()
         }]);
       }, 500);
-    }, 2000);
+    }, 1500);
   };
 
   const handleFormInput = async (input: string) => {
@@ -158,7 +150,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
     
     setFormData(prev => ({
       ...prev,
-      [currentField.field]: currentField.field === 'platforms' ? input.split(',').map(p => p.trim()) : input
+      [currentField.field]: input
     }));
     
     if (currentStep < formSteps.length - 1) {
@@ -178,7 +170,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
       const leadData = formData as LeadData;
       console.log('🚀 Submitting lead data:', leadData);
       
-      const result = await submitWithFallback(leadData, 'lead');
+      const result = await submitLead(leadData);
       
       if (result.success) {
         await addBotMessage(`Perfect! Thank you, ${leadData.name}. I've recorded your information about your ${leadData.numberOfProperties} properties in ${leadData.locations}.`);
@@ -188,10 +180,10 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
         
         toast({
           title: "Success!",
-          description: `Your information has been submitted successfully via ${result.method}.`,
+          description: "Your information has been submitted successfully.",
         });
       } else {
-        throw new Error('Both Supabase and Formspree submissions failed');
+        throw new Error('Submission failed');
       }
     } catch (error) {
       console.error('❌ Form submission failed:', error);
@@ -252,9 +244,7 @@ export default function GeneralChatBot({ isOpen, onClose }: GeneralChatBotProps)
             </div>
             <div>
               <h3 className="font-semibold">PropCloud Assistant</h3>
-              <p className="text-xs opacity-90">
-                {isConnected === null ? 'Connecting...' : isConnected ? 'Connected' : 'Backup Mode'}
-              </p>
+              <p className="text-xs opacity-90">Ready to help</p>
             </div>
           </div>
           <button
