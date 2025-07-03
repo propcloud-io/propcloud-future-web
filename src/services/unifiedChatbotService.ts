@@ -47,7 +47,7 @@ export async function createLead(leadData: LeadData): Promise<any> {
     const leadRecord = {
       name: leadData.name,
       email: leadData.email,
-      location: leadData.locations, // Fixed: locations -> location
+      location: leadData.locations || '', // Fixed: locations -> location, with fallback
       message: leadData.additionalNotes || '',
       number_of_properties: parseInt(leadData.numberOfProperties) || 1,
       platform_usage: Array.isArray(leadData.platforms) ? leadData.platforms : 
@@ -85,13 +85,19 @@ export async function createLead(leadData: LeadData): Promise<any> {
 // Create properties for a lead
 async function createPropertiesForLead(leadId: string, leadData: LeadData): Promise<void> {
   const propertyCount = Math.min(parseInt(leadData.numberOfProperties), 10);
-  const locations = typeof leadData.locations === 'string' && leadData.locations 
-    ? leadData.locations.split(',').map(loc => loc.trim()) 
-    : ['Unknown Location'];
+  
+  // Safely handle locations with proper type checking
+  let locations: string[] = ['Unknown Location'];
+  if (leadData.locations && typeof leadData.locations === 'string') {
+    locations = leadData.locations.split(',').map(loc => loc.trim()).filter(loc => loc.length > 0);
+    if (locations.length === 0) {
+      locations = ['Unknown Location'];
+    }
+  }
   
   for (let i = 0; i < propertyCount; i++) {
     try {
-      const propertyLocation = locations[i % locations.length] || locations[0] || 'Unknown Location';
+      const propertyLocation = locations[i % locations.length] || 'Unknown Location';
       
       const propertyRecord = {
         name: `Property ${i + 1}`,
