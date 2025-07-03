@@ -94,12 +94,14 @@ export async function createLead(leadData: LeadData): Promise<any> {
 async function createPropertiesForLead(leadId: string, leadData: LeadData): Promise<void> {
   const propertyCount = Math.min(parseInt(leadData.numberOfProperties), 10);
   
-  // Safely handle locations with proper type checking
+  // Safely handle locations with proper type checking and explicit fallback
   let locations: string[] = ['Unknown Location'];
-  if (leadData.locations && typeof leadData.locations === 'string') {
-    locations = leadData.locations.split(',').map(loc => loc.trim()).filter(loc => loc.length > 0);
-    if (locations.length === 0) {
-      locations = ['Unknown Location'];
+  const locationsData = leadData.locations;
+  
+  if (locationsData && typeof locationsData === 'string' && locationsData.trim().length > 0) {
+    const splitLocations = locationsData.split(',').map(loc => loc.trim()).filter(loc => loc.length > 0);
+    if (splitLocations.length > 0) {
+      locations = splitLocations;
     }
   }
   
