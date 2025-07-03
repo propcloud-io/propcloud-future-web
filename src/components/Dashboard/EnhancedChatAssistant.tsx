@@ -164,10 +164,9 @@ export default function EnhancedChatAssistant() {
       const leadData = {
         name: 'Dashboard Demo User',
         email: 'demo@example.com',
-        source: 'dashboard_demo',
-        message: 'Submitted interest from dashboard demo',
-        location: 'Demo Location',
-        number_of_properties: 1
+        numberOfProperties: '1',
+        locations: 'Demo Location',
+        additionalNotes: 'Submitted interest from dashboard demo'
       };
 
       if (isConnected) {

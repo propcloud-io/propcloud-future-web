@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -312,12 +313,3 @@ export async function addSampleData() {
     return false;
   }
 }
-
-// Export the enhanced functions for backward compatibility
-export { 
-  createEnhancedLead as createLead,
-  createEnhancedJobApplication as createJobApplication,
-  saveEnhancedConversation as saveConversation,
-  getEnhancedDashboardData,
-  testSupabaseConnection
-} from './enhancedSupabaseService';
