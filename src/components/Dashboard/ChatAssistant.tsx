@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Send, Bot, User } from 'lucide-react';
 
 interface Message {
@@ -29,9 +29,57 @@ export default function ChatAssistant() {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [hasShownProactiveMessage, setHasShownProactiveMessage] = useState(false);
+
+  // Proactive nudge after user activity
+  useEffect(() => {
+    if (hasShownProactiveMessage) return;
+
+    const handleActivity = () => {
+      if (hasShownProactiveMessage) return;
+      
+      setTimeout(() => {
+        if (!hasShownProactiveMessage) {
+          const proactiveMessage: Message = {
+            id: 'proactive-' + Date.now(),
+            text: "Quick question — does this kind of insight look useful to you? We can set this up for your listings. Want a walkthrough?",
+            sender: 'assistant',
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, proactiveMessage]);
+          setHasShownProactiveMessage(true);
+        }
+      }, 5000); // 5 seconds after activity
+    };
+
+    window.addEventListener('scroll', handleActivity);
+    window.addEventListener('click', handleActivity);
+
+    return () => {
+      window.removeEventListener('scroll', handleActivity);
+      window.removeEventListener('click', handleActivity);
+    };
+  }, [hasShownProactiveMessage]);
 
   const getResponse = (userInput: string): string => {
     const input = userInput.toLowerCase();
+    
+    // Handle contextual responses
+    if (input.includes('cool') || input.includes('nice') || input.includes('impressive')) {
+      return "Thanks! This is a demo dashboard showing simulated metrics: 92% occupancy, $3,400 net this month, and 45% repeat guests. Want us to set this up for your listings? Just drop your info and we'll reach out.";
+    }
+    
+    if (input.includes('how') && input.includes('work')) {
+      return "This dashboard connects to your property listings and provides real-time AI insights. We track everything from occupancy to guest satisfaction. Want a walkthrough of how we'd customize this for you?";
+    }
+    
+    if (input.includes('get this') || input.includes('want this') || input.includes('can i')) {
+      return "Absolutely! We can set this up for your property. Just submit your interest via our chatbot and we'll reach out with a custom demo for your listings.";
+    }
+
+    if (input.includes('summary') || input.includes('explain')) {
+      return "This is a demo dashboard. The metrics are simulated to show 92% occupancy, $3,400 net this month, and 45% repeat guests. Want us to set this up for your listings?";
+    }
     
     if (input.includes('occupancy')) return mockResponses.occupancy;
     if (input.includes('turnover')) return mockResponses.turnovers;
@@ -78,7 +126,7 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col h-96">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col h-80 md:h-96">
       <div className="p-4 border-b border-gray-100">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
           <Bot size={20} className="text-teal-600" />

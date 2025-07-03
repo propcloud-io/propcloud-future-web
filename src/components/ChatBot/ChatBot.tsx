@@ -20,6 +20,8 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const [showFlows, setShowFlows] = useState(false);
   const [flowCompleted, setFlowCompleted] = useState(false);
+  const [lastActivityTime, setLastActivityTime] = useState(Date.now());
+  const [hasShownIdleMessage, setHasShownIdleMessage] = useState(false);
 
   // Show chatbot after 4 seconds or when user scrolls
   useEffect(() => {
@@ -29,6 +31,15 @@ export default function ChatBot() {
       if (window.scrollY > 300) {
         setIsVisible(true);
       }
+      setLastActivityTime(Date.now());
+    };
+
+    const handleMouseMove = () => {
+      setLastActivityTime(Date.now());
+    };
+
+    const handleClick = () => {
+      setLastActivityTime(Date.now());
     };
 
     const handleOpenChatBot = () => {
@@ -36,14 +47,37 @@ export default function ChatBot() {
     };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('click', handleClick);
     window.addEventListener('openChatBot', handleOpenChatBot);
     
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('click', handleClick);
       window.removeEventListener('openChatBot', handleOpenChatBot);
     };
   }, []);
+
+  // Idle detection and proactive messages
+  useEffect(() => {
+    if (!isVisible || isOpen || hasShownIdleMessage) return;
+
+    const checkIdle = () => {
+      const timeSinceActivity = Date.now() - lastActivityTime;
+      if (timeSinceActivity > 30000) { // 30 seconds
+        setIsOpen(true);
+        setHasShownIdleMessage(true);
+        setTimeout(() => {
+          addMessage("Need help deciding if this is right for you?", true);
+        }, 500);
+      }
+    };
+
+    const interval = setInterval(checkIdle, 5000);
+    return () => clearInterval(interval);
+  }, [isVisible, isOpen, lastActivityTime, hasShownIdleMessage]);
 
   // Initialize with welcome message when opened
   useEffect(() => {
@@ -85,6 +119,42 @@ export default function ChatBot() {
     }, 1000);
   };
 
+  const getCurrentPage = () => {
+    const path = window.location.pathname;
+    if (path === '/') return 'homepage';
+    if (path === '/app') return 'dashboard';
+    if (path === '/about') return 'about';
+    return 'website';
+  };
+
+  const getContextualResponse = (userMessage: string) => {
+    const currentPage = getCurrentPage();
+    
+    // Out-of-context handling
+    if (userMessage.includes('weather') || userMessage.includes('news') || userMessage.includes('recipe') || userMessage.includes('movie')) {
+      return "That's outside our core service, but we focus on full-service property management using AI. Want to explore how it works?";
+    }
+
+    if (currentPage === 'dashboard') {
+      if (userMessage.includes('cool') || userMessage.includes('nice') || userMessage.includes('impressive')) {
+        return "Thanks! This is a demo dashboard. The metrics are simulated to show 92% occupancy, $3,400 net this month, and 45% repeat guests. Want us to set this up for your listings?";
+      }
+      if (userMessage.includes('how') && userMessage.includes('work')) {
+        return "This dashboard shows real-time property performance. We connect to your listings and provide AI-powered insights. Want a walkthrough of how we'd set this up for you?";
+      }
+      if (userMessage.includes('get this') || userMessage.includes('want this') || userMessage.includes('can i')) {
+        return "Absolutely! Just drop your info and we'll reach out with a custom setup for your property.";
+      }
+    }
+
+    // Default responses based on keywords
+    if (userMessage.includes('help') || userMessage.includes('support')) {
+      return "I'd be happy to help! Would you like to start a new conversation to tell me more about what you need?";
+    }
+    
+    return "Thanks for your message! Let me help you get connected with the right information.";
+  };
+
   const handleSendMessage = () => {
     if (!inputText.trim() || showFlows) return;
 
@@ -92,18 +162,12 @@ export default function ChatBot() {
     const userMessage = inputText.toLowerCase();
     setInputText('');
 
-    // Simple responses for general chat
-    if (userMessage.includes('help') || userMessage.includes('support')) {
-      addBotMessage("I'd be happy to help! Would you like to start a new conversation to tell me more about what you need?");
-      setTimeout(() => {
-        setShowFlows(true);
-      }, 2000);
-    } else {
-      addBotMessage("Thanks for your message! Let me help you get connected with the right information.");
-      setTimeout(() => {
-        setShowFlows(true);
-      }, 2000);
-    }
+    const response = getContextualResponse(userMessage);
+    addBotMessage(response);
+    
+    setTimeout(() => {
+      setShowFlows(true);
+    }, 2000);
   };
 
   const handleFlowComplete = async (data: FlowData) => {
