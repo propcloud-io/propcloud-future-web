@@ -9,7 +9,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="relative py-20 bg-gradient-to-br from-slate-800 via-propcloud-800 to-teal-800 text-white overflow-hidden">
-      <AbstractAccent position="bottom" color="teal" />
+      <AbstractAccent position="bottom" color="green" />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
