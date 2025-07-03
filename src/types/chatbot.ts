@@ -12,7 +12,7 @@ export interface LeadData {
   email: string;
   numberOfProperties: string;
   locations: string;
-  platforms?: string[];
+  platforms?: string | string[];
   additionalNotes?: string;
 }
 

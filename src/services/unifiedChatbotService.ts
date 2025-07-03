@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { LeadData, JobApplicationData } from '@/types/chatbot';
 import { submitToFormspree } from '@/services/formspreeService';
@@ -43,22 +42,20 @@ export async function createLead(leadData: LeadData): Promise<any> {
   console.log('💾 Creating lead with data:', leadData);
   
   try {
-    // Handle platforms field properly with explicit type checking
+    // Handle platforms field with explicit type checking and proper fallbacks
     let platformUsage: string[] = [];
-    const platforms = leadData.platforms;
-    
-    if (Array.isArray(platforms)) {
-      platformUsage = platforms;
-    } else if (typeof platforms === 'string' && platforms.trim().length > 0) {
-      platformUsage = platforms.split(',').map(p => p.trim());
+    if (leadData.platforms) {
+      if (Array.isArray(leadData.platforms)) {
+        platformUsage = leadData.platforms;
+      } else if (typeof leadData.platforms === 'string' && leadData.platforms.trim().length > 0) {
+        platformUsage = leadData.platforms.split(',').map(p => p.trim()).filter(p => p.length > 0);
+      }
     }
 
     // Handle locations field with proper type checking
     let locationString = '';
-    const locationsData = leadData.locations;
-    
-    if (locationsData && typeof locationsData === 'string') {
-      locationString = locationsData;
+    if (leadData.locations && typeof leadData.locations === 'string') {
+      locationString = leadData.locations.trim();
     }
 
     // Correct field mapping to match database schema
@@ -104,10 +101,8 @@ async function createPropertiesForLead(leadId: string, leadData: LeadData): Prom
   
   // Safely handle locations with proper type checking and explicit fallback
   let locations: string[] = ['Unknown Location'];
-  const locationsData = leadData.locations;
-  
-  if (locationsData && typeof locationsData === 'string' && locationsData.trim().length > 0) {
-    const splitLocations = locationsData.split(',').map(loc => loc.trim()).filter(loc => loc.length > 0);
+  if (leadData.locations && typeof leadData.locations === 'string' && leadData.locations.trim().length > 0) {
+    const splitLocations = leadData.locations.split(',').map(loc => loc.trim()).filter(loc => loc.length > 0);
     if (splitLocations.length > 0) {
       locations = splitLocations;
     }
